@@ -48,9 +48,19 @@ self.addEventListener('fetch', (event) => {
     caches.match(event.request)
       .then((cachedResponse) => {
         const fetchPromise = fetch(event.request).then((networkResponse) => {
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, networkResponse.clone());
-          });
+          if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
+            return networkResponse;
+          }
+          
+          try {
+            const responseToCache = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, responseToCache);
+            });
+          } catch (e) {
+            console.warn('Cache clone error:', e);
+          }
+          
           return networkResponse;
         }).catch(() => {
           // Offline fallback
@@ -58,6 +68,7 @@ self.addEventListener('fetch', (event) => {
             return caches.match('/home.html');
           }
         });
+        
         return cachedResponse || fetchPromise;
       })
   );
