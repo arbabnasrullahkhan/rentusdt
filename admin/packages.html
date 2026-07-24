@@ -113,32 +113,41 @@
   </div>
 
   <script type="module">
-    import { getAdminUser } from '../firebase-auth.js';
+    import { getAdminUser, initAuthObserver } from '../firebase-auth.js';
     import { db } from '../firebase-config.js';
     import { collection, getDocs, doc, setDoc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
     import { DEFAULT_PACKAGES } from '../firestore.js';
     import { showToast, formatUSD } from '../utils.js';
 
-    const admin = getAdminUser();
-    if (!admin) window.location.href = 'login.html';
-
     let packages = [];
     let editingId = null;
+    let pkgUnsubscribe = null;
 
-    // Real-time listener
-    const pkgRef = collection(db, 'packages');
-    onSnapshot(pkgRef, (snapshot) => {
-      if (!snapshot.empty) {
-        packages = [];
-        snapshot.forEach(d => packages.push({ id: d.id, ...d.data() }));
-        packages.sort((a, b) => (a.order || 0) - (b.order || 0));
-      } else {
-        packages = DEFAULT_PACKAGES;
+    initAuthObserver((user) => {
+      const admin = getAdminUser();
+      if (!admin && !user) {
+        window.location.href = 'login.html';
+        return;
       }
-      renderPackages();
-    }, () => {
-      packages = DEFAULT_PACKAGES;
-      renderPackages();
+
+      // Real-time listener
+      if (!pkgUnsubscribe) {
+        const pkgRef = collection(db, 'packages');
+        pkgUnsubscribe = onSnapshot(pkgRef, (snapshot) => {
+          if (!snapshot.empty) {
+            packages = [];
+            snapshot.forEach(d => packages.push({ id: d.id, ...d.data() }));
+            packages.sort((a, b) => (a.order || 0) - (b.order || 0));
+          } else {
+            packages = [];
+          }
+          renderPackages();
+        }, (err) => {
+          console.warn('Packages snapshot error:', err);
+          packages = [];
+          renderPackages();
+        });
+      }
     });
 
     function renderPackages() {
