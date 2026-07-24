@@ -187,29 +187,37 @@
   </div>
 
   <script type="module">
-    import { getAdminUser } from '../firebase-auth.js';
+    import { getAdminUser, initAuthObserver } from '../firebase-auth.js';
     import { db } from '../firebase-config.js';
     import { collection, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
     import { formatUSD, showToast, escapeHTML } from '../utils.js';
-
-    const admin = getAdminUser();
-    if (!admin) window.location.href = 'login.html';
 
     let allOrders = [];
     let currentFilter = 'all';
     let searchQuery = '';
     let selectedOrderId = null;
+    let ordersUnsubscribe = null;
 
-    // Real-time orders listener
-    const ordersRef = collection(db, 'orders');
-    onSnapshot(ordersRef, (snapshot) => {
-      allOrders = [];
-      snapshot.forEach(d => allOrders.push({ id: d.id, ...d.data() }));
-      allOrders.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
-      renderOrders();
-    }, (err) => {
-      console.warn('Orders snapshot error:', err);
-      document.getElementById('orders-tbody').innerHTML = '<tr class="empty-row"><td colspan="8">Unable to load orders. Check Firestore permissions.</td></tr>';
+    initAuthObserver((user) => {
+      const admin = getAdminUser();
+      if (!admin && !user) {
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      // Real-time orders listener (only initialize once)
+      if (!ordersUnsubscribe) {
+        const ordersRef = collection(db, 'orders');
+        ordersUnsubscribe = onSnapshot(ordersRef, (snapshot) => {
+          allOrders = [];
+          snapshot.forEach(d => allOrders.push({ id: d.id, ...d.data() }));
+          allOrders.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+          renderOrders();
+        }, (err) => {
+          console.warn('Orders snapshot error:', err);
+          document.getElementById('orders-tbody').innerHTML = '<tr class="empty-row"><td colspan="8">Unable to load orders. Check Firestore permissions.</td></tr>';
+        });
+      }
     });
 
     // Filter buttons
