@@ -49,11 +49,11 @@ export async function loginAdminWithGoogle() {
     const result = await signInWithPopup(auth, googleProvider);
     const user = result.user;
 
-    // Verify Admin Role in Firestore 'adminUsers' Collection
+    // Verify Admin Role in Firestore 'adminUsers' Collection or Hardcoded UID
     const adminRef = doc(db, 'adminUsers', user.uid);
     const adminSnap = await getDoc(adminRef);
 
-    if (adminSnap.exists() || user.email.endsWith('@dollarrent.com')) {
+    if (adminSnap.exists() || user.email.endsWith('@dollarrent.com') || user.uid === 'koirKqfkNiOCtzndDW4ZabHi7Gl2') {
       const adminData = {
         uid: user.uid,
         email: user.email,
