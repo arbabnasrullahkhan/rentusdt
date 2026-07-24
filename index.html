@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- ================= ADVANCED SEO & META TAGS ================= -->
+  <title>DollarRent — Premium Digital USD Rental Platform</title>
+  <meta name="description" content="Fast, Secure & Trusted Digital USD Rental Platform. Instant processing, premium fintech security, and top-tier trading UI.">
+  <meta name="keywords" content="DollarRent, USD Rental, Digital USD, Crypto, Fintech, Trading, Binance, Quotex, Forex">
+  <meta name="author" content="DollarRent Admin">
+  <meta name="robots" content="index, follow">
+  
+  <!-- Open Graph & Twitter -->
+  <meta property="og:title" content="DollarRent — Premium Digital USD Rental Platform">
+  <meta property="og:description" content="Experience lightning-fast and secure digital USD rentals with our advanced fintech platform.">
+  
+  <!-- STRICT GLOBAL LOGO COMPLIANCE -->
+  <meta property="og:image" content="assets/logo.png">
+  <meta property="twitter:image" content="assets/logo.png">
+  <meta property="twitter:card" content="summary_large_image">
+  <link rel="icon" href="assets/logo.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/logo.png">
+  <link rel="manifest" href="manifest.json">
+
+  <!-- ================= NEXT-LEVEL FINTECH UI/UX CSS ================= -->
+  <style>
+    :root {
+      --bg-cream: #FDFBF7; 
+      --bg-white: #FFFFFF;
+      --text-main: #0B101E;
+      --text-muted: #64748B;
+      --primary: #0F62FE;
+      --primary-light: #4A8BFF;
+      --primary-glow: rgba(15, 98, 254, 0.12);
+      --danger: #E11D48;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", sans-serif; }
+    
+    body {
+      /* Premium FinTech Background: Grid pattern combined with soft radial lighting */
+      background-color: var(--bg-cream);
+      background-image: 
+        radial-gradient(circle at 50% -10%, var(--bg-white) 0%, transparent 60%),
+        linear-gradient(rgba(15, 98, 254, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(15, 98, 254, 0.03) 1px, transparent 1px);
+      background-size: 100% 100%, 24px 24px, 24px 24px;
+      color: var(--text-main);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      cursor: pointer;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Staggered Cinematic Entrance */
+    .animate-item {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes slideUpFade { to { transform: translateY(0); opacity: 1; } }
+
+    /* Main Content Wrapper */
+    .splash-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      width: 100%;
+      max-width: 440px;
+      padding: 20px;
+      z-index: 10;
+      position: relative;
+    }
+
+    /* ================= MAIN LOGO & RIPPLE (SINGLE SOURCE LOGO) ================= */
+    .logo-container {
+      position: relative;
+      width: 135px;
+      height: 135px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-aura {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: var(--primary-glow);
+      border-radius: 50%;
+      z-index: 1;
+      animation: ripplePulse 2.5s infinite cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    .logo-aura:nth-child(2) { animation-delay: 1.2s; }
+
+    @keyframes ripplePulse {
+      0% { transform: scale(0.85); opacity: 1; }
+      100% { transform: scale(1.9); opacity: 0; }
+    }
+
+    .main-logo {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      z-index: 2;
+      filter: drop-shadow(0 14px 28px rgba(15, 98, 254, 0.18));
+      animation: gentleFloat 4s ease-in-out infinite;
+    }
+
+    @keyframes gentleFloat {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+
+    /* Gradient Typography */
+    .brand-title {
+      font-size: 40px;
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      color: var(--text-main);
+      margin-bottom: 6px;
+      line-height: 1.1;
+    }
+    .brand-title span { 
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .brand-tagline {
+      font-size: 15px;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-bottom: 40px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    /* ================= DYNAMIC AUTHENTICATION SPINNER & COUNTER ================= */
+    #loading-ui {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .spinner-wrapper {
+      position: relative;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .orbital-spinner {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 3px solid rgba(15, 98, 254, 0.1);
+      border-top-color: var(--primary);
+      animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+    }
+
+    /* Glow effect on spinner */
+    .orbital-spinner::before {
+      content: '';
+      position: absolute;
+      top: -3px; left: -3px; right: -3px; bottom: -3px;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      border-top-color: rgba(15, 98, 254, 0.4);
+      filter: blur(4px);
+      animation: spin 1s linear infinite;
+    }
+
+    /* Dynamic Percentage Text */
+    .percentage-text {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary);
+      z-index: 2;
+    }
+
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+
+    .loading-status {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-main);
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .loading-status::after {
+      content: 'Authenticating';
+      animation: typingStatus 2s infinite;
+    }
+
+    @keyframes typingStatus {
+      0% { content: 'Connecting.'; }
+      33% { content: 'Securing..'; }
+      66% { content: 'Authenticating...'; }
+      100% { content: 'Connecting.'; }
+    }
+
+    .tap-hint {
+      margin-top: 10px;
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+      opacity: 0;
+      animation: breatheText 2s infinite;
+      animation-delay: 1s; 
+    }
+
+    @keyframes breatheText {
+      0%, 100% { opacity: 0.4; transform: scale(1); }
+      50% { opacity: 0.9; transform: scale(1.02); }
+    }
+
+    /* ================= EXPLICITLY REQUESTED "CONNECT WITH" SECTION ================= */
+    .connect-section {
+      position: absolute;
+      bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .connect-text {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #94A3B8;
+      margin-bottom: 20px;
+      font-weight: 700;
+    }
+
+    .connect-logos {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .connect-logos img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%; 
+      object-fit: contain;
+      filter: grayscale(100%) drop-shadow(0 4px 10px rgba(0, 0, 0, 0.05));
+      opacity: 0.5;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: pointer;
+    }
+
+    .connect-logos img:hover {
+      opacity: 1;
+      filter: grayscale(0%) drop-shadow(0 12px 24px rgba(15, 98, 254, 0.3));
+      transform: translateY(-8px) scale(1.15);
+    }
+
+    /* ================= MAINTENANCE MODE UI ================= */
+    #maintenance-ui {
+      display: none; 
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+    .maintenance-icon {
+      margin-bottom: 16px;
+      background: rgba(225, 29, 72, 0.08);
+      padding: 16px;
+      border-radius: 50%;
+    }
+    .maintenance-icon svg { width: 34px; height: 34px; fill: var(--danger); }
+    .maintenance-title { color: var(--danger); font-size: 22px; font-weight: 800; margin-bottom: 8px;}
+    .maintenance-text { color: var(--text-muted); font-size: 14px; line-height: 1.6; padding: 0 20px; font-weight: 500;}
+
+    /* Delays */
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+    .delay-5 { animation-delay: 0.6s; }
+  </style>
+</head>
+<body onclick="handleManualTap()">
+
+  <div class="splash-content" id="app-card">
+    
+    <!-- EXACT STRICT LOGO USAGE (No Fallbacks) -->
+    <div class="logo-container animate-item delay-1">
+      <div class="logo-aura"></div>
+      <div class="logo-aura"></div>
+      <img src="assets/logo.png" alt="DollarRent Logo" class="main-logo">
+    </div>
+
+    <!-- Typography -->
+    <h1 class="brand-title animate-item delay-2">Dollar<span>Rent</span></h1>
+    <p class="brand-tagline animate-item delay-3">Fast • Secure • Trusted</p>
+
+    <!-- UI: Real-time Counter & Spinner -->
+    <div id="loading-ui" class="animate-item delay-4">
+      <div class="spinner-wrapper">
+        <div class="orbital-spinner"></div>
+        <div class="percentage-text" id="loading-pct">0%</div>
+      </div>
+      <div class="loading-status"></div>
+      <p class="tap-hint">Tap anywhere to enter instantly</p>
+    </div>
+
+    <!-- Maintenance UI -->
+    <div id="maintenance-ui" class="animate-item delay-4">
+      <div class="maintenance-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+      </div>
+      <h2 class="maintenance-title">System Update</h2>
+      <p class="maintenance-text">We are upgrading our servers for a faster experience. Please check back shortly.</p>
+    </div>
+  </div>
+
+  <!-- Explicitly Requested Connect Section -->
+  <div class="connect-section animate-item delay-5">
+    <div class="connect-text">Connect with</div>
+    <div class="connect-logos">
+      <img src="https://www.google.com/s2/favicons?domain=binance.com&sz=128" alt="Binance" title="Binance">
+      <img src="https://www.google.com/s2/favicons?domain=quotex.com&sz=128" alt="Quotex" title="Quotex">
+      <img src="https://www.google.com/s2/favicons?domain=forex.com&sz=128" alt="Forex" title="Forex">
+    </div>
+  </div>
+
+  <!-- ================= LOGIC & FIREBASE INTEGRATION ================= -->
+  <script type="module">
+    import './app.js';
+    import { db } from './firebase-config.js';
+    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    let isMaintenanceMode = false;
+    let configLoaded = false;
+    let authProgress = 0;
+    const progressEl = document.getElementById('loading-pct');
+
+    // UI Improvement: Simulate Real-Time Authentication Progress
+    const progressInterval = setInterval(() => {
+      authProgress += Math.floor(Math.random() * 15) + 4;
+      if (authProgress >= 99) {
+        authProgress = 99;
+      }
+      if (progressEl && !isMaintenanceMode) progressEl.innerText = `${authProgress}%`;
+    }, 120);
+
+    try {
+      const docRef = doc(db, "admin_settings", "status");
+      getDoc(docRef).then((docSnap) => {
+        if (docSnap.exists() && docSnap.data().maintenance === true) {
+          enableMaintenanceMode();
+        }
+        configLoaded = true;
+      }).catch(() => { configLoaded = true; });
+    } catch (error) {
+      configLoaded = true; 
+    }
+
+    function enableMaintenanceMode() {
+      isMaintenanceMode = true;
+      clearInterval(progressInterval);
+      document.getElementById('loading-ui').style.display = 'none';
+      document.getElementById('maintenance-ui').style.display = 'flex';
+      document.body.style.cursor = 'default';
+    }
+
+    window.redirectToHome = function() {
+      if (isMaintenanceMode) return;
+      clearInterval(progressInterval);
+      if (progressEl) progressEl.innerText = `100%`;
+      setTimeout(() => {
+        window.location.href = 'home.html';
+      }, 150);
+    };
+
+    window.handleManualTap = function() {
+      if (!isMaintenanceMode) redirectToHome();
+    };
+
+    setTimeout(() => {
+      const checkReady = setInterval(() => {
+        if (configLoaded) {
+          clearInterval(checkReady);
+          if (!isMaintenanceMode) redirectToHome();
+        }
+      }, 100);
+    }, 2200); 
+  </script>
+</body>
+</html>
