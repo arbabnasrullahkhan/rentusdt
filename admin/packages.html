@@ -7,60 +7,118 @@
   <meta name="robots" content="noindex, nofollow">
   <link rel="icon" href="../assets/logo.png" type="image/png">
   <style>
-    :root { --bg: #F1F5F9; --card: #FFFFFF; --border: #E2E8F0; --primary: #0F62FE; --primary-hover: #0043CE; --primary-glow: rgba(15,98,254,0.1); --success: #059669; --warning: #D97706; --danger: #EF4444; --heading: #0B101E; --body: #64748B; --radius: 20px; --radius-sm: 12px; --shadow: 0 4px 24px -4px rgba(0,0,0,0.06); --sidebar-w: 260px; }
+    :root {
+      --bg: #F5F5F7; --card: rgba(255, 255, 255, 0.7); --border: rgba(226, 232, 240, 0.6);
+      --primary: #0066CC; --primary-hover: #0055AA; --primary-glow: rgba(0, 102, 204, 0.1);
+      --success: #34C759; --warning: #FF9500; --danger: #FF3B30;
+      --heading: #1D1D1F; --body: #86868B;
+      --radius: 24px; --radius-sm: 16px;
+      --shadow: 0 10px 40px -10px rgba(0,0,0,0.08);
+      --sidebar-w: 280px;
+    }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", sans-serif; background: var(--bg); color: var(--heading); display: flex; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif;
+      background: var(--bg); color: var(--heading);
+      display: flex; min-height: 100vh; -webkit-font-smoothing: antialiased;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
     a { text-decoration: none; color: inherit; }
-    .sidebar { width: var(--sidebar-w); background: var(--card); border-right: 1px solid var(--border); padding: 24px 16px; display: flex; flex-direction: column; justify-content: space-between; position: fixed; top: 0; bottom: 0; left: 0; z-index: 100; }
-    .sidebar-brand { display: flex; align-items: center; gap: 10px; padding: 0 8px; margin-bottom: 28px; }
-    .sidebar-brand img { width: 32px; height: 32px; }
-    .sidebar-brand span { font-size: 18px; font-weight: 800; }
+
+    /* ===== SIDEBAR (Desktop) / BOTTOM DOCK (Mobile) ===== */
+    .sidebar {
+      width: var(--sidebar-w); background: var(--card); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      border-right: 1px solid var(--border); padding: 32px 20px; display: flex; flex-direction: column;
+      justify-content: space-between; position: fixed; top: 0; bottom: 0; left: 0;
+      z-index: 100; overflow-y: auto; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .sidebar-brand { display: flex; align-items: center; gap: 12px; padding: 0 12px; margin-bottom: 36px; }
+    .sidebar-brand img { width: 36px; height: 36px; filter: drop-shadow(0 4px 8px rgba(0,102,204,0.3)); }
+    .sidebar-brand span { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
     .sidebar-brand span b { color: var(--primary); }
-    .sidebar-menu { list-style: none; display: flex; flex-direction: column; gap: 4px; }
-    .sidebar-menu a { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; color: var(--body); transition: all 0.2s; }
-    .sidebar-menu a:hover, .sidebar-menu a.active { background: var(--primary-glow); color: var(--primary); }
-    .sidebar-menu svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-    .sidebar-footer { padding: 0 8px; }
-    .sidebar-footer a { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--body); }
-    .sidebar-footer svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; }
 
-    .main { flex: 1; margin-left: var(--sidebar-w); padding: 28px 32px; }
-    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-    .page-header h1 { font-size: 26px; font-weight: 800; }
-    .page-header p { font-size: 14px; color: var(--body); }
+    .sidebar-menu { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .sidebar-menu a {
+      display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: var(--radius-sm);
+      font-size: 15px; font-weight: 600; color: var(--body); transition: all 0.25s ease;
+    }
+    .sidebar-menu a:hover { background: var(--primary-glow); color: var(--primary); transform: translateX(4px); }
+    .sidebar-menu a.active { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(0,102,204,0.3); }
+    .sidebar-menu svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-    .pkg-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); }
-    .pkg-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-    .pkg-amount { font-size: 28px; font-weight: 800; color: var(--primary); }
-    .pkg-badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
-    .pkg-badge.active { background: rgba(5,150,105,0.1); color: var(--success); }
-    .pkg-badge.inactive { background: rgba(239,68,68,0.1); color: var(--danger); }
-    .pkg-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 14px; border-bottom: 1px solid rgba(226,232,240,0.5); }
+    .sidebar-footer { padding: 0 12px; }
+    .sidebar-footer a { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; color: var(--body); padding: 12px 0; }
+    .sidebar-footer a:hover { color: var(--danger); }
+    .sidebar-footer svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    /* ===== MAIN ===== */
+    .main { flex: 1; margin-left: var(--sidebar-w); padding: 40px 48px; overflow-y: auto; min-width: 0; }
+    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; flex-wrap: wrap; gap: 16px; }
+    .page-header h1 { font-size: 32px; font-weight: 800; letter-spacing: -1px; }
+    .page-header p { font-size: 15px; color: var(--body); margin-top: 4px; font-weight: 500; }
+
+    .btn-add { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 30px; font-size: 14px; font-weight: 700; border: none; cursor: pointer; transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1); background: var(--primary); color: white; box-shadow: 0 6px 16px rgba(0,102,204,0.25); }
+    .btn-add:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,102,204,0.35); }
+    .btn-add svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2.5; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+    .pkg-card { background: var(--card); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow); transition: transform 0.3s ease; }
+    .pkg-card:hover { transform: translateY(-4px); }
+    .pkg-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .pkg-amount { font-size: 36px; font-weight: 800; color: var(--heading); letter-spacing: -1px; }
+    .pkg-badge { padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; text-transform: uppercase; }
+    .pkg-badge.active { background: rgba(52,199,89,0.1); color: var(--success); }
+    .pkg-badge.inactive { background: rgba(255,59,48,0.1); color: var(--danger); }
+    
+    .pkg-row { display: flex; justify-content: space-between; padding: 12px 0; font-size: 15px; border-bottom: 1px solid rgba(226,232,240,0.5); }
     .pkg-row:last-child { border-bottom: none; }
     .pkg-row .label { color: var(--body); }
     .pkg-row .value { font-weight: 700; }
-    .pkg-actions { display: flex; gap: 8px; margin-top: 14px; }
-    .btn-edit { flex: 1; padding: 10px; background: var(--primary-glow); color: var(--primary); border: none; border-radius: var(--radius-sm); font-size: 13px; font-weight: 700; cursor: pointer; }
-    .btn-toggle { flex: 1; padding: 10px; background: rgba(239,68,68,0.06); color: var(--danger); border: none; border-radius: var(--radius-sm); font-size: 13px; font-weight: 700; cursor: pointer; }
+    
+    .pkg-actions { display: flex; gap: 12px; margin-top: 20px; }
+    .btn-edit { flex: 1; padding: 12px; background: var(--primary-glow); color: var(--primary); border: none; border-radius: 30px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+    .btn-edit:hover { background: var(--primary); color: white; }
+    .btn-toggle { flex: 1; padding: 12px; background: rgba(255,59,48,0.08); color: var(--danger); border: none; border-radius: 30px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+    .btn-toggle:hover { background: rgba(255,59,48,0.15); }
 
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 1000; }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 1000; }
     .modal-overlay.active { display: flex; }
-    .modal { background: var(--card); border-radius: var(--radius); padding: 28px; width: 90%; max-width: 440px; box-shadow: 0 24px 48px -12px rgba(0,0,0,0.2); }
-    .modal h3 { font-size: 20px; font-weight: 800; margin-bottom: 20px; }
-    .form-group { margin-bottom: 14px; }
-    .form-group label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; }
-    .form-group input { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; outline: none; }
+    .modal { background: var(--card); backdrop-filter: blur(30px); border-radius: var(--radius); padding: 32px; width: 90%; max-width: 440px; box-shadow: 0 24px 48px -12px rgba(0,0,0,0.2); }
+    .modal h3 { font-size: 24px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 24px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 14px; font-weight: 700; margin-bottom: 8px; color: var(--heading); }
+    .form-group input { width: 100%; padding: 12px 16px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 15px; outline: none; background: rgba(255,255,255,0.8); transition: border-color 0.2s; }
     .form-group input:focus { border-color: var(--primary); }
-    .modal-btns { display: flex; gap: 10px; margin-top: 16px; }
-    .modal-btns button { flex: 1; padding: 12px; border: none; border-radius: var(--radius-sm); font-size: 14px; font-weight: 700; cursor: pointer; }
+    .modal-btns { display: flex; gap: 12px; margin-top: 24px; }
+    .modal-btns button { flex: 1; padding: 14px; border: none; border-radius: 30px; font-size: 15px; font-weight: 700; cursor: pointer; transition: transform 0.2s; }
     .btn-save { background: var(--primary); color: white; }
-    .btn-cancel { background: var(--bg); color: var(--body); }
+    .btn-save:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,102,204,0.25); }
+    .btn-cancel { background: rgba(0,0,0,0.05); color: var(--heading); }
 
-    .btn-add { display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px; background: var(--primary); color: white; border: none; border-radius: var(--radius-sm); font-size: 13px; font-weight: 700; cursor: pointer; }
-    .btn-add svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; }
+    /* Mobile Dock */
+    .mobile-dock { display: none; }
 
-    @media (max-width: 768px) { .sidebar { display: none; } .main { margin-left: 0; padding: 20px 16px; } }
+    @media (max-width: 1024px) {
+      .main { padding: 32px; }
+    }
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding: 24px 16px 100px; }
+      .page-header h1 { font-size: 26px; }
+      .grid { grid-template-columns: 1fr; }
+      
+      .mobile-dock {
+        display: flex; justify-content: space-around; align-items: center;
+        position: fixed; bottom: 16px; left: 16px; right: 16px;
+        background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+        border: 1px solid rgba(229, 231, 235, 0.7); border-radius: 30px;
+        padding: 10px 16px; z-index: 10000; box-shadow: 0 10px 30px -5px rgba(0,0,0,0.15);
+      }
+      .mobile-dock a { display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--body); font-size: 10px; font-weight: 700; gap: 4px; flex: 1; transition: all 0.2s ease; }
+      .mobile-dock a svg { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 2; transition: all 0.3s; }
+      .mobile-dock a.active { color: var(--primary); }
+      .mobile-dock a.active svg { transform: translateY(-2px); stroke-width: 2.5; filter: drop-shadow(0 2px 4px rgba(0,102,204,0.4)); }
+    }
   </style>
 </head>
 <body>
@@ -96,6 +154,30 @@
       <div style="text-align:center; padding:40px; color:var(--body); grid-column: 1/-1;">Loading packages...</div>
     </div>
   </main>
+
+  <!-- Mobile Dock (Bottom Navigation) -->
+  <nav class="mobile-dock">
+    <a href="dashboard.html">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+      <span>Home</span>
+    </a>
+    <a href="orders.html">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg>
+      <span>Orders</span>
+    </a>
+    <a href="packages.html" class="active">
+      <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+      <span>Pkgs</span>
+    </a>
+    <a href="users.html">
+      <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+      <span>Users</span>
+    </a>
+    <a href="settings.html">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle></svg>
+      <span>Settings</span>
+    </a>
+  </nav>
 
   <!-- Edit Modal -->
   <div class="modal-overlay" id="pkg-modal">
