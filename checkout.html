@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Payment Checkout — DollarRent</title>
-  
-  <meta name="description" content="Complete your DollarRent rental payment securely via Easypaisa, JazzCash, Bank Transfer, Binance Pay, or USDT.">
+
+  <meta name="description"
+    content="Complete your DollarRent rental payment securely via Easypaisa, JazzCash, Bank Transfer, Binance Pay, or USDT.">
   <link rel="icon" href="assets/logo.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/logo.png">
   <link rel="manifest" href="manifest.json">
@@ -32,7 +34,11 @@
       --shadow-hover: 0 20px 40px -8px rgba(15, 98, 254, 0.2);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     body {
       font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
@@ -42,171 +48,495 @@
         linear-gradient(90deg, rgba(15, 98, 254, 0.03) 1px, transparent 1px);
       background-size: 100% 100%, 30px 30px, 30px 30px;
       color: var(--heading);
-      padding-bottom: 120px; /* Space for Mobile Dock */
+      padding-bottom: 120px;
+      /* Space for Mobile Dock */
       -webkit-font-smoothing: antialiased;
     }
-    
-    a { text-decoration: none; color: inherit; }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
 
     /* ================= MAIN CONTAINER ================= */
-    .container { max-width: 720px; margin: 0 auto; padding: 100px 20px 40px; }
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 100px 20px 40px;
+    }
 
     /* ================= ANIMATIONS ================= */
-    .animate-in { opacity: 0; transform: translateY(16px); animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
-    .delay-1 { animation-delay: 0.1s; }
-    .delay-2 { animation-delay: 0.2s; }
-    .delay-3 { animation-delay: 0.3s; }
+    .animate-in {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .delay-1 {
+      animation-delay: 0.1s;
+    }
+
+    .delay-2 {
+      animation-delay: 0.2s;
+    }
+
+    .delay-3 {
+      animation-delay: 0.3s;
+    }
 
     /* ================= BACK BUBBLE ================= */
-    .back-bubble-wrapper { margin-bottom: 24px; display: flex; align-items: center; }
+    .back-bubble-wrapper {
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+    }
+
     .back-bubble {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: var(--card-solid); border: 1px solid var(--border-color);
-      padding: 8px 16px; border-radius: 30px; font-size: 14px; font-weight: 700;
-      color: var(--body); box-shadow: var(--shadow-sm); transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--card-solid);
+      border: 1px solid var(--border-color);
+      padding: 8px 16px;
+      border-radius: 30px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--body);
+      box-shadow: var(--shadow-sm);
+      transition: all 0.3s ease;
       cursor: pointer;
     }
-    .back-bubble:hover { border-color: var(--primary); color: var(--primary); transform: translateX(-4px); box-shadow: var(--shadow-md); }
-    .back-bubble svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+    .back-bubble:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: translateX(-4px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .back-bubble svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
 
     /* ================= PAGE HEADER ================= */
-    .page-header { margin-bottom: 32px; text-align: center; }
-    .page-header h1 { font-size: 32px; font-weight: 800; color: var(--heading); letter-spacing: -1px; margin-bottom: 6px; }
-    .page-header p { font-size: 15px; color: var(--body); font-weight: 500; }
+    .page-header {
+      margin-bottom: 32px;
+      text-align: center;
+    }
+
+    .page-header h1 {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--heading);
+      letter-spacing: -1px;
+      margin-bottom: 6px;
+    }
+
+    .page-header p {
+      font-size: 15px;
+      color: var(--body);
+      font-weight: 500;
+    }
 
     /* ================= PREMIUM CARDS ================= */
     .content-card {
-      background: var(--card-solid); border: 1px solid var(--border-color);
-      border-radius: var(--radius-lg); padding: 32px 28px;
-      box-shadow: var(--shadow-md); margin-bottom: 24px; position: relative; overflow: hidden;
+      background: var(--card-solid);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 32px 28px;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
     }
+
     .card-title {
-      font-size: 18px; font-weight: 800; color: var(--heading); margin-bottom: 20px;
-      display: flex; align-items: center; gap: 10px;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--heading);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
-    .card-title svg { width: 22px; height: 22px; stroke: var(--primary); fill: none; stroke-width: 2.5; }
+
+    .card-title svg {
+      width: 22px;
+      height: 22px;
+      stroke: var(--primary);
+      fill: none;
+      stroke-width: 2.5;
+    }
 
     /* ================= ORDER SUMMARY ================= */
     .summary-row {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 14px 0; border-bottom: 1px solid rgba(226,232,240,0.6); font-size: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+      font-size: 15px;
     }
-    .summary-row:last-child { border-bottom: none; }
-    .summary-row .label { color: var(--body); font-weight: 600; }
-    .summary-row .value { font-weight: 800; color: var(--heading); }
-    
+
+    .summary-row:last-child {
+      border-bottom: none;
+    }
+
+    .summary-row .label {
+      color: var(--body);
+      font-weight: 600;
+    }
+
+    .summary-row .value {
+      font-weight: 800;
+      color: var(--heading);
+    }
+
     .summary-total {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 20px 0 0; margin-top: 8px; border-top: 2px dashed var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0 0;
+      margin-top: 8px;
+      border-top: 2px dashed var(--border-color);
     }
-    .summary-total .label { font-size: 16px; font-weight: 800; }
-    .summary-total .value { font-size: 28px; font-weight: 900; color: var(--primary); letter-spacing: -0.5px; }
+
+    .summary-total .label {
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .summary-total .value {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--primary);
+      letter-spacing: -0.5px;
+    }
 
     /* ================= PAYMENT METHOD SELECTOR ================= */
-    .method-list { display: flex; flex-direction: column; gap: 12px; }
+    .method-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
     .method-option {
-      display: flex; align-items: center; gap: 16px; padding: 18px;
-      border: 2px solid var(--border-color); border-radius: var(--radius-md);
-      cursor: pointer; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 18px;
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
       background: var(--bg-color);
     }
-    .method-option:hover { border-color: rgba(15,98,254,0.4); background: var(--card-solid); transform: translateY(-2px); }
-    
+
+    .method-option:hover {
+      border-color: rgba(15, 98, 254, 0.4);
+      background: var(--card-solid);
+      transform: translateY(-2px);
+    }
+
     .method-option.selected {
-      border-color: var(--primary); background: var(--card-solid);
+      border-color: var(--primary);
+      background: var(--card-solid);
       box-shadow: 0 8px 20px rgba(15, 98, 254, 0.15);
     }
+
     .method-radio {
-      width: 24px; height: 24px; border: 2px solid var(--border-color);
-      border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
-      transition: all 0.3s ease; background: var(--card-solid);
+      width: 24px;
+      height: 24px;
+      border: 2px solid var(--border-color);
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      background: var(--card-solid);
     }
-    .method-option.selected .method-radio { border-color: var(--primary); }
+
+    .method-option.selected .method-radio {
+      border-color: var(--primary);
+    }
+
     .method-option.selected .method-radio::after {
-      content: ''; width: 12px; height: 12px; border-radius: 50%; background: var(--primary);
+      content: '';
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--primary);
     }
-    .method-info { flex: 1; }
-    .method-name { font-size: 16px; font-weight: 800; color: var(--heading); margin-bottom: 2px; }
-    .method-desc { font-size: 13px; color: var(--body); font-weight: 500; }
+
+    .method-info {
+      flex: 1;
+    }
+
+    .method-name {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--heading);
+      margin-bottom: 2px;
+    }
+
+    .method-desc {
+      font-size: 13px;
+      color: var(--body);
+      font-weight: 500;
+    }
 
     /* ================= PAYMENT DETAILS PANEL ================= */
     .payment-details {
-      display: none; background: rgba(15, 98, 254, 0.03);
-      border: 1px solid rgba(15, 98, 254, 0.15); border-radius: var(--radius-md);
-      padding: 24px; margin-top: 20px; animation: slideDown 0.4s ease forwards;
+      display: none;
+      background: rgba(15, 98, 254, 0.03);
+      border: 1px solid rgba(15, 98, 254, 0.15);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      margin-top: 20px;
+      animation: slideDown 0.4s ease forwards;
     }
-    @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-    .payment-details.visible { display: block; }
-    
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .payment-details.visible {
+      display: block;
+    }
+
     .detail-row {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 14px 0; border-bottom: 1px solid rgba(226,232,240,0.8); gap: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+      gap: 12px;
     }
-    .detail-row:last-child { border-bottom: none; padding-bottom: 0; }
-    .detail-label { font-size: 14px; color: var(--body); font-weight: 600; }
-    .detail-value { font-size: 15px; font-weight: 800; color: var(--heading); display: flex; align-items: center; gap: 10px; text-align: right;}
-    
+
+    .detail-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .detail-label {
+      font-size: 14px;
+      color: var(--body);
+      font-weight: 600;
+    }
+
+    .detail-value {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--heading);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-align: right;
+    }
+
     .copy-btn {
-      background: var(--primary-glow); color: var(--primary); border: none;
-      padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 800;
-      cursor: pointer; transition: all 0.2s ease;
+      background: var(--primary-glow);
+      color: var(--primary);
+      border: none;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
-    .copy-btn:hover { background: var(--primary); color: white; }
+
+    .copy-btn:hover {
+      background: var(--primary);
+      color: white;
+    }
 
     .instructions-box {
-      background: var(--card-solid); border-left: 4px solid var(--warning);
-      border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px;
-      margin-top: 20px; font-size: 14px; color: var(--body); line-height: 1.6; font-weight: 500;
+      background: var(--card-solid);
+      border-left: 4px solid var(--warning);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 16px;
+      margin-top: 20px;
+      font-size: 14px;
+      color: var(--body);
+      line-height: 1.6;
+      font-weight: 500;
       box-shadow: var(--shadow-sm);
     }
-    .instructions-box strong { color: var(--heading); font-weight: 800; }
+
+    .instructions-box strong {
+      color: var(--heading);
+      font-weight: 800;
+    }
 
     /* ================= UPLOAD SECTION ================= */
     .upload-dropzone {
-      border: 2px dashed var(--border-color); border-radius: var(--radius-md);
-      padding: 40px 20px; text-align: center; cursor: pointer; transition: all 0.3s ease;
+      border: 2px dashed var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 40px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
       background: var(--bg-color);
     }
-    .upload-dropzone:hover { border-color: var(--primary); background: var(--primary-glow); }
-    .upload-dropzone.has-file { border-color: var(--success); background: rgba(0, 230, 118, 0.05); }
-    .upload-dropzone svg { width: 48px; height: 48px; stroke: #94A3B8; fill: none; stroke-width: 1.5; margin-bottom: 12px; transition: 0.3s; }
-    .upload-dropzone.has-file svg { stroke: var(--success); }
-    .upload-dropzone p { font-size: 15px; color: var(--heading); font-weight: 600; }
-    .upload-dropzone span { font-size: 13px; color: var(--body); }
-    .upload-dropzone .filename { font-size: 14px; font-weight: 800; color: var(--success); margin-top: 10px; }
-    .upload-dropzone input { display: none; }
 
-    .upload-preview { margin-top: 16px; border-radius: var(--radius-sm); overflow: hidden; display: none; text-align: center; }
-    .upload-preview img { width: 100%; max-height: 250px; object-fit: contain; border-radius: var(--radius-sm); border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); }
+    .upload-dropzone:hover {
+      border-color: var(--primary);
+      background: var(--primary-glow);
+    }
+
+    .upload-dropzone.has-file {
+      border-color: var(--success);
+      background: rgba(0, 230, 118, 0.05);
+    }
+
+    .upload-dropzone svg {
+      width: 48px;
+      height: 48px;
+      stroke: #94A3B8;
+      fill: none;
+      stroke-width: 1.5;
+      margin-bottom: 12px;
+      transition: 0.3s;
+    }
+
+    .upload-dropzone.has-file svg {
+      stroke: var(--success);
+    }
+
+    .upload-dropzone p {
+      font-size: 15px;
+      color: var(--heading);
+      font-weight: 600;
+    }
+
+    .upload-dropzone span {
+      font-size: 13px;
+      color: var(--body);
+    }
+
+    .upload-dropzone .filename {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--success);
+      margin-top: 10px;
+    }
+
+    .upload-dropzone input {
+      display: none;
+    }
+
+    .upload-preview {
+      margin-top: 16px;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      display: none;
+      text-align: center;
+    }
+
+    .upload-preview img {
+      width: 100%;
+      max-height: 250px;
+      object-fit: contain;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+    }
 
     /* ================= SUBMIT BUTTON ================= */
     .btn-submit {
-      display: flex; align-items: center; justify-content: center; gap: 10px;
-      width: 100%; padding: 18px; background: linear-gradient(135deg, var(--primary), var(--primary-hover));
-      color: white; border: none; border-radius: 30px; font-size: 16px; font-weight: 800;
-      cursor: pointer; box-shadow: 0 10px 24px rgba(15,98,254,0.3); transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+      color: white;
+      border: none;
+      border-radius: 30px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 10px 24px rgba(15, 98, 254, 0.3);
+      transition: all 0.3s ease;
     }
-    .btn-submit:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 14px 32px rgba(15,98,254,0.4); }
-    .btn-submit:disabled { background: #CBD5E1; color: #94A3B8; cursor: not-allowed; box-shadow: none; transform: none; }
-    .btn-submit svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2.5; }
+
+    .btn-submit:hover:not(:disabled) {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 32px rgba(15, 98, 254, 0.4);
+    }
+
+    .btn-submit:disabled {
+      background: #CBD5E1;
+      color: #94A3B8;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .btn-submit svg {
+      width: 22px;
+      height: 22px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.5;
+    }
 
     @media (max-width: 767px) {
-      .container { padding-top: 80px; }
-      .content-card { padding: 24px 20px; }
-      .summary-total .value { font-size: 24px; }
-      .detail-value { flex-direction: column; align-items: flex-end; gap: 6px; }
+      .container {
+        padding-top: 80px;
+      }
+
+      .content-card {
+        padding: 24px 20px;
+      }
+
+      .summary-total .value {
+        font-size: 24px;
+      }
+
+      .detail-value {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 6px;
+      }
     }
   </style>
 </head>
+
 <body>
 
   <main class="container">
-    
+
     <!-- Premium Back Bubble -->
     <div class="back-bubble-wrapper animate-in">
       <a href="javascript:history.back()" class="back-bubble">
-        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        <svg viewBox="0 0 24 24">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
         Back
       </a>
     </div>
@@ -219,13 +549,20 @@
     <!-- Order Summary Card -->
     <div class="content-card animate-in delay-1">
       <div class="card-title">
-        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+        <svg viewBox="0 0 24 24">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="3" y1="9" x2="21" y2="9"></line>
+          <line x1="9" y1="21" x2="9" y2="9"></line>
+        </svg>
         Order Summary
       </div>
-      <div class="summary-row"><span class="label">Selected Package</span><span class="value" id="sum-package">—</span></div>
+      <div class="summary-row"><span class="label">Selected Package</span><span class="value" id="sum-package">—</span>
+      </div>
       <div class="summary-row"><span class="label">Total Amount</span><span class="value" id="sum-amount">—</span></div>
-      <div class="summary-row"><span class="label">Est. Processing Time</span><span class="value" id="sum-time">—</span></div>
-      <div class="summary-row"><span class="label">Reference ID</span><span class="value" id="sum-ref" style="font-family: monospace;">—</span></div>
+      <div class="summary-row"><span class="label">Est. Processing Time</span><span class="value" id="sum-time">—</span>
+      </div>
+      <div class="summary-row"><span class="label">Reference ID</span><span class="value" id="sum-ref"
+          style="font-family: monospace;">—</span></div>
       <div class="summary-total">
         <span class="label">Advance Rental Fee</span>
         <span class="value" id="sum-fee">$0.00</span>
@@ -235,12 +572,19 @@
     <!-- Payment Method Selection -->
     <div class="content-card animate-in delay-2">
       <div class="card-title">
-        <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2" ry="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+        <svg viewBox="0 0 24 24">
+          <rect x="2" y="5" width="20" height="14" rx="2" ry="2"></rect>
+          <line x1="2" y1="10" x2="22" y2="10"></line>
+        </svg>
         Select Payment Method
       </div>
       <div class="method-list" id="payment-methods-list">
         <div style="text-align:center; padding:20px; color:var(--body); font-weight:600;">
-          <svg style="animation: spin 1s linear infinite; width:24px; height:24px; stroke:var(--primary); fill:none; stroke-width:3; margin-bottom:10px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-dashoffset="32"></circle></svg>
+          <svg
+            style="animation: spin 1s linear infinite; width:24px; height:24px; stroke:var(--primary); fill:none; stroke-width:3; margin-bottom:10px;"
+            viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-dashoffset="32"></circle>
+          </svg>
           <br>Loading secure payment methods...
         </div>
       </div>
@@ -255,11 +599,19 @@
     <!-- Screenshot Upload Section -->
     <div class="content-card animate-in delay-3">
       <div class="card-title">
-        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+        <svg viewBox="0 0 24 24">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="17 8 12 3 7 8"></polyline>
+          <line x1="12" y1="3" x2="12" y2="15"></line>
+        </svg>
         Upload Payment Proof
       </div>
       <div class="upload-dropzone" id="upload-dropzone">
-        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+        <svg viewBox="0 0 24 24">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <circle cx="8.5" cy="8.5" r="1.5"></circle>
+          <polyline points="21 15 16 10 5 21"></polyline>
+        </svg>
         <p>Tap or Drag to upload your transaction screenshot</p>
         <span>JPG, PNG up to 5MB</span>
         <div class="filename" id="file-name" style="display:none;"></div>
@@ -272,7 +624,10 @@
 
     <!-- Submit Button -->
     <button class="btn-submit animate-in delay-3" id="btn-submit-order" disabled>
-      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+      </svg>
       Verify & Submit Order
     </button>
   </main>
@@ -280,7 +635,7 @@
   <!-- ================= FIREBASE & LOGIC ================= -->
   <script type="module">
     import './app.js';
-    
+
     // SAFE FALLBACKS (Fixes the "missing error")
     // If utils.js fails to load a function, these will prevent the app from crashing.
     const safeFormatUSD = (val) => `$${Number(val).toFixed(2)}`;
@@ -389,7 +744,7 @@
       panel.classList.add('visible');
     }
 
-    window._copyText = function(text) { copyToClipboard(text); };
+    window._copyText = function (text) { copyToClipboard(text); };
 
     // Image Upload Logic
     const dropzone = document.getElementById('upload-dropzone');
@@ -427,7 +782,7 @@
             reader.readAsDataURL(file);
           });
         }
-        
+
         dropzone.classList.add('has-file');
         fileNameEl.textContent = file.name;
         fileNameEl.style.display = 'block';
@@ -467,6 +822,7 @@
 
       const orderData = {
         orderId: orderId,
+        userId: user?.uid || 'guest',
         amountUSD: packageAmount,
         fee: packageFee,
         processingTime: processingTime,
@@ -489,7 +845,7 @@
           // If Firestore is disconnected, simulate success for UX testing
           console.warn("Firestore 'createOrder' missing, simulating success.");
         }
-        
+
         showToast('Payment submitted successfully!', 'success');
         setTimeout(() => {
           // Redirect to a success page or status page
@@ -514,4 +870,5 @@
     loadPaymentMethods();
   </script>
 </body>
+
 </html>
