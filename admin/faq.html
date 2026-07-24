@@ -177,40 +177,47 @@
   </div>
 
   <script type="module">
-    import { getAdminUser } from '../firebase-auth.js';
+    import { initAuthObserver, getAdminUser } from '../firebase-auth.js';
     import { db } from '../firebase-config.js';
     import { collection, onSnapshot, doc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
     import { showToast, escapeHTML } from '../utils.js';
 
-    const admin = getAdminUser();
-    if (!admin) window.location.href = 'login.html';
-
     let faqs = [];
     let editingId = null;
+    let faqsUnsubscribe = null;
 
-    onSnapshot(collection(db, 'faqs'), (snapshot) => {
-      faqs = [];
-      snapshot.forEach(d => faqs.push({ id: d.id, ...d.data() }));
-      faqs.sort((a, b) => (a.order || 0) - (b.order || 0));
-      renderFaqs();
+    initAuthObserver((user) => {
+      const adminUser = getAdminUser();
+      if (!adminUser && !user) {
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      if (!faqsUnsubscribe) {
+        faqsUnsubscribe = onSnapshot(collection(db, 'faqs'), (snapshot) => {
+          faqs = [];
+          snapshot.forEach(d => faqs.push({ id: d.id, ...d.data() }));
+          faqs.sort((a, b) => (a.order || 0) - (b.order || 0));
+          renderFaqs();
+        });
+      }
     });
 
     function renderFaqs() {
-      const tbody = document.getElementById('faq-tbody');
+      const container = document.getElementById('faq-list');
       if (!faqs.length) {
-        tbody.innerHTML = '<tr class="empty-row"><td colspan="4">No FAQs added yet.</td></tr>';
+        container.innerHTML = '<div style="text-align:center; padding:40px; color:var(--body);">No FAQs added yet.</div>';
         return;
       }
-      tbody.innerHTML = faqs.map(f => `
-        <tr>
-          <td><strong>${escapeHTML(f.question)}</strong></td>
-          <td style="color:var(--body); max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHTML(f.answer)}</td>
-          <td>${f.order || 0}</td>
-          <td>
-            <button class="action-btn" onclick="window._editFaq('${f.id}')">Edit</button>
-            <button class="action-btn action-delete" onclick="window._deleteFaq('${f.id}')">Delete</button>
-          </td>
-        </tr>
+      container.innerHTML = faqs.map(f => `
+        <div class="faq-item">
+          <h4>${escapeHTML(f.question)}</h4>
+          <p>${escapeHTML(f.answer)}</p>
+          <div class="faq-actions">
+            <button class="btn-edit" onclick="window._editFaq('${f.id}')">Edit</button>
+            <button class="btn-delete" onclick="window._deleteFaq('${f.id}')">Delete</button>
+          </div>
+        </div>
       `).join('');
     }
 
