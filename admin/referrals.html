@@ -7,46 +7,102 @@
   <meta name="robots" content="noindex, nofollow">
   <link rel="icon" href="../assets/logo.png" type="image/png">
   <style>
-    :root { --bg: #F1F5F9; --card: #FFFFFF; --border: #E2E8F0; --primary: #0F62FE; --primary-glow: rgba(15,98,254,0.1); --success: #059669; --warning: #D97706; --danger: #EF4444; --heading: #0B101E; --body: #64748B; --radius: 20px; --radius-sm: 12px; --shadow: 0 4px 24px -4px rgba(0,0,0,0.06); --sidebar-w: 260px; }
+    :root {
+      --bg: #F5F5F7; --card: rgba(255, 255, 255, 0.7); --border: rgba(226, 232, 240, 0.6);
+      --primary: #0066CC; --primary-hover: #0055AA; --primary-glow: rgba(0, 102, 204, 0.1);
+      --success: #34C759; --warning: #FF9500; --danger: #FF3B30;
+      --heading: #1D1D1F; --body: #86868B;
+      --radius: 24px; --radius-sm: 16px;
+      --shadow: 0 10px 40px -10px rgba(0,0,0,0.08);
+      --sidebar-w: 280px;
+    }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", sans-serif; background: var(--bg); color: var(--heading); display: flex; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif;
+      background: var(--bg); color: var(--heading);
+      display: flex; min-height: 100vh; -webkit-font-smoothing: antialiased;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
     a { text-decoration: none; color: inherit; }
-    .sidebar { width: var(--sidebar-w); background: var(--card); border-right: 1px solid var(--border); padding: 24px 16px; display: flex; flex-direction: column; justify-content: space-between; position: fixed; top: 0; bottom: 0; left: 0; z-index: 100; }
-    .sidebar-brand { display: flex; align-items: center; gap: 10px; padding: 0 8px; margin-bottom: 28px; }
-    .sidebar-brand img { width: 32px; height: 32px; }
-    .sidebar-brand span { font-size: 18px; font-weight: 800; }
+
+    /* ===== SIDEBAR (Desktop) / BOTTOM DOCK (Mobile) ===== */
+    .sidebar {
+      width: var(--sidebar-w); background: var(--card); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      border-right: 1px solid var(--border); padding: 32px 20px; display: flex; flex-direction: column;
+      justify-content: space-between; position: fixed; top: 0; bottom: 0; left: 0;
+      z-index: 100; overflow-y: auto; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .sidebar-brand { display: flex; align-items: center; gap: 12px; padding: 0 12px; margin-bottom: 36px; }
+    .sidebar-brand img { width: 36px; height: 36px; filter: drop-shadow(0 4px 8px rgba(0,102,204,0.3)); }
+    .sidebar-brand span { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
     .sidebar-brand span b { color: var(--primary); }
-    .sidebar-menu { list-style: none; display: flex; flex-direction: column; gap: 4px; }
-    .sidebar-menu a { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; color: var(--body); transition: all 0.2s; }
-    .sidebar-menu a:hover, .sidebar-menu a.active { background: var(--primary-glow); color: var(--primary); }
-    .sidebar-menu svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-    .sidebar-footer { padding: 0 8px; }
-    .sidebar-footer a { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--body); }
-    .sidebar-footer svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; }
 
-    .main { flex: 1; margin-left: var(--sidebar-w); padding: 28px 32px; }
-    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-    .page-header h1 { font-size: 26px; font-weight: 800; }
-    .page-header p { font-size: 14px; color: var(--body); }
+    .sidebar-menu { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .sidebar-menu a {
+      display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: var(--radius-sm);
+      font-size: 15px; font-weight: 600; color: var(--body); transition: all 0.25s ease;
+    }
+    .sidebar-menu a:hover { background: var(--primary-glow); color: var(--primary); transform: translateX(4px); }
+    .sidebar-menu a.active { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(0,102,204,0.3); }
+    .sidebar-menu svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 
-    .search-bar { margin-bottom: 20px; }
-    .search-input { padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 14px; width: 320px; outline: none; background: var(--card); }
+    .sidebar-footer { padding: 0 12px; }
+    .sidebar-footer a { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; color: var(--body); padding: 12px 0; }
+    .sidebar-footer a:hover { color: var(--danger); }
+    .sidebar-footer svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    /* ===== MAIN ===== */
+    .main { flex: 1; margin-left: var(--sidebar-w); padding: 40px 48px; overflow-y: auto; min-width: 0; }
+    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; flex-wrap: wrap; gap: 16px; }
+    .page-header h1 { font-size: 32px; font-weight: 800; letter-spacing: -1px; }
+    .page-header p { font-size: 15px; color: var(--body); margin-top: 4px; font-weight: 500; }
+    
+    .filter-bar { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+    .search-input { padding: 12px 18px; border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 15px; width: 320px; outline: none; background: var(--card); backdrop-filter: blur(10px); transition: border-color 0.2s; }
     .search-input:focus { border-color: var(--primary); }
 
-    .table-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
-    table { width: 100%; border-collapse: collapse; }
-    th { text-align: left; padding: 10px 12px; font-size: 12px; font-weight: 700; color: var(--body); text-transform: uppercase; border-bottom: 1px solid var(--border); }
-    td { padding: 14px 12px; font-size: 14px; border-bottom: 1px solid #F1F5F9; }
-    tr:hover td { background: rgba(15,98,254,0.015); }
+    .table-card { background: var(--card); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow); overflow: hidden; }
+    .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 800px; }
+    th { text-align: left; padding: 12px 16px; font-size: 12px; font-weight: 800; color: var(--body); text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border); }
+    td { padding: 16px; font-size: 15px; font-weight: 500; border-bottom: 1px solid rgba(226,232,240,0.5); }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(0,102,204,0.03); }
+
     .badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
-    .badge-pending { background: rgba(217,119,6,0.1); color: var(--warning); }
-    .badge-completed { background: rgba(5,150,105,0.1); color: var(--success); }
+    .badge-pending { background: rgba(255,149,0,0.1); color: var(--warning); }
+    .badge-completed { background: rgba(52,199,89,0.1); color: var(--success); }
+
+    .action-btn { padding: 6px 14px; border-radius: 10px; font-size: 13px; font-weight: 600; border: none; cursor: pointer; transition: all 0.2s; background: var(--primary); color: white; }
+    .action-btn:hover { background: var(--primary-hover); }
+
     .empty-row td { text-align: center; color: var(--body); padding: 40px; }
 
-    .action-btn { padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; border: none; cursor: pointer; transition: all 0.2s; background: rgba(5,150,105,0.1); color: var(--success); }
-    .action-btn:hover { background: rgba(5,150,105,0.2); }
+    /* Mobile Dock */
+    .mobile-dock { display: none; }
 
-    @media (max-width: 768px) { .sidebar { display: none; } .main { margin-left: 0; padding: 20px 16px; } .search-input { width: 100%; } }
+    @media (max-width: 1024px) {
+      .main { padding: 32px; }
+    }
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding: 24px 16px 100px; }
+      .page-header h1 { font-size: 26px; }
+      .table-card { padding: 16px; }
+      .search-input { width: 100%; }
+      
+      .mobile-dock {
+        display: flex; justify-content: space-around; align-items: center;
+        position: fixed; bottom: 16px; left: 16px; right: 16px;
+        background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+        border: 1px solid rgba(229, 231, 235, 0.7); border-radius: 30px;
+        padding: 10px 16px; z-index: 10000; box-shadow: 0 10px 30px -5px rgba(0,0,0,0.15);
+      }
+      .mobile-dock a { display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--body); font-size: 10px; font-weight: 700; gap: 4px; flex: 1; transition: all 0.2s ease; }
+      .mobile-dock a svg { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 2; transition: all 0.3s; }
+      .mobile-dock a.active { color: var(--primary); }
+      .mobile-dock a.active svg { transform: translateY(-2px); stroke-width: 2.5; filter: drop-shadow(0 2px 4px rgba(0,102,204,0.4)); }
+    }
   </style>
 </head>
 <body>
@@ -72,13 +128,46 @@
     <div class="search-bar">
       <input type="text" class="search-input" id="search-input" placeholder="Search by user or email...">
     </div>
+    <!-- Referrals Table -->
     <div class="table-card">
-      <table>
-        <thead><tr><th>Referrer</th><th>Referred User</th><th>Status</th><th>Date</th><th>Action</th></tr></thead>
-        <tbody id="referrals-tbody"><tr class="empty-row"><td colspan="5">Loading referrals...</td></tr></tbody>
-      </table>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Referrer</th>
+              <th>Referred User</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="referrals-tbody">
+            <tr class="empty-row"><td colspan="5">Loading referrals...</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </main>
+
+  <!-- Mobile Dock (Bottom Navigation) -->
+  <nav class="mobile-dock">
+    <a href="dashboard.html">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+      <span>Home</span>
+    </a>
+    <a href="orders.html">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg>
+      <span>Orders</span>
+    </a>
+    <a href="referrals.html" class="active">
+      <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+      <span>Refs</span>
+    </a>
+    <a href="users.html">
+      <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+      <span>Users</span>
+    </a>
+  </nav>
 
   <script type="module">
     import { getAdminUser } from '../firebase-auth.js';
