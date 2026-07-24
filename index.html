@@ -7,7 +7,7 @@
   <!-- ================= ADVANCED SEO & META TAGS ================= -->
   <title>DollarRent — Premium Digital USD Rental Platform</title>
   <meta name="description" content="Fast, Secure & Trusted Digital USD Rental Platform. Instant processing, premium fintech security, and top-tier trading UI.">
-  <meta name="keywords" content="DollarRent, USD Rental, Digital USD, Crypto, Fintech, Trading, Binance, Quotex, Forex">
+  <meta name="keywords" content="DollarRent, USD Rental, Digital USD, Crypto, Fintech, Trading, Binance, Quotex, MetaTrader 5">
   <meta name="author" content="DollarRent Admin">
   <meta name="robots" content="index, follow">
   
@@ -335,7 +335,8 @@
     <div class="connect-logos">
       <img src="https://www.google.com/s2/favicons?domain=binance.com&sz=128" alt="Binance" title="Binance">
       <img src="https://www.google.com/s2/favicons?domain=quotex.com&sz=128" alt="Quotex" title="Quotex">
-      <img src="https://www.google.com/s2/favicons?domain=forex.com&sz=128" alt="Forex" title="Forex">
+      <!-- UPGRADED TO METATRADER 5 (MT5) ICON -->
+      <img src="https://www.google.com/s2/favicons?domain=metatrader5.com&sz=128" alt="MetaTrader 5" title="MetaTrader 5">
     </div>
   </div>
 
@@ -350,14 +351,15 @@
     let authProgress = 0;
     const progressEl = document.getElementById('loading-pct');
 
-    // UI Improvement: Simulate Real-Time Authentication Progress
+    // SMOOTH 5-SECOND PROGRESS BAR LOGIC
+    // Increment dynamically so it hits 99% right around the 5 second mark
     const progressInterval = setInterval(() => {
-      authProgress += Math.floor(Math.random() * 15) + 4;
+      authProgress += Math.floor(Math.random() * 4) + 1; // Slower increment for 5s
       if (authProgress >= 99) {
         authProgress = 99;
       }
       if (progressEl && !isMaintenanceMode) progressEl.innerText = `${authProgress}%`;
-    }, 120);
+    }, 150);
 
     try {
       const docRef = doc(db, "admin_settings", "status");
@@ -392,6 +394,7 @@
       if (!isMaintenanceMode) redirectToHome();
     };
 
+    // EXACTLY 5 SECONDS (5000ms) AUTO-REDIRECT
     setTimeout(() => {
       const checkReady = setInterval(() => {
         if (configLoaded) {
@@ -399,7 +402,7 @@
           if (!isMaintenanceMode) redirectToHome();
         }
       }, 100);
-    }, 2200); 
+    }, 5000); // Changed from 2200 to 5000 
   </script>
 </body>
 </html>
