@@ -2,18 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   
   <!-- ================= ADVANCED SEO & META TAGS ================= -->
-  <title>DollarRent — Premium Digital USD Rental Platform</title>
+  <title>DollarRent — Premium Digital USD Rental</title>
   <meta name="description" content="Fast, Secure & Trusted Digital USD Rental Platform. Instant processing, premium fintech security, and top-tier trading UI.">
   <meta name="keywords" content="DollarRent, USD Rental, Digital USD, Crypto, Fintech, Trading, Binance, Quotex, MetaTrader 5">
-  <meta name="author" content="DollarRent Admin">
-  <meta name="robots" content="index, follow">
-  
-  <!-- Open Graph & Twitter -->
-  <meta property="og:title" content="DollarRent — Premium Digital USD Rental Platform">
-  <meta property="og:description" content="Experience lightning-fast and secure digital USD rentals with our advanced fintech platform.">
   
   <!-- STRICT GLOBAL LOGO COMPLIANCE -->
   <meta property="og:image" content="assets/logo.png">
@@ -31,18 +25,17 @@
       --text-main: #0B101E;
       --text-muted: #64748B;
       --primary: #0F62FE;
-      --primary-light: #4A8BFF;
-      --primary-glow: rgba(15, 98, 254, 0.12);
+      --primary-glow: rgba(15, 98, 254, 0.15);
+      --secondary: #00E676;
       --danger: #E11D48;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", sans-serif; }
     
     body {
-      /* Premium FinTech Background: Grid pattern combined with soft radial lighting */
       background-color: var(--bg-cream);
       background-image: 
-        radial-gradient(circle at 50% -10%, var(--bg-white) 0%, transparent 60%),
+        radial-gradient(circle at 50% -10%, var(--bg-white) 0%, transparent 70%),
         linear-gradient(rgba(15, 98, 254, 0.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(15, 98, 254, 0.03) 1px, transparent 1px);
       background-size: 100% 100%, 24px 24px, 24px 24px;
@@ -57,7 +50,7 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* Staggered Cinematic Entrance */
+    /* Cinematic Entrance */
     .animate-item {
       opacity: 0;
       transform: translateY(20px);
@@ -65,24 +58,11 @@
     }
     @keyframes slideUpFade { to { transform: translateY(0); opacity: 1; } }
 
-    /* Main Content Wrapper */
-    .splash-content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      width: 100%;
-      max-width: 440px;
-      padding: 20px;
-      z-index: 10;
-      position: relative;
-    }
-
-    /* ================= MAIN LOGO & RIPPLE (SINGLE SOURCE LOGO) ================= */
+    /* ================= MAIN LOGO & RIPPLE ================= */
     .logo-container {
       position: relative;
-      width: 135px;
-      height: 135px;
+      width: 140px;
+      height: 140px;
       margin-bottom: 24px;
       display: flex;
       align-items: center;
@@ -119,9 +99,9 @@
       50% { transform: translateY(-8px); }
     }
 
-    /* Gradient Typography */
+    /* Typography */
     .brand-title {
-      font-size: 40px;
+      font-size: 42px;
       font-weight: 800;
       letter-spacing: -1.5px;
       color: var(--text-main);
@@ -129,7 +109,7 @@
       line-height: 1.1;
     }
     .brand-title span { 
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      background: linear-gradient(135deg, var(--primary) 0%, #4A8BFF 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -137,23 +117,23 @@
       font-size: 15px;
       color: var(--text-muted);
       font-weight: 600;
-      margin-bottom: 40px;
+      margin-bottom: 48px;
       letter-spacing: 0.5px;
       text-transform: uppercase;
     }
 
-    /* ================= DYNAMIC AUTHENTICATION SPINNER & COUNTER ================= */
+    /* ================= DYNAMIC SPINNER ================= */
     #loading-ui {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 14px;
+      gap: 16px;
     }
 
     .spinner-wrapper {
       position: relative;
-      width: 50px;
-      height: 50px;
+      width: 56px;
+      height: 56px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -168,44 +148,22 @@
       border-top-color: var(--primary);
       animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
     }
-
-    /* Glow effect on spinner */
     .orbital-spinner::before {
-      content: '';
-      position: absolute;
+      content: ''; position: absolute;
       top: -3px; left: -3px; right: -3px; bottom: -3px;
-      border-radius: 50%;
-      border: 3px solid transparent;
+      border-radius: 50%; border: 3px solid transparent;
       border-top-color: rgba(15, 98, 254, 0.4);
-      filter: blur(4px);
-      animation: spin 1s linear infinite;
+      filter: blur(4px); animation: spin 1s linear infinite;
     }
-
-    /* Dynamic Percentage Text */
-    .percentage-text {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--primary);
-      z-index: 2;
-    }
-
     @keyframes spin { 100% { transform: rotate(360deg); } }
 
+    .percentage-text { font-size: 14px; font-weight: 800; color: var(--primary); z-index: 2; }
+
     .loading-status {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text-main);
-      letter-spacing: 0.5px;
-      display: flex;
-      align-items: center;
-      gap: 4px;
+      font-size: 15px; font-weight: 700; color: var(--text-main);
+      letter-spacing: 0.5px; display: flex; align-items: center; gap: 4px;
     }
-
-    .loading-status::after {
-      content: 'Authenticating';
-      animation: typingStatus 2s infinite;
-    }
-
+    .loading-status::after { content: 'Authenticating'; animation: typingStatus 2s infinite; }
     @keyframes typingStatus {
       0% { content: 'Connecting.'; }
       33% { content: 'Securing..'; }
@@ -214,77 +172,47 @@
     }
 
     .tap-hint {
-      margin-top: 10px;
-      font-size: 13px;
-      color: var(--text-muted);
-      font-weight: 500;
-      opacity: 0;
-      animation: breatheText 2s infinite;
-      animation-delay: 1s; 
+      margin-top: 12px; font-size: 13px; color: var(--text-muted); font-weight: 500;
+      opacity: 0; animation: breatheText 2s infinite; animation-delay: 1.5s; 
     }
+    @keyframes breatheText { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
 
-    @keyframes breatheText {
-      0%, 100% { opacity: 0.4; transform: scale(1); }
-      50% { opacity: 0.9; transform: scale(1.02); }
-    }
-
-    /* ================= EXPLICITLY REQUESTED "CONNECT WITH" SECTION ================= */
-    .connect-section {
+    /* ================= CONNECT PILL (UPGRADED UI) ================= */
+    .connect-pill {
       position: absolute;
       bottom: 40px;
       display: flex;
-      flex-direction: column;
       align-items: center;
+      gap: 16px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+      padding: 10px 24px;
+      border-radius: 50px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
     }
-
+    
     .connect-text {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      color: #94A3B8;
-      margin-bottom: 20px;
-      font-weight: 700;
+      font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
+      color: var(--text-muted); font-weight: 700; padding-right: 12px;
+      border-right: 1px solid var(--border-color);
     }
 
-    .connect-logos {
-      display: flex;
-      align-items: center;
-      gap: 40px;
-    }
-
+    .connect-logos { display: flex; align-items: center; gap: 16px; }
     .connect-logos img {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%; 
-      object-fit: contain;
-      filter: grayscale(100%) drop-shadow(0 4px 10px rgba(0, 0, 0, 0.05));
-      opacity: 0.5;
+      width: 28px; height: 28px; border-radius: 50%; object-fit: contain;
+      filter: grayscale(100%); opacity: 0.5;
       transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-      cursor: pointer;
     }
+    .connect-logos img:hover { opacity: 1; filter: grayscale(0%); transform: translateY(-4px) scale(1.2); }
 
-    .connect-logos img:hover {
-      opacity: 1;
-      filter: grayscale(0%) drop-shadow(0 12px 24px rgba(15, 98, 254, 0.3));
-      transform: translateY(-8px) scale(1.15);
-    }
-
-    /* ================= MAINTENANCE MODE UI ================= */
-    #maintenance-ui {
-      display: none; 
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
-    }
-    .maintenance-icon {
-      margin-bottom: 16px;
-      background: rgba(225, 29, 72, 0.08);
-      padding: 16px;
-      border-radius: 50%;
-    }
+    /* ================= MAINTENANCE MODE ================= */
+    #maintenance-ui { display: none; flex-direction: column; align-items: center; width: 100%; }
+    .maintenance-icon { margin-bottom: 16px; background: rgba(225, 29, 72, 0.08); padding: 16px; border-radius: 50%; }
     .maintenance-icon svg { width: 34px; height: 34px; fill: var(--danger); }
     .maintenance-title { color: var(--danger); font-size: 22px; font-weight: 800; margin-bottom: 8px;}
-    .maintenance-text { color: var(--text-muted); font-size: 14px; line-height: 1.6; padding: 0 20px; font-weight: 500;}
+    .maintenance-text { color: var(--text-muted); font-size: 14px; line-height: 1.6; text-align: center; padding: 0 20px;}
 
     /* Delays */
     .delay-1 { animation-delay: 0.1s; }
@@ -296,73 +224,81 @@
 </head>
 <body onclick="handleManualTap()">
 
-  <div class="splash-content" id="app-card">
-    
-    <!-- EXACT STRICT LOGO USAGE (No Fallbacks) -->
-    <div class="logo-container animate-item delay-1">
-      <div class="logo-aura"></div>
-      <div class="logo-aura"></div>
-      <img src="assets/logo.png" alt="DollarRent Logo" class="main-logo">
-    </div>
-
-    <!-- Typography -->
-    <h1 class="brand-title animate-item delay-2">Dollar<span>Rent</span></h1>
-    <p class="brand-tagline animate-item delay-3">Fast • Secure • Trusted</p>
-
-    <!-- UI: Real-time Counter & Spinner -->
-    <div id="loading-ui" class="animate-item delay-4">
-      <div class="spinner-wrapper">
-        <div class="orbital-spinner"></div>
-        <div class="percentage-text" id="loading-pct">0%</div>
-      </div>
-      <div class="loading-status"></div>
-      <p class="tap-hint">Tap anywhere to enter instantly</p>
-    </div>
-
-    <!-- Maintenance UI -->
-    <div id="maintenance-ui" class="animate-item delay-4">
-      <div class="maintenance-icon">
-        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-      </div>
-      <h2 class="maintenance-title">System Update</h2>
-      <p class="maintenance-text">We are upgrading our servers for a faster experience. Please check back shortly.</p>
-    </div>
+  <!-- Main Splash Area -->
+  <div class="logo-container animate-item delay-1">
+    <div class="logo-aura"></div>
+    <div class="logo-aura"></div>
+    <img src="assets/logo.png" alt="DollarRent Logo" class="main-logo">
   </div>
 
-  <!-- Explicitly Requested Connect Section -->
-  <div class="connect-section animate-item delay-5">
-    <div class="connect-text">Connect with</div>
+  <h1 class="brand-title animate-item delay-2">Dollar<span>Rent</span></h1>
+  <p class="brand-tagline animate-item delay-3">Fast • Secure • Trusted</p>
+
+  <!-- UI: 5 Second Spinner -->
+  <div id="loading-ui" class="animate-item delay-4">
+    <div class="spinner-wrapper">
+      <div class="orbital-spinner"></div>
+      <div class="percentage-text" id="loading-pct">0%</div>
+    </div>
+    <div class="loading-status"></div>
+    <p class="tap-hint">Tap anywhere to enter instantly</p>
+  </div>
+
+  <!-- Maintenance UI -->
+  <div id="maintenance-ui" class="animate-item delay-4">
+    <div class="maintenance-icon">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+    </div>
+    <h2 class="maintenance-title">System Update</h2>
+    <p class="maintenance-text">We are upgrading our servers for a faster experience. Please check back shortly.</p>
+  </div>
+
+  <!-- Premium Frosted Connect Pill -->
+  <div class="connect-pill animate-item delay-5">
+    <div class="connect-text">Supported Platforms</div>
     <div class="connect-logos">
       <img src="https://www.google.com/s2/favicons?domain=binance.com&sz=128" alt="Binance" title="Binance">
       <img src="https://www.google.com/s2/favicons?domain=quotex.com&sz=128" alt="Quotex" title="Quotex">
-      <!-- UPGRADED TO METATRADER 5 (MT5) ICON -->
       <img src="https://www.google.com/s2/favicons?domain=metatrader5.com&sz=128" alt="MetaTrader 5" title="MetaTrader 5">
     </div>
   </div>
 
   <!-- ================= LOGIC & FIREBASE INTEGRATION ================= -->
+  <!-- NOTICE: app.js IS REMOVED SO HEADER AND DOCK DO NOT APPEAR HERE -->
   <script type="module">
-    import './app.js';
-    import { db } from './firebase-config.js';
-    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // Replace with your real keys if you want maintenance mode to work from Firebase
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "YOUR_MESSAGING_ID",
+      appId: "YOUR_APP_ID"
+    };
 
     let isMaintenanceMode = false;
     let configLoaded = false;
     let authProgress = 0;
     const progressEl = document.getElementById('loading-pct');
 
-    // SMOOTH 5-SECOND PROGRESS BAR LOGIC
-    // Increment dynamically so it hits 99% right around the 5 second mark
+    // Smooth 5-Second (5000ms) Progress Bar Logic
     const progressInterval = setInterval(() => {
-      authProgress += Math.floor(Math.random() * 4) + 1; // Slower increment for 5s
+      authProgress += Math.floor(Math.random() * 3) + 1; 
       if (authProgress >= 99) {
-        authProgress = 99;
+        authProgress = 99; // Holds at 99% until 5 seconds are complete
       }
       if (progressEl && !isMaintenanceMode) progressEl.innerText = `${authProgress}%`;
     }, 150);
 
+    // Maintenance check logic
     try {
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
       const docRef = doc(db, "admin_settings", "status");
+      
       getDoc(docRef).then((docSnap) => {
         if (docSnap.exists() && docSnap.data().maintenance === true) {
           enableMaintenanceMode();
@@ -370,7 +306,7 @@
         configLoaded = true;
       }).catch(() => { configLoaded = true; });
     } catch (error) {
-      configLoaded = true; 
+      configLoaded = true; // Still load app if keys aren't set
     }
 
     function enableMaintenanceMode() {
@@ -402,7 +338,7 @@
           if (!isMaintenanceMode) redirectToHome();
         }
       }, 100);
-    }, 5000); // Changed from 2200 to 5000 
+    }, 5000);
   </script>
 </body>
 </html>
