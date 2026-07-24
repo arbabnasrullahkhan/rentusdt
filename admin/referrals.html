@@ -170,23 +170,31 @@
   </nav>
 
   <script type="module">
-    import { getAdminUser } from '../firebase-auth.js';
+    import { initAuthObserver, getAdminUser } from '../firebase-auth.js';
     import { db } from '../firebase-config.js';
     import { collection, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
     import { showToast, escapeHTML } from '../utils.js';
 
-    const admin = getAdminUser();
-    if (!admin) window.location.href = 'login.html';
-
     let allReferrals = [];
+    let referralsUnsubscribe = null;
 
-    onSnapshot(collection(db, 'referrals'), (snapshot) => {
-      allReferrals = [];
-      snapshot.forEach(d => allReferrals.push({ id: d.id, ...d.data() }));
-      allReferrals.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
-      renderReferrals();
-    }, () => {
-      document.getElementById('referrals-tbody').innerHTML = '<tr class="empty-row"><td colspan="5">Unable to load referrals.</td></tr>';
+    initAuthObserver((user) => {
+      const admin = getAdminUser();
+      if (!admin && !user) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      if (!referralsUnsubscribe) {
+        referralsUnsubscribe = onSnapshot(collection(db, 'referrals'), (snapshot) => {
+          allReferrals = [];
+          snapshot.forEach(d => allReferrals.push({ id: d.id, ...d.data() }));
+          allReferrals.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+          renderReferrals();
+        }, () => {
+          document.getElementById('referrals-tbody').innerHTML = '<tr class="empty-row"><td colspan="5">Unable to load referrals.</td></tr>';
+        });
+      }
     });
 
     document.getElementById('search-input').addEventListener('input', () => renderReferrals());
