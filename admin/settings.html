@@ -180,13 +180,22 @@
   </nav>
 
   <script type="module">
-    import { getAdminUser } from '../firebase-auth.js';
+    import { initAuthObserver, getAdminUser } from '../firebase-auth.js';
     import { db } from '../firebase-config.js';
     import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
     import { showToast } from '../utils.js';
 
-    const admin = getAdminUser();
-    if (!admin) window.location.href = 'login.html';
+    let currentAdmin = null;
+
+    initAuthObserver((user) => {
+      const adminUser = getAdminUser();
+      if (!adminUser && !user) {
+        window.location.href = 'login.html';
+        return;
+      }
+      currentAdmin = adminUser || user;
+      loadSettings();
+    });
 
     // Load settings
     async function loadSettings() {
@@ -232,10 +241,8 @@
       }
 
       btn.disabled = false;
-      btn.textContent = 'Save All Settings';
+      btn.textContent = 'Save Settings';
     });
-
-    loadSettings();
   </script>
 </body>
 </html>
