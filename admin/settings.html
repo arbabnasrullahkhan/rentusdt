@@ -7,56 +7,92 @@
   <meta name="robots" content="noindex, nofollow">
   <link rel="icon" href="../assets/logo.png" type="image/png">
   <style>
-    :root { --bg: #F1F5F9; --card: #FFFFFF; --border: #E2E8F0; --primary: #0F62FE; --primary-glow: rgba(15,98,254,0.1); --success: #059669; --danger: #EF4444; --heading: #0B101E; --body: #64748B; --radius: 20px; --radius-sm: 12px; --shadow: 0 4px 24px -4px rgba(0,0,0,0.06); --sidebar-w: 260px; }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", sans-serif; background: var(--bg); color: var(--heading); display: flex; min-height: 100vh; -webkit-font-smoothing: antialiased; }
-    a { text-decoration: none; color: inherit; }
-    .sidebar { width: var(--sidebar-w); background: var(--card); border-right: 1px solid var(--border); padding: 24px 16px; display: flex; flex-direction: column; justify-content: space-between; position: fixed; top: 0; bottom: 0; left: 0; z-index: 100; }
-    .sidebar-brand { display: flex; align-items: center; gap: 10px; padding: 0 8px; margin-bottom: 28px; }
-    .sidebar-brand img { width: 32px; height: 32px; }
-    .sidebar-brand span { font-size: 18px; font-weight: 800; }
-    .sidebar-brand span b { color: var(--primary); }
-    .sidebar-menu { list-style: none; display: flex; flex-direction: column; gap: 4px; }
-    .sidebar-menu a { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; color: var(--body); transition: all 0.2s; }
-    .sidebar-menu a:hover, .sidebar-menu a.active { background: var(--primary-glow); color: var(--primary); }
-    .sidebar-menu svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-    .sidebar-footer { padding: 0 8px; }
-    .sidebar-footer a { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--body); }
-    .sidebar-footer svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; }
-
-    .main { flex: 1; margin-left: var(--sidebar-w); padding: 28px 32px; }
-    .page-header { margin-bottom: 28px; }
-    .page-header h1 { font-size: 26px; font-weight: 800; }
-    .page-header p { font-size: 14px; color: var(--body); }
-
-    .settings-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); margin-bottom: 20px; }
-    .settings-card h3 { font-size: 18px; font-weight: 800; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-    .settings-card h3 svg { width: 20px; height: 20px; stroke: var(--primary); fill: none; stroke-width: 2; }
-    .form-group { margin-bottom: 16px; }
-    .form-group label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--heading); }
-    .form-group input, .form-group textarea, .form-group select {
-      width: 100%; padding: 11px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm);
-      font-size: 14px; font-family: inherit; outline: none; background: var(--bg);
+    :root {
+      --bg: #F5F5F7; --card: rgba(255, 255, 255, 0.7); --border: rgba(226, 232, 240, 0.6);
+      --primary: #0066CC; --primary-hover: #0055AA; --primary-glow: rgba(0, 102, 204, 0.1);
+      --success: #34C759; --warning: #FF9500; --danger: #FF3B30;
+      --heading: #1D1D1F; --body: #86868B;
+      --radius: 24px; --radius-sm: 16px;
+      --shadow: 0 10px 40px -10px rgba(0,0,0,0.08);
+      --sidebar-w: 280px;
     }
-    .form-group input:focus, .form-group textarea:focus { border-color: var(--primary); }
-    .form-group textarea { resize: vertical; min-height: 80px; }
-    .form-group .hint { font-size: 12px; color: var(--body); margin-top: 4px; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif;
+      background: var(--bg); color: var(--heading);
+      display: flex; min-height: 100vh; -webkit-font-smoothing: antialiased;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    a { text-decoration: none; color: inherit; }
 
-    .toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid rgba(226,232,240,0.5); }
-    .toggle-row:last-child { border-bottom: none; }
-    .toggle-label { font-size: 14px; font-weight: 600; }
-    .toggle-desc { font-size: 12px; color: var(--body); margin-top: 2px; }
-    .toggle-switch { position: relative; width: 48px; height: 26px; flex-shrink: 0; }
-    .toggle-switch input { opacity: 0; width: 0; height: 0; }
-    .toggle-slider { position: absolute; cursor: pointer; inset: 0; background: #CBD5E1; border-radius: 26px; transition: 0.3s; }
-    .toggle-slider::before { content: ''; position: absolute; height: 20px; width: 20px; left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: 0.3s; }
-    .toggle-switch input:checked + .toggle-slider { background: var(--primary); }
-    .toggle-switch input:checked + .toggle-slider::before { transform: translateX(22px); }
+    /* ===== SIDEBAR (Desktop) / BOTTOM DOCK (Mobile) ===== */
+    .sidebar {
+      width: var(--sidebar-w); background: var(--card); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      border-right: 1px solid var(--border); padding: 32px 20px; display: flex; flex-direction: column;
+      justify-content: space-between; position: fixed; top: 0; bottom: 0; left: 0;
+      z-index: 100; overflow-y: auto; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .sidebar-brand { display: flex; align-items: center; gap: 12px; padding: 0 12px; margin-bottom: 36px; }
+    .sidebar-brand img { width: 36px; height: 36px; filter: drop-shadow(0 4px 8px rgba(0,102,204,0.3)); }
+    .sidebar-brand span { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
+    .sidebar-brand span b { color: var(--primary); }
 
-    .btn-save { padding: 12px 24px; background: var(--primary); color: white; border: none; border-radius: var(--radius-sm); font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.25s; }
-    .btn-save:hover { background: #0043CE; }
+    .sidebar-menu { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .sidebar-menu a {
+      display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: var(--radius-sm);
+      font-size: 15px; font-weight: 600; color: var(--body); transition: all 0.25s ease;
+    }
+    .sidebar-menu a:hover { background: var(--primary-glow); color: var(--primary); transform: translateX(4px); }
+    .sidebar-menu a.active { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(0,102,204,0.3); }
+    .sidebar-menu svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 
-    @media (max-width: 768px) { .sidebar { display: none; } .main { margin-left: 0; padding: 20px 16px; } }
+    .sidebar-footer { padding: 0 12px; }
+    .sidebar-footer a { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; color: var(--body); padding: 12px 0; }
+    .sidebar-footer a:hover { color: var(--danger); }
+    .sidebar-footer svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    /* ===== MAIN ===== */
+    .main { flex: 1; margin-left: var(--sidebar-w); padding: 40px 48px; overflow-y: auto; min-width: 0; }
+    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; flex-wrap: wrap; gap: 16px; }
+    .page-header h1 { font-size: 32px; font-weight: 800; letter-spacing: -1px; }
+    .page-header p { font-size: 15px; color: var(--body); margin-top: 4px; font-weight: 500; }
+
+    .settings-container { max-width: 800px; }
+    .settings-section { background: var(--card); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border: 1px solid var(--border); border-radius: var(--radius); padding: 32px; box-shadow: var(--shadow); margin-bottom: 24px; }
+    .settings-section h3 { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 24px; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
+    
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-size: 14px; font-weight: 700; margin-bottom: 8px; color: var(--heading); }
+    .form-group input { width: 100%; padding: 14px 18px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 15px; outline: none; background: rgba(255,255,255,0.8); transition: border-color 0.2s; }
+    .form-group input:focus { border-color: var(--primary); }
+    
+    .btn-save { padding: 14px 28px; background: var(--primary); color: white; border: none; border-radius: 30px; font-size: 15px; font-weight: 700; cursor: pointer; transition: transform 0.2s; box-shadow: 0 6px 16px rgba(0,102,204,0.25); }
+    .btn-save:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,102,204,0.35); }
+
+    /* Mobile Dock */
+    .mobile-dock { display: none; }
+
+    @media (max-width: 1024px) {
+      .main { padding: 32px; }
+    }
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding: 24px 16px 100px; }
+      .page-header h1 { font-size: 26px; }
+      .settings-section { padding: 20px; }
+      
+      .mobile-dock {
+        display: flex; justify-content: space-around; align-items: center;
+        position: fixed; bottom: 16px; left: 16px; right: 16px;
+        background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+        border: 1px solid rgba(229, 231, 235, 0.7); border-radius: 30px;
+        padding: 10px 16px; z-index: 10000; box-shadow: 0 10px 30px -5px rgba(0,0,0,0.15);
+      }
+      .mobile-dock a { display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--body); font-size: 10px; font-weight: 700; gap: 4px; flex: 1; transition: all 0.2s ease; }
+      .mobile-dock a svg { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 2; transition: all 0.3s; }
+      .mobile-dock a.active { color: var(--primary); }
+      .mobile-dock a.active svg { transform: translateY(-2px); stroke-width: 2.5; filter: drop-shadow(0 2px 4px rgba(0,102,204,0.4)); }
+    }
   </style>
 </head>
 <body>
@@ -77,70 +113,71 @@
 
   <main class="main">
     <div class="page-header">
-      <h1>Site Settings</h1>
-      <p>Configure global platform settings and maintenance mode</p>
+      <div>
+        <h1>Site Settings</h1>
+        <p>Configure global platform settings</p>
+      </div>
     </div>
 
-    <!-- Maintenance & Toggles -->
-    <div class="settings-card">
-      <h3><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> Platform Controls</h3>
-      <div class="toggle-row">
-        <div>
-          <div class="toggle-label">Maintenance Mode</div>
-          <div class="toggle-desc">Temporarily disable public access with a maintenance screen</div>
+    <div class="settings-container">
+      <div class="settings-section">
+        <h3>Platform Controls</h3>
+        <div class="form-group">
+            <label>Maintenance Mode</label>
+            <input type="checkbox" id="toggle-maintenance">
         </div>
-        <label class="toggle-switch">
-          <input type="checkbox" id="toggle-maintenance">
-          <span class="toggle-slider"></span>
-        </label>
-      </div>
-      <div class="toggle-row">
-        <div>
-          <div class="toggle-label">New User Registration</div>
-          <div class="toggle-desc">Allow new users to sign up via Google Authentication</div>
+        <div class="form-group">
+            <label>New User Registration</label>
+            <input type="checkbox" id="toggle-registration">
         </div>
-        <label class="toggle-switch">
-          <input type="checkbox" id="toggle-registration" checked>
-          <span class="toggle-slider"></span>
-        </label>
       </div>
-      <div class="toggle-row">
-        <div>
-          <div class="toggle-label">Referral Program</div>
-          <div class="toggle-desc">Enable the referral program for all users</div>
+
+      <div class="settings-section">
+        <h3>Support Configuration</h3>
+        <div class="form-group">
+          <label>Telegram Username</label>
+          <input type="text" id="setting-telegram" placeholder="@username">
         </div>
-        <label class="toggle-switch">
-          <input type="checkbox" id="toggle-referrals" checked>
-          <span class="toggle-slider"></span>
-        </label>
+        <div class="form-group">
+          <label>Support Email</label>
+          <input type="email" id="setting-email" placeholder="support@example.com">
+        </div>
       </div>
-    </div>
 
-    <!-- Telegram & Support -->
-    <div class="settings-card">
-      <h3><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg> Support Configuration</h3>
-      <div class="form-group">
-        <label>Telegram Username</label>
-        <input type="text" id="setting-telegram" value="@RENTAL_DOLLOR" placeholder="@username">
-        <div class="hint">This appears on the floating support button and contact pages</div>
+      <div class="settings-section">
+        <h3>Announcement</h3>
+        <div class="form-group">
+          <label>Banner Message</label>
+          <textarea id="setting-announcement" placeholder="e.g., New $200 package now available!"></textarea>
+        </div>
       </div>
-      <div class="form-group">
-        <label>Support Email</label>
-        <input type="email" id="setting-email" value="support@dollarrent.com" placeholder="support@example.com">
-      </div>
-    </div>
 
-    <!-- Announcement -->
-    <div class="settings-card">
-      <h3><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg> Announcement Banner</h3>
-      <div class="form-group">
-        <label>Banner Message (leave empty to disable)</label>
-        <textarea id="setting-announcement" placeholder="e.g., New $200 package now available!"></textarea>
-      </div>
+      <button class="btn-save" id="btn-save-settings">Save Settings</button>
     </div>
-
-    <button class="btn-save" id="btn-save-settings">Save All Settings</button>
   </main>
+
+  <nav class="mobile-dock">
+    <a href="dashboard.html">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+      <span>Home</span>
+    </a>
+    <a href="orders.html">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg>
+      <span>Orders</span>
+    </a>
+    <a href="packages.html">
+      <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+      <span>Pkgs</span>
+    </a>
+    <a href="users.html">
+      <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+      <span>Users</span>
+    </a>
+    <a href="settings.html" class="active">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle></svg>
+      <span>Settings</span>
+    </a>
+  </nav>
 
   <script type="module">
     import { getAdminUser } from '../firebase-auth.js';
