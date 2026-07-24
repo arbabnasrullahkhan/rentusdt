@@ -60,7 +60,27 @@
     .btn-save { background: var(--primary); color: white; }
     .btn-cancel { background: var(--bg); color: var(--body); }
 
-    @media (max-width: 768px) { .sidebar { display: none; } .main { margin-left: 0; padding: 20px 16px; } }
+    @media (max-width: 768px) { 
+      .sidebar { display: none; } 
+      .main { margin-left: 0; padding: 20px 16px 100px; } /* Bottom padding for dock */
+      
+      /* Mobile Dock */
+      .mobile-dock {
+        display: flex; justify-content: space-around; align-items: center;
+        position: fixed; bottom: 16px; left: 16px; right: 16px;
+        background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+        border: 1px solid rgba(229, 231, 235, 0.7); border-radius: 30px;
+        padding: 10px 16px; z-index: 10000; box-shadow: 0 10px 30px -5px rgba(0,0,0,0.15);
+      }
+      .mobile-dock a {
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        color: var(--body); font-size: 10px; font-weight: 700; gap: 4px; flex: 1; transition: all 0.2s ease;
+      }
+      .mobile-dock a svg { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 2; transition: all 0.3s; }
+      .mobile-dock a.active { color: var(--primary); }
+      .mobile-dock a.active svg { transform: translateY(-2px); stroke-width: 2.5; filter: drop-shadow(0 2px 4px rgba(0,102,204,0.4)); }
+    }
+    @media (min-width: 769px) { .mobile-dock { display: none; } }
   </style>
 </head>
 <body>
@@ -104,30 +124,65 @@
     </div>
   </div>
 
+  <!-- Mobile Dock (Bottom Navigation) -->
+  <nav class="mobile-dock">
+    <a href="dashboard.html">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+      <span>Home</span>
+    </a>
+    <a href="orders.html">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg>
+      <span>Orders</span>
+    </a>
+    <a href="packages.html">
+      <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+      <span>Pkgs</span>
+    </a>
+    <a href="payment-methods.html" class="active">
+      <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+      <span>Methods</span>
+    </a>
+    <a href="settings.html">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle></svg>
+      <span>Settings</span>
+    </a>
+  </nav>
+
   <script type="module">
-    import { getAdminUser } from '../firebase-auth.js';
+    import { initAuthObserver, getAdminUser } from '../firebase-auth.js';
     import { db } from '../firebase-config.js';
     import { collection, onSnapshot, doc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-    import { DEFAULT_PAYMENT_METHODS } from '../firestore.js';
     import { showToast, escapeHTML } from '../utils.js';
-
-    const admin = getAdminUser();
-    if (!admin) window.location.href = 'login.html';
 
     let methods = [];
     let editingId = null;
+    let methodsUnsubscribe = null;
+    let currentAdmin = null;
 
-    onSnapshot(collection(db, 'paymentMethods'), (snapshot) => {
-      if (!snapshot.empty) {
-        methods = [];
-        snapshot.forEach(d => methods.push({ id: d.id, ...d.data() }));
-      } else {
-        methods = DEFAULT_PAYMENT_METHODS;
+    initAuthObserver((user) => {
+      const adminUser = getAdminUser();
+      if (!adminUser && !user) {
+        window.location.href = 'login.html';
+        return;
       }
-      renderMethods();
-    }, () => {
-      methods = DEFAULT_PAYMENT_METHODS;
-      renderMethods();
+      currentAdmin = adminUser || user;
+
+      if (!methodsUnsubscribe) {
+        methodsUnsubscribe = onSnapshot(collection(db, 'paymentMethods'), (snapshot) => {
+          if (!snapshot.empty) {
+            methods = [];
+            snapshot.forEach(d => methods.push({ id: d.id, ...d.data() }));
+          } else {
+            methods = [
+              { id: 'binance_pay', label: 'Binance Pay', accountName: 'DollarRent Official', accountNumber: 'UID: 123456789', active: true }
+            ];
+          }
+          renderMethods();
+        }, (err) => {
+          console.warn("Error fetching methods:", err);
+          document.getElementById('methods-grid').innerHTML = '<div style="text-align:center; padding:40px; color:var(--body); grid-column:1/-1;">Unable to load payment methods. Check Firestore permissions.</div>';
+        });
+      }
     });
 
     function renderMethods() {
