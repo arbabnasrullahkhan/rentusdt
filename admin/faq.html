@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>FAQ Management — DollarRent Admin</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="../assets/logo.png" type="image/png">
+  <style>
+    :root { --bg: #F1F5F9; --card: #FFFFFF; --border: #E2E8F0; --primary: #0F62FE; --primary-glow: rgba(15,98,254,0.1); --success: #059669; --danger: #EF4444; --heading: #0B101E; --body: #64748B; --radius: 20px; --radius-sm: 12px; --shadow: 0 4px 24px -4px rgba(0,0,0,0.06); --sidebar-w: 260px; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", sans-serif; background: var(--bg); color: var(--heading); display: flex; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: inherit; }
+    .sidebar { width: var(--sidebar-w); background: var(--card); border-right: 1px solid var(--border); padding: 24px 16px; display: flex; flex-direction: column; justify-content: space-between; position: fixed; top: 0; bottom: 0; left: 0; z-index: 100; }
+    .sidebar-brand { display: flex; align-items: center; gap: 10px; padding: 0 8px; margin-bottom: 28px; }
+    .sidebar-brand img { width: 32px; height: 32px; }
+    .sidebar-brand span { font-size: 18px; font-weight: 800; }
+    .sidebar-brand span b { color: var(--primary); }
+    .sidebar-menu { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+    .sidebar-menu a { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; color: var(--body); transition: all 0.2s; }
+    .sidebar-menu a:hover, .sidebar-menu a.active { background: var(--primary-glow); color: var(--primary); }
+    .sidebar-menu svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .sidebar-footer { padding: 0 8px; }
+    .sidebar-footer a { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--body); }
+    .sidebar-footer svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    .main { flex: 1; margin-left: var(--sidebar-w); padding: 28px 32px; }
+    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    .page-header h1 { font-size: 26px; font-weight: 800; }
+    .page-header p { font-size: 14px; color: var(--body); }
+
+    .btn-add { display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px; background: var(--primary); color: white; border: none; border-radius: var(--radius-sm); font-size: 13px; font-weight: 700; cursor: pointer; }
+    .btn-add svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    .table-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; padding: 10px 12px; font-size: 12px; font-weight: 700; color: var(--body); text-transform: uppercase; border-bottom: 1px solid var(--border); }
+    td { padding: 14px 12px; font-size: 14px; border-bottom: 1px solid #F1F5F9; }
+    tr:hover td { background: rgba(15,98,254,0.015); }
+    
+    .action-btn { padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; border: none; cursor: pointer; transition: all 0.2s; background: var(--primary-glow); color: var(--primary); }
+    .action-btn:hover { background: rgba(15,98,254,0.2); }
+    .action-delete { background: rgba(239,68,68,0.1); color: var(--danger); margin-left: 6px; }
+    .action-delete:hover { background: rgba(239,68,68,0.2); }
+
+    .empty-row td { text-align: center; color: var(--body); padding: 40px; }
+
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 1000; }
+    .modal-overlay.active { display: flex; }
+    .modal { background: var(--card); border-radius: var(--radius); padding: 28px; width: 90%; max-width: 500px; box-shadow: 0 24px 48px -12px rgba(0,0,0,0.2); }
+    .modal h3 { font-size: 20px; font-weight: 800; margin-bottom: 20px; }
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+    .form-group input, .form-group textarea { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; outline: none; font-family: inherit; }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+    .modal-btns { display: flex; gap: 10px; margin-top: 16px; }
+    .modal-btns button { flex: 1; padding: 12px; border: none; border-radius: var(--radius-sm); font-size: 14px; font-weight: 700; cursor: pointer; }
+    .btn-save { background: var(--primary); color: white; }
+    .btn-cancel { background: var(--bg); color: var(--body); }
+
+    @media (max-width: 768px) { .sidebar { display: none; } .main { margin-left: 0; padding: 20px 16px; } }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-brand"><img src="../assets/logo.png" alt="DollarRent"><span>Dollar<b>Admin</b></span></div>
+      <ul class="sidebar-menu">
+        <li><a href="dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg> Dashboard</a></li>
+        <li><a href="orders.html"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg> Orders</a></li>
+        <li><a href="packages.html"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg> Packages</a></li>
+        <li><a href="settings.html"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle></svg> Settings</a></li>
+        <li><a href="faq.html" class="active"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg> FAQs</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-footer"><a href="../home.html"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg> Exit</a></div>
+  </aside>
+
+  <main class="main">
+    <div class="page-header">
+      <div><h1>FAQ Management</h1><p>Add or edit frequently asked questions</p></div>
+      <button class="btn-add" id="btn-add-faq"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> Add FAQ</button>
+    </div>
+
+    <div class="table-card">
+      <table>
+        <thead><tr><th>Question</th><th>Answer Snippet</th><th>Order</th><th>Actions</th></tr></thead>
+        <tbody id="faq-tbody"><tr class="empty-row"><td colspan="4">Loading...</td></tr></tbody>
+      </table>
+    </div>
+  </main>
+
+  <div class="modal-overlay" id="faq-modal">
+    <div class="modal">
+      <h3 id="modal-title">Edit FAQ</h3>
+      <div class="form-group"><label>Question</label><input type="text" id="f-question" placeholder="e.g. How does it work?"></div>
+      <div class="form-group"><label>Answer</label><textarea id="f-answer" placeholder="Detailed answer here..."></textarea></div>
+      <div class="form-group"><label>Display Order (Lower = First)</label><input type="number" id="f-order" placeholder="e.g. 1"></div>
+      <div class="modal-btns">
+        <button class="btn-save" id="modal-save">Save</button>
+        <button class="btn-cancel" id="modal-cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { getAdminUser } from '../firebase-auth.js';
+    import { db } from '../firebase-config.js';
+    import { collection, onSnapshot, doc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { showToast, escapeHTML } from '../utils.js';
+
+    const admin = getAdminUser();
+    if (!admin) window.location.href = 'login.html';
+
+    let faqs = [];
+    let editingId = null;
+
+    onSnapshot(collection(db, 'faqs'), (snapshot) => {
+      faqs = [];
+      snapshot.forEach(d => faqs.push({ id: d.id, ...d.data() }));
+      faqs.sort((a, b) => (a.order || 0) - (b.order || 0));
+      renderFaqs();
+    });
+
+    function renderFaqs() {
+      const tbody = document.getElementById('faq-tbody');
+      if (!faqs.length) {
+        tbody.innerHTML = '<tr class="empty-row"><td colspan="4">No FAQs added yet.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = faqs.map(f => `
+        <tr>
+          <td><strong>${escapeHTML(f.question)}</strong></td>
+          <td style="color:var(--body); max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHTML(f.answer)}</td>
+          <td>${f.order || 0}</td>
+          <td>
+            <button class="action-btn" onclick="window._editFaq('${f.id}')">Edit</button>
+            <button class="action-btn action-delete" onclick="window._deleteFaq('${f.id}')">Delete</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    window._editFaq = (id) => {
+      const f = faqs.find(x => x.id === id);
+      if (!f) return;
+      editingId = id;
+      document.getElementById('modal-title').textContent = 'Edit FAQ';
+      document.getElementById('f-question').value = f.question;
+      document.getElementById('f-answer').value = f.answer;
+      document.getElementById('f-order').value = f.order || 0;
+      document.getElementById('faq-modal').classList.add('active');
+    };
+
+    window._deleteFaq = async (id) => {
+      if (!confirm('Delete this FAQ?')) return;
+      try {
+        await deleteDoc(doc(db, 'faqs', id));
+        showToast('FAQ deleted', 'success');
+      } catch (err) { showToast('Error: ' + err.message, 'error'); }
+    };
+
+    document.getElementById('btn-add-faq').addEventListener('click', () => {
+      editingId = null;
+      document.getElementById('modal-title').textContent = 'Add New FAQ';
+      document.getElementById('f-question').value = '';
+      document.getElementById('f-answer').value = '';
+      document.getElementById('f-order').value = faqs.length + 1;
+      document.getElementById('faq-modal').classList.add('active');
+    });
+
+    document.getElementById('modal-save').addEventListener('click', async () => {
+      const id = editingId || 'f' + Date.now();
+      const data = {
+        question: document.getElementById('f-question').value,
+        answer: document.getElementById('f-answer').value,
+        order: parseInt(document.getElementById('f-order').value) || 0,
+        active: true
+      };
+      if(!data.question || !data.answer) return showToast('Please fill all fields', 'warning');
+
+      try {
+        await setDoc(doc(db, 'faqs', id), data);
+        showToast('FAQ saved!', 'success');
+        document.getElementById('faq-modal').classList.remove('active');
+      } catch (err) { showToast('Save failed: ' + err.message, 'error'); }
+    });
+
+    document.getElementById('modal-cancel').addEventListener('click', () => document.getElementById('faq-modal').classList.remove('active'));
+    document.getElementById('faq-modal').addEventListener('click', (e) => { if (e.target === e.currentTarget) e.currentTarget.classList.remove('active'); });
+  </script>
+</body>
+</html>

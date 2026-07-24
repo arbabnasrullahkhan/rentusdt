@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Admin Dashboard — DollarRent</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="../assets/logo.png" type="image/png">
+  <style>
+    :root {
+      --bg: #F1F5F9; --card: #FFFFFF; --border: #E2E8F0;
+      --primary: #0F62FE; --primary-hover: #0043CE; --primary-glow: rgba(15,98,254,0.1);
+      --success: #059669; --warning: #D97706; --danger: #EF4444;
+      --heading: #0B101E; --body: #64748B;
+      --radius: 20px; --radius-sm: 12px;
+      --shadow: 0 4px 24px -4px rgba(0,0,0,0.06);
+      --sidebar-w: 260px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+      background: var(--bg); color: var(--heading);
+      display: flex; min-height: 100vh; -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* ===== SIDEBAR ===== */
+    .sidebar {
+      width: var(--sidebar-w); background: var(--card);
+      border-right: 1px solid var(--border);
+      padding: 24px 16px; display: flex; flex-direction: column;
+      justify-content: space-between; position: fixed; top: 0; bottom: 0; left: 0;
+      z-index: 100; overflow-y: auto;
+    }
+    .sidebar-brand {
+      display: flex; align-items: center; gap: 10px;
+      padding: 0 8px; margin-bottom: 28px;
+    }
+    .sidebar-brand img { width: 32px; height: 32px; }
+    .sidebar-brand span { font-size: 18px; font-weight: 800; }
+    .sidebar-brand span b { color: var(--primary); }
+
+    .sidebar-menu { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+    .sidebar-menu a {
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px 14px; border-radius: var(--radius-sm);
+      font-size: 14px; font-weight: 600; color: var(--body);
+      transition: all 0.2s ease;
+    }
+    .sidebar-menu a:hover { background: var(--primary-glow); color: var(--primary); }
+    .sidebar-menu a.active { background: var(--primary-glow); color: var(--primary); font-weight: 700; }
+    .sidebar-menu svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    .sidebar-footer { padding: 0 8px; }
+    .sidebar-footer a {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; font-weight: 600; color: var(--body);
+      padding: 10px 0;
+    }
+    .sidebar-footer a:hover { color: var(--primary); }
+    .sidebar-footer svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    /* ===== MAIN ===== */
+    .main { flex: 1; margin-left: var(--sidebar-w); padding: 28px 32px; overflow-y: auto; }
+
+    .page-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 28px; flex-wrap: wrap; gap: 12px;
+    }
+    .page-header h1 { font-size: 26px; font-weight: 800; }
+    .page-header p { font-size: 14px; color: var(--body); }
+    .header-actions { display: flex; gap: 10px; }
+    .btn-sm {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 10px 18px; border-radius: var(--radius-sm);
+      font-size: 13px; font-weight: 700; border: none; cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-sm svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-outline { background: var(--card); color: var(--heading); border: 1px solid var(--border); }
+    .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+
+    /* KPI Grid */
+    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+    .kpi-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 22px 20px;
+      box-shadow: var(--shadow);
+    }
+    .kpi-label { font-size: 13px; font-weight: 600; color: var(--body); margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+    .kpi-label svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; }
+    .kpi-value { font-size: 28px; font-weight: 800; }
+
+    /* Table Card */
+    .table-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px;
+      box-shadow: var(--shadow);
+    }
+    .table-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 16px;
+    }
+    .table-header h3 { font-size: 18px; font-weight: 800; }
+
+    table { width: 100%; border-collapse: collapse; }
+    th {
+      text-align: left; padding: 10px 14px;
+      font-size: 12px; font-weight: 700; color: var(--body);
+      text-transform: uppercase; letter-spacing: 0.5px;
+      border-bottom: 1px solid var(--border);
+    }
+    td { padding: 14px; font-size: 14px; border-bottom: 1px solid #F1F5F9; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(15,98,254,0.02); }
+
+    .badge {
+      display: inline-block; padding: 4px 10px;
+      border-radius: 20px; font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.3px;
+    }
+    .badge-submitted { background: rgba(15,98,254,0.1); color: var(--primary); }
+    .badge-under_review { background: rgba(217,119,6,0.1); color: var(--warning); }
+    .badge-approved { background: rgba(5,150,105,0.1); color: var(--success); }
+    .badge-rejected { background: rgba(239,68,68,0.1); color: var(--danger); }
+    .badge-delivered { background: rgba(5,150,105,0.15); color: var(--success); }
+
+    .action-link {
+      color: var(--primary); font-weight: 600; font-size: 13px;
+      display: inline-flex; align-items: center; gap: 4px;
+    }
+    .action-link:hover { text-decoration: underline; }
+
+    .empty-row td { text-align: center; color: var(--body); padding: 40px; }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding: 20px 16px; }
+      .kpi-grid { grid-template-columns: 1fr 1fr; }
+      table { font-size: 13px; }
+      th, td { padding: 10px 8px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-brand">
+        <img src="../assets/logo.png" alt="DollarRent">
+        <span>Dollar<b>Admin</b></span>
+      </div>
+      <ul class="sidebar-menu">
+        <li><a href="dashboard.html" class="active">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          Dashboard
+        </a></li>
+        <li><a href="orders.html">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+          Orders Queue
+        </a></li>
+        <li><a href="packages.html">
+          <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+          Packages & Fees
+        </a></li>
+        <li><a href="payment-methods.html">
+          <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+          Payment Methods
+        </a></li>
+        <li><a href="users.html">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+          Users
+        </a></li>
+        <li><a href="referrals.html">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          Referrals
+        </a></li>
+        <li><a href="notifications.html">
+          <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+          Notifications
+        </a></li>
+        <li><a href="settings.html">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          Settings
+        </a></li>
+      </ul>
+    </div>
+    <div class="sidebar-footer">
+      <a href="../home.html">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        Exit to Public Site
+      </a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="page-header">
+      <div>
+        <h1>Dashboard</h1>
+        <p>Real-time overview of all DollarRent operations</p>
+      </div>
+      <div class="header-actions">
+        <a href="orders.html" class="btn-sm btn-primary">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+          Manage Orders
+        </a>
+      </div>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg>
+          Total Orders
+        </div>
+        <div class="kpi-value" id="kpi-total">—</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          Pending Review
+        </div>
+        <div class="kpi-value" id="kpi-pending" style="color:var(--warning);">—</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          Approved
+        </div>
+        <div class="kpi-value" id="kpi-approved" style="color:var(--success);">—</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">
+          <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+          Revenue (Fees)
+        </div>
+        <div class="kpi-value" id="kpi-revenue" style="color:var(--primary);">—</div>
+      </div>
+    </div>
+
+    <!-- Recent Orders Table -->
+    <div class="table-card">
+      <div class="table-header">
+        <h3>Recent Orders</h3>
+        <a href="orders.html" class="action-link">View All →</a>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Order Ref</th>
+            <th>Customer</th>
+            <th>Package</th>
+            <th>Fee</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="recent-orders-tbody">
+          <tr class="empty-row"><td colspan="7">Loading orders...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <script type="module">
+    import { getAdminUser } from '../firebase-auth.js';
+    import { db } from '../firebase-config.js';
+    import { collection, getDocs, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { formatUSD, escapeHTML } from '../utils.js';
+
+    // Admin auth check
+    const admin = getAdminUser();
+    if (!admin) {
+      window.location.href = 'login.html';
+    }
+
+    // Real-time dashboard
+    function initDashboard() {
+      const ordersRef = collection(db, 'orders');
+
+      // Real-time listener
+      onSnapshot(ordersRef, (snapshot) => {
+        const orders = [];
+        snapshot.forEach(doc => orders.push({ id: doc.id, ...doc.data() }));
+
+        // Sort by date
+        orders.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+
+        // KPIs
+        const total = orders.length;
+        const pending = orders.filter(o => o.status === 'submitted' || o.status === 'under_review').length;
+        const approved = orders.filter(o => o.status === 'approved' || o.status === 'delivered').length;
+        const revenue = orders.filter(o => o.status === 'approved' || o.status === 'delivered').reduce((acc, o) => acc + (o.fee || 0), 0);
+
+        document.getElementById('kpi-total').textContent = total;
+        document.getElementById('kpi-pending').textContent = pending;
+        document.getElementById('kpi-approved').textContent = approved;
+        document.getElementById('kpi-revenue').textContent = formatUSD(revenue);
+
+        // Recent orders table
+        const tbody = document.getElementById('recent-orders-tbody');
+        if (orders.length === 0) {
+          tbody.innerHTML = '<tr class="empty-row"><td colspan="7">No orders yet. Orders will appear here in real-time.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = orders.slice(0, 8).map(o => {
+          const date = o.createdAt ? new Date(o.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—';
+          const status = o.status || 'submitted';
+          return `
+            <tr>
+              <td><strong>${escapeHTML(o.orderId || o.id)}</strong></td>
+              <td>${escapeHTML(o.customer?.fullName || 'Customer')}</td>
+              <td>$${o.amountUSD || 0} USD</td>
+              <td>${formatUSD(o.fee || 0)}</td>
+              <td><span class="badge badge-${status}">${status.replace('_', ' ')}</span></td>
+              <td style="font-size:13px; color:var(--body);">${date}</td>
+              <td><a href="orders.html?id=${o.orderId || o.id}" class="action-link">Review</a></td>
+            </tr>
+          `;
+        }).join('');
+      }, (err) => {
+        console.warn('Dashboard snapshot error:', err.message);
+        document.getElementById('recent-orders-tbody').innerHTML = '<tr class="empty-row"><td colspan="7">Unable to connect. Check Firestore permissions.</td></tr>';
+      });
+    }
+
+    initDashboard();
+  </script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Banners Manager — DollarRent Admin</title>
+  <link rel="icon" href="https://img.icons8.com/isometric/96/000000/dollar-coin.png" type="image/png">
+  <style>
+    :root { --bg: #F8FAFC; --card: #FFFFFF; --border: #E5E7EB; --primary: #0F62FE; --heading: #111827; --body: #6B7280; --radius: 20px; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif; background: var(--bg); color: var(--heading); display: flex; min-height: 100vh; }
+    a { text-decoration: none; color: inherit; }
+    .sidebar { width: 260px; background: #FFFFFF; border-right: 1px solid var(--border); padding: 24px 20px; display: flex; flex-direction: column; justify-content: space-between; }
+    .brand { font-size: 20px; font-weight: 800; } .brand span { color: var(--primary); }
+    .menu { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .menu a { padding: 12px 16px; border-radius: 12px; font-size: 14px; font-weight: 600; color: var(--body); display: flex; align-items: center; gap: 10px; }
+    .menu a.active { background: rgba(15, 98, 254, 0.08); color: var(--primary); }
+    .main { flex: 1; padding: 32px; overflow-y: auto; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; max-width: 600px; }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div>
+      <div class="brand">Dollar<span>Admin</span></div>
+      <ul class="menu">
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="orders.html">Orders Queue</a></li>
+        <li><a href="packages.html">Packages & Fees</a></li>
+        <li><a href="banners.html" class="active">Homepage Banners</a></li>
+        <li><a href="payment-methods.html">Payment Methods</a></li>
+        <li><a href="users.html">Users & Customers</a></li>
+        <li><a href="settings.html">Site Settings</a></li>
+      </ul>
+    </div>
+    <a href="../home.html" style="font-size:13px; color:var(--body); font-weight:600;">← Exit to Public Site</a>
+  </aside>
+
+  <main class="main">
+    <h1 style="font-size:28px; font-weight:800; margin-bottom:6px;">Homepage Banners & Offers</h1>
+    <p style="font-size:14px; color:var(--body); margin-bottom:28px;">Manage hero section promotion banners and announcement ribbons.</p>
+
+    <div class="card">
+      <div style="margin-bottom:16px;">
+        <label style="font-size:13px; font-weight:600; display:block; margin-bottom:6px;">Hero Title Banner</label>
+        <input type="text" value="Rent Digital USD Packages Instantly" style="width:100%; padding:10px; border-radius:10px; border:1px solid var(--border);">
+      </div>
+      <button style="background:var(--primary); color:white; border:none; padding:12px 20px; border-radius:10px; font-weight:700; cursor:pointer;">Update Hero Text</button>
+    </div>
+  </main>
+</body>
+</html>

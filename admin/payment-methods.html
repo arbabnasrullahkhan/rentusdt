@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Payment Methods — DollarRent Admin</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="../assets/logo.png" type="image/png">
+  <style>
+    :root { --bg: #F1F5F9; --card: #FFFFFF; --border: #E2E8F0; --primary: #0F62FE; --primary-glow: rgba(15,98,254,0.1); --success: #059669; --danger: #EF4444; --heading: #0B101E; --body: #64748B; --radius: 20px; --radius-sm: 12px; --shadow: 0 4px 24px -4px rgba(0,0,0,0.06); --sidebar-w: 260px; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", sans-serif; background: var(--bg); color: var(--heading); display: flex; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: inherit; }
+    .sidebar { width: var(--sidebar-w); background: var(--card); border-right: 1px solid var(--border); padding: 24px 16px; display: flex; flex-direction: column; justify-content: space-between; position: fixed; top: 0; bottom: 0; left: 0; z-index: 100; }
+    .sidebar-brand { display: flex; align-items: center; gap: 10px; padding: 0 8px; margin-bottom: 28px; }
+    .sidebar-brand img { width: 32px; height: 32px; }
+    .sidebar-brand span { font-size: 18px; font-weight: 800; }
+    .sidebar-brand span b { color: var(--primary); }
+    .sidebar-menu { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+    .sidebar-menu a { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; color: var(--body); transition: all 0.2s; }
+    .sidebar-menu a:hover, .sidebar-menu a.active { background: var(--primary-glow); color: var(--primary); }
+    .sidebar-menu svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .sidebar-footer { padding: 0 8px; }
+    .sidebar-footer a { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--body); }
+    .sidebar-footer svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    .main { flex: 1; margin-left: var(--sidebar-w); padding: 28px 32px; }
+    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    .page-header h1 { font-size: 26px; font-weight: 800; }
+    .page-header p { font-size: 14px; color: var(--body); }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+    .method-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); }
+    .method-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .method-name { font-size: 16px; font-weight: 800; }
+    .method-badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+    .method-badge.active { background: rgba(5,150,105,0.1); color: var(--success); }
+    .method-badge.inactive { background: rgba(239,68,68,0.1); color: var(--danger); }
+    .method-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 14px; border-bottom: 1px solid rgba(226,232,240,0.5); }
+    .method-row:last-child { border-bottom: none; }
+    .method-row .label { color: var(--body); font-weight: 500; }
+    .method-row .value { font-weight: 700; font-size: 13px; word-break: break-all; max-width: 60%; text-align: right; }
+    .method-actions { display: flex; gap: 8px; margin-top: 14px; }
+    .btn-edit { flex: 1; padding: 10px; background: var(--primary-glow); color: var(--primary); border: none; border-radius: var(--radius-sm); font-size: 13px; font-weight: 700; cursor: pointer; }
+    .btn-toggle { flex: 1; padding: 10px; border: none; border-radius: var(--radius-sm); font-size: 13px; font-weight: 700; cursor: pointer; }
+
+    .btn-add { display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px; background: var(--primary); color: white; border: none; border-radius: var(--radius-sm); font-size: 13px; font-weight: 700; cursor: pointer; }
+    .btn-add svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 1000; }
+    .modal-overlay.active { display: flex; }
+    .modal { background: var(--card); border-radius: var(--radius); padding: 28px; width: 90%; max-width: 480px; box-shadow: 0 24px 48px -12px rgba(0,0,0,0.2); max-height: 85vh; overflow-y: auto; }
+    .modal h3 { font-size: 20px; font-weight: 800; margin-bottom: 20px; }
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+    .form-group input, .form-group textarea { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; outline: none; font-family: inherit; }
+    .form-group textarea { resize: vertical; min-height: 60px; }
+    .modal-btns { display: flex; gap: 10px; margin-top: 16px; }
+    .modal-btns button { flex: 1; padding: 12px; border: none; border-radius: var(--radius-sm); font-size: 14px; font-weight: 700; cursor: pointer; }
+    .btn-save { background: var(--primary); color: white; }
+    .btn-cancel { background: var(--bg); color: var(--body); }
+
+    @media (max-width: 768px) { .sidebar { display: none; } .main { margin-left: 0; padding: 20px 16px; } }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-brand"><img src="../assets/logo.png" alt="DollarRent"><span>Dollar<b>Admin</b></span></div>
+      <ul class="sidebar-menu">
+        <li><a href="dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg> Dashboard</a></li>
+        <li><a href="orders.html"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg> Orders</a></li>
+        <li><a href="packages.html"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg> Packages</a></li>
+        <li><a href="payment-methods.html" class="active"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg> Payment Methods</a></li>
+        <li><a href="users.html"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> Users</a></li>
+        <li><a href="settings.html"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle></svg> Settings</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-footer"><a href="../home.html"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg> Exit</a></div>
+  </aside>
+
+  <main class="main">
+    <div class="page-header">
+      <div><h1>Payment Methods</h1><p>Manage payment options available to customers at checkout</p></div>
+      <button class="btn-add" id="btn-add-method"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> Add Method</button>
+    </div>
+    <div class="grid" id="methods-grid">
+      <div style="text-align:center; padding:40px; color:var(--body); grid-column:1/-1;">Loading payment methods...</div>
+    </div>
+  </main>
+
+  <!-- Edit Modal -->
+  <div class="modal-overlay" id="method-modal">
+    <div class="modal">
+      <h3 id="modal-title">Edit Payment Method</h3>
+      <div class="form-group"><label>Label</label><input type="text" id="m-label" placeholder="e.g. Easypaisa Mobile Account"></div>
+      <div class="form-group"><label>Account Name</label><input type="text" id="m-name" placeholder="e.g. DollarRent Official"></div>
+      <div class="form-group"><label>Account Number / Wallet</label><input type="text" id="m-number" placeholder="e.g. 0300-1234567"></div>
+      <div class="form-group"><label>Instructions</label><textarea id="m-instructions" placeholder="Payment instructions for the customer..."></textarea></div>
+      <div class="modal-btns">
+        <button class="btn-save" id="modal-save">Save</button>
+        <button class="btn-cancel" id="modal-cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { getAdminUser } from '../firebase-auth.js';
+    import { db } from '../firebase-config.js';
+    import { collection, onSnapshot, doc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { DEFAULT_PAYMENT_METHODS } from '../firestore.js';
+    import { showToast, escapeHTML } from '../utils.js';
+
+    const admin = getAdminUser();
+    if (!admin) window.location.href = 'login.html';
+
+    let methods = [];
+    let editingId = null;
+
+    onSnapshot(collection(db, 'paymentMethods'), (snapshot) => {
+      if (!snapshot.empty) {
+        methods = [];
+        snapshot.forEach(d => methods.push({ id: d.id, ...d.data() }));
+      } else {
+        methods = DEFAULT_PAYMENT_METHODS;
+      }
+      renderMethods();
+    }, () => {
+      methods = DEFAULT_PAYMENT_METHODS;
+      renderMethods();
+    });
+
+    function renderMethods() {
+      const grid = document.getElementById('methods-grid');
+      grid.innerHTML = methods.map(m => `
+        <div class="method-card">
+          <div class="method-header">
+            <div class="method-name">${escapeHTML(m.label)}</div>
+            <span class="method-badge ${m.active !== false ? 'active' : 'inactive'}">${m.active !== false ? 'Active' : 'Disabled'}</span>
+          </div>
+          <div class="method-row"><span class="label">Account Name</span><span class="value">${escapeHTML(m.accountName)}</span></div>
+          <div class="method-row"><span class="label">Account #</span><span class="value">${escapeHTML(m.accountNumber)}</span></div>
+          <div class="method-actions">
+            <button class="btn-edit" onclick="window._editMethod('${m.id}')">Edit</button>
+            <button class="btn-toggle" style="background:${m.active !== false ? 'rgba(239,68,68,0.06)' : 'rgba(5,150,105,0.06)'}; color:${m.active !== false ? 'var(--danger)' : 'var(--success)'};" onclick="window._toggleMethod('${m.id}', ${m.active !== false})">${m.active !== false ? 'Disable' : 'Enable'}</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    window._editMethod = function(id) {
+      const m = methods.find(x => x.id === id);
+      if (!m) return;
+      editingId = id;
+      document.getElementById('modal-title').textContent = `Edit: ${m.label}`;
+      document.getElementById('m-label').value = m.label || '';
+      document.getElementById('m-name').value = m.accountName || '';
+      document.getElementById('m-number').value = m.accountNumber || '';
+      document.getElementById('m-instructions').value = m.instructions || '';
+      document.getElementById('method-modal').classList.add('active');
+    };
+
+    window._toggleMethod = async function(id, active) {
+      try {
+        await updateDoc(doc(db, 'paymentMethods', id), { active: !active });
+        showToast(`Method ${active ? 'disabled' : 'enabled'}!`, 'success');
+      } catch (err) { showToast('Failed: ' + err.message, 'error'); }
+    };
+
+    document.getElementById('btn-add-method').addEventListener('click', () => {
+      editingId = null;
+      document.getElementById('modal-title').textContent = 'Add Payment Method';
+      document.getElementById('m-label').value = '';
+      document.getElementById('m-name').value = '';
+      document.getElementById('m-number').value = '';
+      document.getElementById('m-instructions').value = '';
+      document.getElementById('method-modal').classList.add('active');
+    });
+
+    document.getElementById('modal-save').addEventListener('click', async () => {
+      const data = {
+        label: document.getElementById('m-label').value,
+        accountName: document.getElementById('m-name').value,
+        accountNumber: document.getElementById('m-number').value,
+        instructions: document.getElementById('m-instructions').value,
+        active: true
+      };
+      try {
+        if (editingId) {
+          await updateDoc(doc(db, 'paymentMethods', editingId), data);
+        } else {
+          const newId = data.label.toLowerCase().replace(/[^a-z0-9]/g, '_');
+          await setDoc(doc(db, 'paymentMethods', newId), data);
+        }
+        showToast('Payment method saved!', 'success');
+        document.getElementById('method-modal').classList.remove('active');
+      } catch (err) { showToast('Save failed: ' + err.message, 'error'); }
+    });
+
+    document.getElementById('modal-cancel').addEventListener('click', () => document.getElementById('method-modal').classList.remove('active'));
+    document.getElementById('method-modal').addEventListener('click', (e) => { if (e.target === e.currentTarget) e.currentTarget.classList.remove('active'); });
+  </script>
+</body>
+</html>

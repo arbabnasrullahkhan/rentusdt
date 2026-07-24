@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>About Us & Legal — DollarRent</title>
+
+  <meta name="description"
+    content="Learn about DollarRent, our mission, legal disclaimers, privacy policies, and terms of service.">
+  <link rel="canonical" href="https://rentusdt.vercel.app/about.html">
+
+  <!-- STRICT SINGLE LOGO COMPLIANCE -->
+  <link rel="icon" href="assets/logo.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/logo.png">
+  <link rel="manifest" href="manifest.json">
+  <meta property="og:image" content="assets/logo.png">
+  <meta name="twitter:image" content="assets/logo.png">
+
+  <!-- ================= PREMIUM FINTECH CSS ================= -->
+  <style>
+    :root {
+      --bg-color: #F8FAFC;
+      --card-solid: #FFFFFF;
+      --border-color: #E2E8F0;
+      --primary: #0F62FE;
+      --primary-hover: #0043CE;
+      --primary-glow: rgba(15, 98, 254, 0.12);
+      --secondary: #00E676;
+      --danger: #EF4444;
+      --danger-glow: rgba(239, 68, 68, 0.1);
+      --warning: #F59E0B;
+      --warning-glow: rgba(245, 158, 11, 0.15);
+      --heading: #0B101E;
+      --body: #475569;
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 12px 24px -4px rgba(15, 98, 254, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+      background-color: var(--bg-color);
+      background-image: radial-gradient(circle at 50% 0%, #ffffff 0%, transparent 70%),
+        linear-gradient(rgba(15, 98, 254, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(15, 98, 254, 0.03) 1px, transparent 1px);
+      background-size: 100% 100%, 30px 30px, 30px 30px;
+      color: var(--heading);
+      padding-bottom: 120px;
+      /* Space for Mobile Dock from app.js */
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 100px 20px 40px;
+      /* Top padding clears app.js Header */
+    }
+
+    /* ================= ANIMATIONS ================= */
+    .animate-in {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .delay-1 {
+      animation-delay: 0.1s;
+    }
+
+    .delay-2 {
+      animation-delay: 0.2s;
+    }
+
+    .delay-3 {
+      animation-delay: 0.3s;
+    }
+
+    .delay-4 {
+      animation-delay: 0.4s;
+    }
+
+    /* ================= CRITICAL EDUCATIONAL WARNING ================= */
+    .edu-warning {
+      background: var(--warning-glow);
+      border: 1px solid var(--warning);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      margin-bottom: 32px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .edu-warning svg {
+      width: 28px;
+      height: 28px;
+      fill: var(--warning);
+      flex-shrink: 0;
+    }
+
+    .edu-warning-text h3 {
+      font-size: 16px;
+      font-weight: 800;
+      color: #B45309;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .edu-warning-text p {
+      font-size: 14px;
+      color: #92400E;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    /* ================= HERO SECTION ================= */
+    .hero-section {
+      text-align: center;
+      padding: 20px 0 40px;
+    }
+
+    .hero-logo {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      margin: 0 auto 20px;
+      filter: drop-shadow(0 10px 20px rgba(15, 98, 254, 0.2));
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-8px);
+      }
+    }
+
+    .hero-section h1 {
+      font-size: 38px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 12px;
+    }
+
+    .hero-section h1 span {
+      background: linear-gradient(135deg, var(--primary), #00E676);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-section p {
+      font-size: 16px;
+      color: var(--body);
+      line-height: 1.6;
+      max-width: 600px;
+      margin: 0 auto;
+      font-weight: 500;
+    }
+
+    /* ================= CONTENT CARDS ================= */
+    .content-card {
+      background: var(--card-solid);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Accent lines for different card types */
+    .card-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--primary);
+    }
+
+    .card-legal::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--warning);
+    }
+
+    .card-privacy::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--secondary);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: var(--bg-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--primary);
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .card-header h2 {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--heading);
+    }
+
+    .content-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .content-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 15px;
+      color: var(--body);
+      line-height: 1.6;
+      font-weight: 500;
+    }
+
+    .content-list li::before {
+      content: '•';
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .content-list li b {
+      color: var(--heading);
+      font-weight: 700;
+    }
+
+    /* ================= SOCIAL & CONTACT SECTION ================= */
+    .social-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .social-card {
+      background: var(--bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      text-align: center;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .social-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-sm);
+      border-color: var(--primary);
+    }
+
+    .social-card svg {
+      width: 32px;
+      height: 32px;
+      fill: var(--heading);
+    }
+
+    .social-card.tg:hover svg {
+      fill: #0088cc;
+    }
+
+    .social-card.tt:hover svg {
+      fill: #000000;
+    }
+
+    .social-card.web:hover svg {
+      fill: var(--primary);
+    }
+
+    .social-card h4 {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--heading);
+    }
+
+    .social-card span {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary);
+      background: var(--primary-glow);
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    @media (max-width: 767px) {
+      .container {
+        padding-top: 80px;
+      }
+
+      .content-card {
+        padding: 24px 20px;
+      }
+
+      .hero-section h1 {
+        font-size: 32px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="container">
+
+    <!-- ================= CRITICAL EDUCATIONAL WARNING ================= -->
+    <div class="edu-warning animate-in">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 2L1 21h22L12 2zm0 3.99L19.53 19H4.47L12 5.99zM11 16h2v2h-2v-2zm0-6h2v4h-2v-4z"></path>
+      </svg>
+      <div class="edu-warning-text">
+        <h3>Important Educational Disclaimer</h3>
+        <p>Yeh platform (rentusdt.vercel.app) sirf ek Educational/Test project hai. Is mein real money invest ya deposit
+          hargiz na karein. Agar aap kisi qisam ka deposit karte hain, toh apne nuqsan ke aap khud zimmedar honge.
+          Platform kisi bhi financial loss ka zimmedar nahi hoga.</p>
+      </div>
+    </div>
+
+    <!-- ================= HERO SECTION ================= -->
+    <div class="hero-section animate-in delay-1">
+      <img src="assets/logo.png" class="hero-logo" alt="DollarRent Logo">
+      <h1>About <span>DollarRent</span></h1>
+      <p>We provide a secure, transparent, and legally compliant environment for digital USD balance management and
+        testing.</p>
+    </div>
+
+    <!-- ================= SCOPE & MISSION (About) ================= -->
+    <div class="content-card card-primary animate-in delay-2">
+      <div class="card-header">
+        <div class="card-icon"><svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 16v-4"></path>
+            <path d="M12 8h.01"></path>
+          </svg></div>
+        <h2>Scope of Service</h2>
+      </div>
+      <ul class="content-list">
+        <li><b>Defined Operations:</b> The platform operates strictly and exclusively within the scope of its provided
+          services and features.</li>
+        <li><b>Transparency & Trust:</b> We strive to provide a secure and transparent service, but absolute guarantees
+          against external network failures cannot be made.</li>
+        <li><b>No Investment Advice:</b> We do not provide trading, financial, or investment advice. We do not guarantee
+          any trading profits or prevent losses.</li>
+      </ul>
+    </div>
+
+    <!-- ================= DISCLAIMER & LIABILITIES ================= -->
+    <div class="content-card card-legal animate-in delay-3">
+      <div class="card-header">
+        <div class="card-icon" style="stroke: var(--warning);"><svg viewBox="0 0 24 24">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+            <line x1="12" y1="9" x2="12" y2="13"></line>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg></div>
+        <h2>Disclaimer & User Responsibilities</h2>
+      </div>
+      <ul class="content-list">
+        <li><b>Personal Risk:</b> All financial and trading decisions are undertaken entirely at the user's own personal
+          risk.</li>
+        <li><b>Information Accuracy:</b> The user is solely responsible for the accuracy and legality of any
+          information, documents, or data provided.</li>
+        <li><b>Authorized Accounts Only:</b> Users must only use their own personal and legally authorized accounts for
+          any transactions.</li>
+        <li><b>Third-Party Limitations:</b> DollarRent is completely free from liability regarding policies, delays,
+          technical outages, or issues caused by third parties (e.g., Binance, Banks, Blockchains, or Payment Gateways).
+        </li>
+        <li><b>Legal Compliance:</b> Users are obligated to adhere strictly to their local laws, regulations, and the
+          specific terms of connected third-party platforms.</li>
+        <li><b>Right to Action:</b> In the event of unauthorized, incorrect, or illegal use, the platform reserves full
+          rights to take appropriate action, including suspending or limiting the service without prior notice.</li>
+      </ul>
+    </div>
+
+    <!-- ================= PRIVACY & KYC ================= -->
+    <div class="content-card card-privacy animate-in delay-4">
+      <div class="card-header">
+        <div class="card-icon" style="stroke: var(--secondary);"><svg viewBox="0 0 24 24">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg></div>
+        <h2>Privacy Policy & KYC</h2>
+      </div>
+      <ul class="content-list">
+        <li><b>Data Usage:</b> Your personal documents, selfies, and data are collected strictly for administrative and
+          Identity Verification (KYC) purposes to prevent fraud.</li>
+        <li><b>Data Security:</b> We securely store your data using industry-standard encrypted servers (Firebase) and
+          do not sell your personal data to unauthorized external marketers.</li>
+        <li><b>Your Rights:</b> Users retain the right to request the viewing, correction, or deletion of their
+          submitted data in accordance with digital privacy laws.</li>
+      </ul>
+    </div>
+
+    <!-- ================= SOCIAL & CONTACT ================= -->
+    <div class="content-card animate-in delay-4">
+      <div class="card-header">
+        <div class="card-icon"><svg viewBox="0 0 24 24">
+            <path
+              d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z">
+            </path>
+          </svg></div>
+        <h2>Connect With Us</h2>
+      </div>
+      <p style="font-size: 15px; color: var(--body); font-weight: 500;">Reach out to our official channels for support,
+        updates, and more information. (Usernames are strictly lowercase).</p>
+
+      <div class="social-grid">
+        <!-- Telegram -->
+        <a href="https://t.me/rental_dollor" target="_blank" class="social-card tg">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z" />
+          </svg>
+          <h4>Telegram Support</h4>
+          <span>@rental_dollor</span>
+        </a>
+
+        <!-- TikTok -->
+        <a href="https://tiktok.com/@rental_dollor" target="_blank" class="social-card tt">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 15.68a6.34 6.34 0 0 0 6.26 6.32 6.32 6.32 0 0 0 6.22-6.32V10.1a8.22 8.22 0 0 0 4.7 1.48v-3.4a4.8 4.8 0 0 1-2.59-.49z" />
+          </svg>
+          <h4>TikTok Official</h4>
+          <span>@rental_dollor</span>
+        </a>
+
+        <!-- Website -->
+        <a href="https://rentusdt.vercel.app/" target="_blank" class="social-card web">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+          </svg>
+          <h4>Website Portal</h4>
+          <span>rentusdt.vercel.app</span>
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ================= FIREBASE & APP LOGIC ================= -->
+  <!-- app.js handles the Floating Header, Mobile Dock, and Offline Detection -->
+  <script type="module">
+    import './app.js';
+  </script>
+</body>
+
+</html>

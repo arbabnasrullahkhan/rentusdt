@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>FAQ — DollarRent</title>
+  <meta name="description" content="Frequently asked questions about DollarRent digital USD rental platform. Learn how it works, fees, security, and more.">
+  <link rel="icon" href="assets/logo.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/logo.png">
+  <link rel="manifest" href="manifest.json">
+  <style>
+    :root {
+      --bg-color: #F8FAFC; --card-solid: #FFFFFF; --border-color: #E2E8F0;
+      --primary: #0F62FE; --primary-glow: rgba(15,98,254,0.12);
+      --heading: #0B101E; --body: #64748B;
+      --radius-lg: 24px; --radius-md: 16px; --shadow-card: 0 4px 24px -4px rgba(0,0,0,0.06);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+      background-color: var(--bg-color);
+      background-image: radial-gradient(circle at 50% 0%, #ffffff 0%, transparent 70%),
+        linear-gradient(rgba(15,98,254,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(15,98,254,0.02) 1px, transparent 1px);
+      background-size: 100% 100%, 30px 30px, 30px 30px;
+      color: var(--heading); padding-bottom: 100px; -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+    .container { max-width: 720px; margin: 0 auto; padding: 32px 20px; }
+
+    .animate-in { opacity: 0; transform: translateY(16px); animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) forwards; }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+    .page-header { text-align: center; margin-bottom: 32px; }
+    .page-header h1 { font-size: 30px; font-weight: 800; }
+    .page-header p { font-size: 15px; color: var(--body); margin-top: 6px; }
+
+    .faq-item {
+      background: var(--card-solid);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      margin-bottom: 12px;
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      opacity: 0; transform: translateY(12px);
+      animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    .faq-question {
+      padding: 18px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      gap: 12px;
+      transition: background 0.2s;
+    }
+    .faq-question:hover { background: rgba(15,98,254,0.02); }
+    .faq-question h3 { font-size: 15px; font-weight: 700; flex: 1; }
+    .faq-toggle {
+      width: 28px; height: 28px;
+      background: var(--primary-glow);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: transform 0.3s ease;
+    }
+    .faq-toggle svg { width: 14px; height: 14px; stroke: var(--primary); fill: none; stroke-width: 2.5; }
+    .faq-item.open .faq-toggle { transform: rotate(45deg); }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s cubic-bezier(0.16,1,0.3,1), padding 0.35s ease;
+    }
+    .faq-item.open .faq-answer { max-height: 300px; }
+    .faq-answer-inner {
+      padding: 0 20px 18px;
+      font-size: 14px;
+      color: var(--body);
+      line-height: 1.7;
+    }
+
+    .support-card {
+      background: linear-gradient(135deg, var(--primary), #4A8BFF);
+      border-radius: var(--radius-lg);
+      padding: 28px 24px;
+      text-align: center;
+      color: white;
+      margin-top: 28px;
+    }
+    .support-card h3 { font-size: 18px; font-weight: 800; margin-bottom: 8px; }
+    .support-card p { font-size: 14px; opacity: 0.85; margin-bottom: 16px; }
+    .support-card a {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 24px; background: rgba(255,255,255,0.2);
+      border-radius: 12px; font-size: 14px; font-weight: 700;
+      color: white; backdrop-filter: blur(10px);
+      transition: background 0.25s ease;
+    }
+    .support-card a:hover { background: rgba(255,255,255,0.3); }
+    .support-card a svg { width: 18px; height: 18px; fill: currentColor; }
+  </style>
+</head>
+<body>
+
+  <main class="container">
+    <div class="page-header animate-in">
+      <h1>Frequently Asked Questions</h1>
+      <p>Everything you need to know about renting digital USD with DollarRent</p>
+    </div>
+
+    <div id="faq-list"></div>
+
+    <div class="support-card animate-in" style="animation-delay:0.4s;">
+      <h3>Still Have Questions?</h3>
+      <p>Our support team is available 24/7 on Telegram to help you.</p>
+      <a href="https://t.me/RENTAL_DOLLOR" target="_blank">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
+        Chat on Telegram
+      </a>
+    </div>
+  </main>
+
+  <script type="module">
+    import './app.js';
+    import { db } from './firebase-config.js';
+    import { collection, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const DEFAULT_FAQS = [
+      { q: 'What is DollarRent?', a: 'DollarRent is a digital USD balance rental platform. You can rent USD packages for use on platforms like Binance, Quotex, and other trading/forex platforms. We provide temporary digital balance deposits directly to your wallet.' },
+      { q: 'How does the rental process work?', a: 'Select a package → Complete KYC verification → Pay the rental fee → Receive your USD balance within the processing time. The entire process is streamlined through our secure platform.' },
+      { q: 'What payment methods do you accept?', a: 'We accept Easypaisa, JazzCash, Bank Transfer (Meezan Bank), Binance Pay, and USDT (TRC20). All payment details are provided at checkout.' },
+      { q: 'How long does it take to receive my balance?', a: 'Processing times vary by package: $50-$60 packages take ~30 minutes, $70-$80 take ~45 minutes, and $90-$100+ packages take ~1 hour. During peak hours, it may take slightly longer.' },
+      { q: 'Is DollarRent safe and secure?', a: 'Yes. We use Google Authentication for secure login, all data is encrypted and stored on Google Firebase infrastructure, and payment proofs are verified manually by our admin team before any balance is released.' },
+      { q: 'What is the rental fee?', a: 'Rental fees vary by package amount. Fees start from $9 for the $50 package and increase with larger amounts. All fees are transparently displayed before checkout.' },
+      { q: 'Can I get a refund?', a: 'If your order is rejected or not fulfilled, you may request a refund through our Telegram support channel. Approved refunds are processed within 24-48 hours.' },
+      { q: 'How does the referral program work?', a: 'Share your unique referral link with friends. When they complete their first rental, both you and your friend earn rewards. Visit the Referral page in your account for details.' },
+      { q: 'What platforms can I use the rented USD on?', a: 'DollarRent supports balance deposits for Binance, Quotex, Forex platforms, and other compatible trading platforms. Specify your platform during the order process.' },
+      { q: 'How do I contact support?', a: 'Our primary support channel is Telegram. Contact @RENTAL_DOLLOR for immediate assistance. Our team is available 24/7.' }
+    ];
+
+    async function loadFAQs() {
+      let faqs = DEFAULT_FAQS;
+
+      try {
+        const faqRef = collection(db, 'faqs');
+        const q = query(faqRef, orderBy('order', 'asc'));
+        const snapshot = await getDocs(q);
+        if (!snapshot.empty) {
+          faqs = [];
+          snapshot.forEach(doc => {
+            const d = doc.data();
+            if (d.active !== false) faqs.push({ q: d.question, a: d.answer });
+          });
+        }
+      } catch {}
+
+      const list = document.getElementById('faq-list');
+      list.innerHTML = faqs.map((faq, i) => `
+        <div class="faq-item" style="animation-delay:${0.05 * i}s;">
+          <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
+            <h3>${faq.q}</h3>
+            <div class="faq-toggle">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            </div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">${faq.a}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    loadFAQs();
+  </script>
+</body>
+</html>

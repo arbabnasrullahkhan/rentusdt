@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /checkout.html
+Disallow: /order.html
+Disallow: /profile.html
+Disallow: /payment-success.html
+Disallow: /payment-failed.html
+Disallow: /payment-pending.html
+
+Sitemap: https://rentusdt.vercel.app/sitemap.xml

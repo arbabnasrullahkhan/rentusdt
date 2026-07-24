@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Payment Successful — DollarRent</title>
+  <meta name="description" content="Your DollarRent payment has been received. Track your order status in real-time.">
+  <link rel="icon" href="assets/logo.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/logo.png">
+  <link rel="manifest" href="manifest.json">
+  <style>
+    :root {
+      --bg-color: #F8FAFC; --card-solid: #FFFFFF; --border-color: #E2E8F0;
+      --primary: #0F62FE; --success: #059669; --heading: #0B101E; --body: #64748B;
+      --radius-lg: 24px; --radius-md: 16px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+      background-color: var(--bg-color);
+      background-image: radial-gradient(circle at 50% 0%, #ffffff 0%, transparent 70%);
+      color: var(--heading); min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px; -webkit-font-smoothing: antialiased;
+    }
+    .success-container {
+      max-width: 480px; width: 100%; text-align: center;
+      opacity: 0; transform: translateY(20px);
+      animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+    .success-icon {
+      width: 88px; height: 88px; margin: 0 auto 24px;
+      background: rgba(5,150,105,0.1); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      animation: pulseSuccess 2s infinite;
+    }
+    .success-icon svg { width: 40px; height: 40px; stroke: var(--success); fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+    @keyframes pulseSuccess { 0%,100% { box-shadow: 0 0 0 0 rgba(5,150,105,0.3); } 50% { box-shadow: 0 0 0 20px rgba(5,150,105,0); } }
+
+    h1 { font-size: 28px; font-weight: 800; color: var(--success); margin-bottom: 8px; }
+    .subtitle { font-size: 15px; color: var(--body); line-height: 1.6; margin-bottom: 28px; }
+
+    .info-card {
+      background: var(--card-solid); border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg); padding: 24px;
+      box-shadow: 0 4px 24px -4px rgba(0,0,0,0.06); margin-bottom: 24px; text-align: left;
+    }
+    .info-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 0; border-bottom: 1px solid rgba(226,232,240,0.6); font-size: 14px;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-row .label { color: var(--body); font-weight: 500; }
+    .info-row .value { font-weight: 700; }
+
+    .btn-group { display: flex; flex-direction: column; gap: 10px; }
+    .btn {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 14px 24px; border-radius: 14px;
+      font-size: 15px; font-weight: 700; cursor: pointer; border: none;
+      transition: all 0.25s ease;
+    }
+    .btn svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #0043CE); color: white;
+      box-shadow: 0 8px 20px rgba(15,98,254,0.25);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(15,98,254,0.35); }
+    .btn-secondary {
+      background: rgba(15,98,254,0.06); color: var(--primary);
+    }
+    .btn-secondary:hover { background: rgba(15,98,254,0.12); }
+    .btn-tg {
+      background: rgba(0,136,204,0.08); color: #0088cc;
+    }
+    .btn-tg:hover { background: rgba(0,136,204,0.15); }
+  </style>
+</head>
+<body>
+
+  <div class="success-container">
+    <div class="success-icon">
+      <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    </div>
+    <h1>Payment Submitted!</h1>
+    <p class="subtitle">Your order has been received and is being reviewed by our team. You'll be notified once it's approved.</p>
+
+    <div class="info-card">
+      <div class="info-row">
+        <span class="label">Order Reference</span>
+        <span class="value" id="display-ref">—</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Package</span>
+        <span class="value" id="display-pkg">—</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Fee Paid</span>
+        <span class="value" id="display-fee" style="color:var(--primary);">—</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Status</span>
+        <span class="value" style="color:var(--success);">Under Review</span>
+      </div>
+    </div>
+
+    <div class="btn-group">
+      <a href="#" id="track-btn" class="btn btn-primary">
+        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+        Track Order Status
+      </a>
+      <a href="home.html" class="btn btn-secondary">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        Back to Home
+      </a>
+      <a href="https://t.me/RENTAL_DOLLOR" target="_blank" class="btn btn-tg">
+        <svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
+        Contact Support on Telegram
+      </a>
+    </div>
+  </div>
+
+  <script type="module">
+    import { formatUSD } from './utils.js';
+    const params = new URLSearchParams(window.location.search);
+    const orderId = params.get('orderId') || '—';
+    const amount = params.get('amount') || '0';
+    const fee = params.get('fee') || '0';
+
+    document.getElementById('display-ref').textContent = orderId;
+    document.getElementById('display-pkg').textContent = `$${amount} USD`;
+    document.getElementById('display-fee').textContent = formatUSD(parseInt(fee));
+    document.getElementById('track-btn').href = `order-status.html?orderId=${orderId}`;
+  </script>
+</body>
+</html>

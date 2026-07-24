@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Site Settings — DollarRent Admin</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="../assets/logo.png" type="image/png">
+  <style>
+    :root { --bg: #F1F5F9; --card: #FFFFFF; --border: #E2E8F0; --primary: #0F62FE; --primary-glow: rgba(15,98,254,0.1); --success: #059669; --danger: #EF4444; --heading: #0B101E; --body: #64748B; --radius: 20px; --radius-sm: 12px; --shadow: 0 4px 24px -4px rgba(0,0,0,0.06); --sidebar-w: 260px; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", sans-serif; background: var(--bg); color: var(--heading); display: flex; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: inherit; }
+    .sidebar { width: var(--sidebar-w); background: var(--card); border-right: 1px solid var(--border); padding: 24px 16px; display: flex; flex-direction: column; justify-content: space-between; position: fixed; top: 0; bottom: 0; left: 0; z-index: 100; }
+    .sidebar-brand { display: flex; align-items: center; gap: 10px; padding: 0 8px; margin-bottom: 28px; }
+    .sidebar-brand img { width: 32px; height: 32px; }
+    .sidebar-brand span { font-size: 18px; font-weight: 800; }
+    .sidebar-brand span b { color: var(--primary); }
+    .sidebar-menu { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+    .sidebar-menu a { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; color: var(--body); transition: all 0.2s; }
+    .sidebar-menu a:hover, .sidebar-menu a.active { background: var(--primary-glow); color: var(--primary); }
+    .sidebar-menu svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .sidebar-footer { padding: 0 8px; }
+    .sidebar-footer a { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--body); }
+    .sidebar-footer svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    .main { flex: 1; margin-left: var(--sidebar-w); padding: 28px 32px; }
+    .page-header { margin-bottom: 28px; }
+    .page-header h1 { font-size: 26px; font-weight: 800; }
+    .page-header p { font-size: 14px; color: var(--body); }
+
+    .settings-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); margin-bottom: 20px; }
+    .settings-card h3 { font-size: 18px; font-weight: 800; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+    .settings-card h3 svg { width: 20px; height: 20px; stroke: var(--primary); fill: none; stroke-width: 2; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--heading); }
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%; padding: 11px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+      font-size: 14px; font-family: inherit; outline: none; background: var(--bg);
+    }
+    .form-group input:focus, .form-group textarea:focus { border-color: var(--primary); }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+    .form-group .hint { font-size: 12px; color: var(--body); margin-top: 4px; }
+
+    .toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid rgba(226,232,240,0.5); }
+    .toggle-row:last-child { border-bottom: none; }
+    .toggle-label { font-size: 14px; font-weight: 600; }
+    .toggle-desc { font-size: 12px; color: var(--body); margin-top: 2px; }
+    .toggle-switch { position: relative; width: 48px; height: 26px; flex-shrink: 0; }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider { position: absolute; cursor: pointer; inset: 0; background: #CBD5E1; border-radius: 26px; transition: 0.3s; }
+    .toggle-slider::before { content: ''; position: absolute; height: 20px; width: 20px; left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: 0.3s; }
+    .toggle-switch input:checked + .toggle-slider { background: var(--primary); }
+    .toggle-switch input:checked + .toggle-slider::before { transform: translateX(22px); }
+
+    .btn-save { padding: 12px 24px; background: var(--primary); color: white; border: none; border-radius: var(--radius-sm); font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.25s; }
+    .btn-save:hover { background: #0043CE; }
+
+    @media (max-width: 768px) { .sidebar { display: none; } .main { margin-left: 0; padding: 20px 16px; } }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-brand"><img src="../assets/logo.png" alt="DollarRent"><span>Dollar<b>Admin</b></span></div>
+      <ul class="sidebar-menu">
+        <li><a href="dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg> Dashboard</a></li>
+        <li><a href="orders.html"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg> Orders</a></li>
+        <li><a href="packages.html"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg> Packages</a></li>
+        <li><a href="payment-methods.html"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect></svg> Payments</a></li>
+        <li><a href="users.html"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> Users</a></li>
+        <li><a href="settings.html" class="active"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle></svg> Settings</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-footer"><a href="../home.html"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg> Exit</a></div>
+  </aside>
+
+  <main class="main">
+    <div class="page-header">
+      <h1>Site Settings</h1>
+      <p>Configure global platform settings and maintenance mode</p>
+    </div>
+
+    <!-- Maintenance & Toggles -->
+    <div class="settings-card">
+      <h3><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> Platform Controls</h3>
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label">Maintenance Mode</div>
+          <div class="toggle-desc">Temporarily disable public access with a maintenance screen</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="toggle-maintenance">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label">New User Registration</div>
+          <div class="toggle-desc">Allow new users to sign up via Google Authentication</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="toggle-registration" checked>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label">Referral Program</div>
+          <div class="toggle-desc">Enable the referral program for all users</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="toggle-referrals" checked>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Telegram & Support -->
+    <div class="settings-card">
+      <h3><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg> Support Configuration</h3>
+      <div class="form-group">
+        <label>Telegram Username</label>
+        <input type="text" id="setting-telegram" value="@RENTAL_DOLLOR" placeholder="@username">
+        <div class="hint">This appears on the floating support button and contact pages</div>
+      </div>
+      <div class="form-group">
+        <label>Support Email</label>
+        <input type="email" id="setting-email" value="support@dollarrent.com" placeholder="support@example.com">
+      </div>
+    </div>
+
+    <!-- Announcement -->
+    <div class="settings-card">
+      <h3><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg> Announcement Banner</h3>
+      <div class="form-group">
+        <label>Banner Message (leave empty to disable)</label>
+        <textarea id="setting-announcement" placeholder="e.g., New $200 package now available!"></textarea>
+      </div>
+    </div>
+
+    <button class="btn-save" id="btn-save-settings">Save All Settings</button>
+  </main>
+
+  <script type="module">
+    import { getAdminUser } from '../firebase-auth.js';
+    import { db } from '../firebase-config.js';
+    import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { showToast } from '../utils.js';
+
+    const admin = getAdminUser();
+    if (!admin) window.location.href = 'login.html';
+
+    // Load settings
+    async function loadSettings() {
+      try {
+        const statusRef = doc(db, 'admin_settings', 'status');
+        const snap = await getDoc(statusRef);
+        if (snap.exists()) {
+          const data = snap.data();
+          document.getElementById('toggle-maintenance').checked = data.maintenance === true;
+          document.getElementById('toggle-registration').checked = data.registration !== false;
+          document.getElementById('toggle-referrals').checked = data.referrals !== false;
+          if (data.telegram) document.getElementById('setting-telegram').value = data.telegram;
+          if (data.email) document.getElementById('setting-email').value = data.email;
+          if (data.announcement) document.getElementById('setting-announcement').value = data.announcement;
+        }
+      } catch (err) {
+        console.warn('Settings load error:', err.message);
+      }
+    }
+
+    // Save settings
+    document.getElementById('btn-save-settings').addEventListener('click', async () => {
+      const btn = document.getElementById('btn-save-settings');
+      btn.disabled = true;
+      btn.textContent = 'Saving...';
+
+      const data = {
+        maintenance: document.getElementById('toggle-maintenance').checked,
+        registration: document.getElementById('toggle-registration').checked,
+        referrals: document.getElementById('toggle-referrals').checked,
+        telegram: document.getElementById('setting-telegram').value,
+        email: document.getElementById('setting-email').value,
+        announcement: document.getElementById('setting-announcement').value,
+        updatedAt: new Date().toISOString(),
+        updatedBy: admin.email
+      };
+
+      try {
+        await setDoc(doc(db, 'admin_settings', 'status'), data, { merge: true });
+        showToast('Settings saved successfully!', 'success');
+      } catch (err) {
+        showToast('Save failed: ' + err.message, 'error');
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'Save All Settings';
+    });
+
+    loadSettings();
+  </script>
+</body>
+</html>

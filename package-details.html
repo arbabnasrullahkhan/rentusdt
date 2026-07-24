@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Package Details — DollarRent</title>
+
+  <link rel="icon" href="assets/logo.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/logo.png">
+  <link rel="manifest" href="manifest.json">
+
+  <style>
+    :root {
+      --bg-color: #F8FAFC;
+      --card-solid: #FFFFFF;
+      --border-color: #E2E8F0;
+      --primary: #0F62FE;
+      --primary-hover: #0043CE;
+      --primary-glow: rgba(15, 98, 254, 0.12);
+      --secondary: #00E676;
+      --danger: #EF4444;
+      --heading: #0B101E;
+      --body: #475569;
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+      --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 12px 24px -4px rgba(15, 98, 254, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+      background-color: var(--bg-color);
+      /* Subtle Premium Grid Background */
+      background-image: radial-gradient(circle at 50% 0%, #ffffff 0%, transparent 70%),
+        linear-gradient(rgba(15, 98, 254, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(15, 98, 254, 0.03) 1px, transparent 1px);
+      background-size: 100% 100%, 30px 30px, 30px 30px;
+      color: var(--heading);
+      padding-bottom: 120px;
+      /* Space for Mobile Dock from app.js */
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* ================= MAIN WRAPPER (Prevents Header Overlap) ================= */
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 100px 20px 40px;
+      /* 100px top padding clears the app.js Floating Header */
+    }
+
+    /* ================= BACK BUTTON BUBBLE ================= */
+    .back-bubble-wrapper {
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+    }
+
+    .back-bubble {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--card-solid);
+      border: 1px solid var(--border-color);
+      padding: 8px 16px;
+      border-radius: 30px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--body);
+      box-shadow: var(--shadow-sm);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .back-bubble:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: translateX(-4px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .back-bubble svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* ================= PREMIUM DETAIL CARD ================= */
+    .detail-card {
+      background: var(--card-solid);
+      border-radius: var(--radius-lg);
+      padding: 40px 32px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Top glowing accent line */
+    .detail-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+    }
+
+    .package-header {
+      text-align: center;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 28px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--primary-glow);
+      color: var(--primary);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+
+    .amount-title {
+      font-size: 48px;
+      font-weight: 800;
+      color: var(--heading);
+      letter-spacing: -1.5px;
+      line-height: 1;
+    }
+
+    .fee-subtitle {
+      font-size: 16px;
+      color: var(--primary);
+      font-weight: 700;
+      margin-top: 10px;
+    }
+
+    /* ================= INFO GRID ================= */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .info-box {
+      background: var(--bg-color);
+      padding: 18px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .info-box label {
+      font-size: 12px;
+      color: var(--body);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .info-box span {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--heading);
+    }
+
+    /* ================= REQUIREMENTS / HIGHLIGHTS ================= */
+    .section-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--heading);
+      margin-bottom: 16px;
+    }
+
+    .checklist {
+      margin-bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--body);
+      line-height: 1.5;
+    }
+
+    .check-item span b {
+      color: var(--heading);
+      font-weight: 700;
+    }
+
+    .check-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(0, 230, 118, 0.15);
+      color: var(--secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .check-icon svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      stroke-width: 3;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* ================= MAIN PROCEED BUTTON ================= */
+    .btn-proceed {
+      width: 100%;
+      padding: 18px;
+      border-radius: 30px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+      color: white;
+      font-size: 16px;
+      font-weight: 800;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(15, 98, 254, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-proceed:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 35px rgba(15, 98, 254, 0.45);
+    }
+
+    .btn-proceed svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 767px) {
+      .container {
+        padding-top: 80px;
+      }
+
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .detail-card {
+        padding: 32px 20px;
+      }
+
+      .amount-title {
+        font-size: 40px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Main Container -->
+  <main class="container">
+
+    <!-- Beautiful Back Bubble (Placed slightly below header area) -->
+    <div class="back-bubble-wrapper">
+      <a href="home.html#packages" class="back-bubble">
+        <svg viewBox="0 0 24 24">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+        Back to Packages
+      </a>
+    </div>
+
+    <!-- Premium Package Detail Card -->
+    <div class="detail-card">
+
+      <!-- Header -->
+      <div class="package-header">
+        <div class="badge">Verified Rental Package</div>
+        <div class="amount-title" id="pkg-amount">$0.00 USD</div>
+        <div class="fee-subtitle" id="pkg-fee">Advance Rental Fee: $0.00</div>
+      </div>
+
+      <!-- Quick Info Grid -->
+      <div class="info-grid">
+        <div class="info-box">
+          <label>Estimated Processing</label>
+          <span id="pkg-time">15 - 30 Minutes</span>
+        </div>
+        <div class="info-box">
+          <label>Delivery Networks</label>
+          <span>Binance / USDT / Banking</span>
+        </div>
+      </div>
+
+      <!-- Benefits & Requirements Highlights -->
+      <h3 class="section-title">Package Benefits & Rules</h3>
+      <div class="checklist">
+        <div class="check-item">
+          <div class="check-icon"><svg viewBox="0 0 24 24">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg></div>
+          <span><b>Direct Deposit:</b> Funds will be transferred instantly to your specified Binance UID, USDT address,
+            or Bank after KYC verification.</span>
+        </div>
+        <div class="check-item">
+          <div class="check-icon"><svg viewBox="0 0 24 24">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg></div>
+          <span><b>Profit Margin Policy:</b> All profits generated during the rental duration are 100% yours to keep.
+            Return only the base amount.</span>
+        </div>
+        <div class="check-item">
+          <div class="check-icon"><svg viewBox="0 0 24 24">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg></div>
+          <span><b>Strict KYC Required:</b> You will be required to provide a valid CNIC, Live Selfie, and active phone
+            number on the next step.</span>
+        </div>
+        <div class="check-item">
+          <div class="check-icon"><svg viewBox="0 0 24 24">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg></div>
+          <span><b>24/7 Live Tracking:</b> Full admin guarantee and live order status tracking via Telegram Support
+            (<strong>@RENTAL_DOLLOR</strong>).</span>
+        </div>
+      </div>
+
+      <!-- Action Button -->
+      <button id="btn-order-flow" class="btn-proceed">
+        Proceed to KYC & Order Form
+        <svg viewBox="0 0 24 24">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+
+    </div>
+  </main>
+
+  <!-- ================= FIREBASE LOGIC & APP.JS INJECTION ================= -->
+  <!-- Note: app.js will automatically inject the Capsule Header and Mobile Dock -->
+  <script type="module">
+    import './app.js';
+    import { getCurrentUser, loginWithGoogle } from './firebase-auth.js';
+    import { formatUSD, showToast } from './utils.js';
+
+    // 1. Extract URL Parameters safely
+    const params = new URLSearchParams(window.location.search);
+    const amount = params.get('amount') || '50';
+    const fee = params.get('fee') || '9';
+    const id = params.get('id') || 'p50';
+
+    // 2. Populate the UI dynamically
+    document.getElementById('pkg-amount').innerHTML = `$${amount}.00 <span style="font-size:24px; color:var(--body);">USD</span>`;
+    document.getElementById('pkg-fee').textContent = `Advance Rental Fee: ${formatUSD(fee)}`;
+
+    // 3. Handle Order Flow Button
+    document.getElementById('btn-order-flow').addEventListener('click', async () => {
+      let user = getCurrentUser();
+
+      // If user is not logged in, force Google Sign-In as per your requirements
+      if (!user) {
+        showToast('Please sign in with Google to continue to the KYC form.', 'info');
+        try {
+          user = await loginWithGoogle();
+        } catch (error) {
+          // If login fails or user cancels, stop the flow
+          return;
+        }
+      }
+
+      // Navigate to order page with data
+      window.location.href = `order.html?packageId=${id}&amount=${amount}&fee=${fee}`;
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Users — DollarRent Admin</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="../assets/logo.png" type="image/png">
+  <style>
+    :root { --bg: #F1F5F9; --card: #FFFFFF; --border: #E2E8F0; --primary: #0F62FE; --primary-glow: rgba(15,98,254,0.1); --success: #059669; --heading: #0B101E; --body: #64748B; --radius: 20px; --radius-sm: 12px; --shadow: 0 4px 24px -4px rgba(0,0,0,0.06); --sidebar-w: 260px; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", sans-serif; background: var(--bg); color: var(--heading); display: flex; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: inherit; }
+    .sidebar { width: var(--sidebar-w); background: var(--card); border-right: 1px solid var(--border); padding: 24px 16px; display: flex; flex-direction: column; justify-content: space-between; position: fixed; top: 0; bottom: 0; left: 0; z-index: 100; }
+    .sidebar-brand { display: flex; align-items: center; gap: 10px; padding: 0 8px; margin-bottom: 28px; }
+    .sidebar-brand img { width: 32px; height: 32px; }
+    .sidebar-brand span { font-size: 18px; font-weight: 800; }
+    .sidebar-brand span b { color: var(--primary); }
+    .sidebar-menu { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+    .sidebar-menu a { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; color: var(--body); transition: all 0.2s; }
+    .sidebar-menu a:hover, .sidebar-menu a.active { background: var(--primary-glow); color: var(--primary); }
+    .sidebar-menu svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .sidebar-footer { padding: 0 8px; }
+    .sidebar-footer a { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--body); }
+    .sidebar-footer svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    .main { flex: 1; margin-left: var(--sidebar-w); padding: 28px 32px; }
+    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    .page-header h1 { font-size: 26px; font-weight: 800; }
+    .page-header p { font-size: 14px; color: var(--body); }
+
+    .search-bar { margin-bottom: 20px; }
+    .search-input { padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 14px; width: 320px; outline: none; background: var(--card); }
+    .search-input:focus { border-color: var(--primary); }
+
+    .table-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; padding: 10px 12px; font-size: 12px; font-weight: 700; color: var(--body); text-transform: uppercase; border-bottom: 1px solid var(--border); }
+    td { padding: 14px 12px; font-size: 14px; border-bottom: 1px solid #F1F5F9; }
+    tr:hover td { background: rgba(15,98,254,0.015); }
+    .user-row { display: flex; align-items: center; gap: 10px; }
+    .user-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; background: var(--primary-glow); }
+    .user-avatar-fallback { width: 36px; height: 36px; border-radius: 50%; background: var(--primary-glow); display: flex; align-items: center; justify-content: center; color: var(--primary); font-weight: 800; font-size: 14px; }
+    .badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+    .badge-user { background: rgba(15,98,254,0.1); color: var(--primary); }
+    .badge-admin { background: rgba(5,150,105,0.1); color: var(--success); }
+    .empty-row td { text-align: center; color: var(--body); padding: 40px; }
+
+    @media (max-width: 768px) { .sidebar { display: none; } .main { margin-left: 0; padding: 20px 16px; } .search-input { width: 100%; } }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-brand"><img src="../assets/logo.png" alt="DollarRent"><span>Dollar<b>Admin</b></span></div>
+      <ul class="sidebar-menu">
+        <li><a href="dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg> Dashboard</a></li>
+        <li><a href="orders.html"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg> Orders</a></li>
+        <li><a href="packages.html"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg> Packages</a></li>
+        <li><a href="payment-methods.html"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect></svg> Payments</a></li>
+        <li><a href="users.html" class="active"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> Users</a></li>
+        <li><a href="settings.html"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle></svg> Settings</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-footer"><a href="../home.html"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg> Exit</a></div>
+  </aside>
+
+  <main class="main">
+    <div class="page-header">
+      <div><h1>Users & Customers</h1><p>All registered users and their account details</p></div>
+      <div id="user-count" style="font-size:14px; font-weight:700; color:var(--primary);">—</div>
+    </div>
+    <div class="search-bar">
+      <input type="text" class="search-input" id="search-input" placeholder="Search by name or email...">
+    </div>
+    <div class="table-card">
+      <table>
+        <thead><tr><th>User</th><th>Email</th><th>Role</th><th>Joined</th></tr></thead>
+        <tbody id="users-tbody"><tr class="empty-row"><td colspan="4">Loading users...</td></tr></tbody>
+      </table>
+    </div>
+  </main>
+
+  <script type="module">
+    import { getAdminUser } from '../firebase-auth.js';
+    import { db } from '../firebase-config.js';
+    import { collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { escapeHTML } from '../utils.js';
+
+    const admin = getAdminUser();
+    if (!admin) window.location.href = 'login.html';
+
+    let allUsers = [];
+
+    onSnapshot(collection(db, 'users'), (snapshot) => {
+      allUsers = [];
+      snapshot.forEach(d => allUsers.push({ id: d.id, ...d.data() }));
+      allUsers.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+      document.getElementById('user-count').textContent = `${allUsers.length} Users`;
+      renderUsers();
+    }, () => {
+      document.getElementById('users-tbody').innerHTML = '<tr class="empty-row"><td colspan="4">Unable to load users.</td></tr>';
+    });
+
+    document.getElementById('search-input').addEventListener('input', () => renderUsers());
+
+    function renderUsers() {
+      const q = document.getElementById('search-input').value.toLowerCase();
+      let filtered = allUsers;
+      if (q) filtered = filtered.filter(u => `${u.fullName || ''} ${u.email || ''}`.toLowerCase().includes(q));
+
+      const tbody = document.getElementById('users-tbody');
+      if (!filtered.length) {
+        tbody.innerHTML = '<tr class="empty-row"><td colspan="4">No users found.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(u => {
+        const initial = (u.fullName || 'U')[0].toUpperCase();
+        const date = u.createdAt ? new Date(u.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—';
+        const role = u.role || 'user';
+        return `<tr>
+          <td><div class="user-row">
+            ${u.photoURL ? `<img src="${u.photoURL}" class="user-avatar" alt="" onerror="this.outerHTML='<div class=user-avatar-fallback>${initial}</div>'">` : `<div class="user-avatar-fallback">${initial}</div>`}
+            <strong>${escapeHTML(u.fullName || 'User')}</strong>
+          </div></td>
+          <td style="font-size:13px; color:var(--body);">${escapeHTML(u.email || '')}</td>
+          <td><span class="badge badge-${role}">${role}</span></td>
+          <td style="font-size:13px; color:var(--body);">${date}</td>
+        </tr>`;
+      }).join('');
+    }
+  </script>
+</body>
+</html>

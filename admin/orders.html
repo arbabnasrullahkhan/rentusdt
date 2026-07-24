@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Orders Management — DollarRent Admin</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="../assets/logo.png" type="image/png">
+  <style>
+    :root {
+      --bg: #F1F5F9; --card: #FFFFFF; --border: #E2E8F0;
+      --primary: #0F62FE; --primary-hover: #0043CE; --primary-glow: rgba(15,98,254,0.1);
+      --success: #059669; --warning: #D97706; --danger: #EF4444;
+      --heading: #0B101E; --body: #64748B;
+      --radius: 20px; --radius-sm: 12px;
+      --shadow: 0 4px 24px -4px rgba(0,0,0,0.06);
+      --sidebar-w: 260px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", sans-serif; background: var(--bg); color: var(--heading); display: flex; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: inherit; }
+
+    /* Sidebar - same as dashboard */
+    .sidebar { width: var(--sidebar-w); background: var(--card); border-right: 1px solid var(--border); padding: 24px 16px; display: flex; flex-direction: column; justify-content: space-between; position: fixed; top: 0; bottom: 0; left: 0; z-index: 100; overflow-y: auto; }
+    .sidebar-brand { display: flex; align-items: center; gap: 10px; padding: 0 8px; margin-bottom: 28px; }
+    .sidebar-brand img { width: 32px; height: 32px; }
+    .sidebar-brand span { font-size: 18px; font-weight: 800; }
+    .sidebar-brand span b { color: var(--primary); }
+    .sidebar-menu { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+    .sidebar-menu a { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; color: var(--body); transition: all 0.2s; }
+    .sidebar-menu a:hover, .sidebar-menu a.active { background: var(--primary-glow); color: var(--primary); }
+    .sidebar-menu svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .sidebar-footer { padding: 0 8px; }
+    .sidebar-footer a { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--body); padding: 10px 0; }
+    .sidebar-footer svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    /* Main */
+    .main { flex: 1; margin-left: var(--sidebar-w); padding: 28px 32px; overflow-y: auto; }
+    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+    .page-header h1 { font-size: 26px; font-weight: 800; }
+    .page-header p { font-size: 14px; color: var(--body); }
+
+    /* Filters */
+    .filter-bar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+    .search-input { padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 14px; width: 280px; outline: none; background: var(--card); }
+    .search-input:focus { border-color: var(--primary); }
+    .filter-btn { background: var(--card); border: 1px solid var(--border); padding: 9px 16px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s; color: var(--body); }
+    .filter-btn.active, .filter-btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
+
+    /* Table */
+    .table-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); }
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; padding: 10px 12px; font-size: 12px; font-weight: 700; color: var(--body); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); }
+    td { padding: 14px 12px; font-size: 14px; border-bottom: 1px solid #F1F5F9; }
+    tr:hover td { background: rgba(15,98,254,0.015); }
+
+    .badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; }
+    .badge-submitted { background: rgba(15,98,254,0.1); color: var(--primary); }
+    .badge-under_review { background: rgba(217,119,6,0.1); color: var(--warning); }
+    .badge-approved { background: rgba(5,150,105,0.1); color: var(--success); }
+    .badge-delivered { background: rgba(5,150,105,0.15); color: var(--success); }
+    .badge-rejected { background: rgba(239,68,68,0.1); color: var(--danger); }
+
+    .action-btns { display: flex; gap: 6px; }
+    .btn-action {
+      padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 700;
+      border: none; cursor: pointer; transition: all 0.2s;
+    }
+    .btn-approve { background: rgba(5,150,105,0.1); color: var(--success); }
+    .btn-approve:hover { background: rgba(5,150,105,0.2); }
+    .btn-reject { background: rgba(239,68,68,0.1); color: var(--danger); }
+    .btn-reject:hover { background: rgba(239,68,68,0.2); }
+    .btn-view { background: var(--primary-glow); color: var(--primary); }
+    .btn-view:hover { background: rgba(15,98,254,0.2); }
+
+    .empty-row td { text-align: center; color: var(--body); padding: 40px; }
+
+    /* Modal */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 1000; }
+    .modal-overlay.active { display: flex; }
+    .modal {
+      background: var(--card); border-radius: var(--radius); padding: 28px;
+      width: 90%; max-width: 520px; max-height: 85vh; overflow-y: auto;
+      box-shadow: 0 24px 48px -12px rgba(0,0,0,0.2);
+    }
+    .modal h3 { font-size: 20px; font-weight: 800; margin-bottom: 16px; }
+    .modal-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(226,232,240,0.5); font-size: 14px; }
+    .modal-row:last-child { border-bottom: none; }
+    .modal-row .label { color: var(--body); font-weight: 500; }
+    .modal-row .value { font-weight: 700; }
+    .modal-screenshot { width: 100%; max-height: 200px; object-fit: contain; border-radius: var(--radius-sm); border: 1px solid var(--border); margin: 12px 0; }
+    .modal-actions { display: flex; gap: 10px; margin-top: 16px; }
+    .modal-actions select { flex: 1; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; }
+    .modal-actions button {
+      padding: 10px 20px; border-radius: var(--radius-sm); border: none;
+      font-size: 14px; font-weight: 700; cursor: pointer;
+    }
+    .btn-save { background: var(--primary); color: white; }
+    .btn-close { background: var(--bg); color: var(--body); }
+
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; padding: 20px 16px; }
+      .filter-bar { flex-direction: column; }
+      .search-input { width: 100%; }
+      table { font-size: 13px; }
+      th, td { padding: 8px 6px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-brand"><img src="../assets/logo.png" alt="DollarRent"><span>Dollar<b>Admin</b></span></div>
+      <ul class="sidebar-menu">
+        <li><a href="dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg> Dashboard</a></li>
+        <li><a href="orders.html" class="active"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg> Orders Queue</a></li>
+        <li><a href="packages.html"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg> Packages</a></li>
+        <li><a href="payment-methods.html"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg> Payment Methods</a></li>
+        <li><a href="users.html"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> Users</a></li>
+        <li><a href="settings.html"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9c.28.6.86 1 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg> Settings</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-footer"><a href="../home.html"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg> Exit to Public Site</a></div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="page-header">
+      <div>
+        <h1>Orders Queue</h1>
+        <p>Review, approve, and manage all rental orders in real-time</p>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filter-bar">
+      <input type="text" class="search-input" id="search-input" placeholder="Search by Order ID, name, or email...">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="submitted">New</button>
+      <button class="filter-btn" data-filter="under_review">Under Review</button>
+      <button class="filter-btn" data-filter="approved">Approved</button>
+      <button class="filter-btn" data-filter="rejected">Rejected</button>
+    </div>
+
+    <!-- Orders Table -->
+    <div class="table-card">
+      <table>
+        <thead>
+          <tr>
+            <th>Order Ref</th>
+            <th>Customer</th>
+            <th>Package</th>
+            <th>Fee</th>
+            <th>Payment</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="orders-tbody">
+          <tr class="empty-row"><td colspan="8">Loading orders...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <!-- Order Detail Modal -->
+  <div class="modal-overlay" id="order-modal">
+    <div class="modal">
+      <h3 id="modal-title">Order Details</h3>
+      <div id="modal-body"></div>
+      <div class="modal-actions">
+        <select id="modal-status">
+          <option value="submitted">Submitted</option>
+          <option value="under_review">Under Review</option>
+          <option value="approved">Approved</option>
+          <option value="delivered">Delivered</option>
+          <option value="rejected">Rejected</option>
+        </select>
+        <button class="btn-save" id="modal-save">Update Status</button>
+        <button class="btn-close" id="modal-close">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { getAdminUser } from '../firebase-auth.js';
+    import { db } from '../firebase-config.js';
+    import { collection, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { formatUSD, showToast, escapeHTML } from '../utils.js';
+
+    const admin = getAdminUser();
+    if (!admin) window.location.href = 'login.html';
+
+    let allOrders = [];
+    let currentFilter = 'all';
+    let searchQuery = '';
+    let selectedOrderId = null;
+
+    // Real-time orders listener
+    const ordersRef = collection(db, 'orders');
+    onSnapshot(ordersRef, (snapshot) => {
+      allOrders = [];
+      snapshot.forEach(d => allOrders.push({ id: d.id, ...d.data() }));
+      allOrders.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+      renderOrders();
+    }, (err) => {
+      console.warn('Orders snapshot error:', err);
+      document.getElementById('orders-tbody').innerHTML = '<tr class="empty-row"><td colspan="8">Unable to load orders. Check Firestore permissions.</td></tr>';
+    });
+
+    // Filter buttons
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        renderOrders();
+      });
+    });
+
+    // Search
+    document.getElementById('search-input').addEventListener('input', (e) => {
+      searchQuery = e.target.value.toLowerCase();
+      renderOrders();
+    });
+
+    function renderOrders() {
+      let filtered = allOrders;
+
+      if (currentFilter !== 'all') {
+        filtered = filtered.filter(o => o.status === currentFilter);
+      }
+
+      if (searchQuery) {
+        filtered = filtered.filter(o => {
+          const searchStr = `${o.orderId || o.id} ${o.customer?.fullName || ''} ${o.customer?.email || ''}`.toLowerCase();
+          return searchStr.includes(searchQuery);
+        });
+      }
+
+      const tbody = document.getElementById('orders-tbody');
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = '<tr class="empty-row"><td colspan="8">No orders match your filters.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(o => {
+        const date = o.createdAt ? new Date(o.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—';
+        const status = o.status || 'submitted';
+        return `
+          <tr>
+            <td><strong>${escapeHTML(o.orderId || o.id)}</strong></td>
+            <td>
+              <div style="font-weight:600;">${escapeHTML(o.customer?.fullName || 'Customer')}</div>
+              <div style="font-size:12px; color:var(--body);">${escapeHTML(o.customer?.email || '')}</div>
+            </td>
+            <td>$${o.amountUSD || 0} USD</td>
+            <td>${formatUSD(o.fee || 0)}</td>
+            <td style="font-size:13px;">${escapeHTML(o.paymentMethodLabel || o.paymentMethod || '—')}</td>
+            <td><span class="badge badge-${status}">${status.replace('_', ' ')}</span></td>
+            <td style="font-size:13px; color:var(--body);">${date}</td>
+            <td>
+              <div class="action-btns">
+                <button class="btn-action btn-view" onclick="window._viewOrder('${o.id}')">View</button>
+                ${status === 'submitted' || status === 'under_review' ? `
+                  <button class="btn-action btn-approve" onclick="window._quickAction('${o.id}','approved')">✓</button>
+                  <button class="btn-action btn-reject" onclick="window._quickAction('${o.id}','rejected')">✕</button>
+                ` : ''}
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // View order modal
+    window._viewOrder = function(orderId) {
+      const order = allOrders.find(o => o.id === orderId);
+      if (!order) return;
+
+      selectedOrderId = orderId;
+      const modal = document.getElementById('order-modal');
+      const body = document.getElementById('modal-body');
+      const statusSelect = document.getElementById('modal-status');
+
+      document.getElementById('modal-title').textContent = `Order: ${order.orderId || order.id}`;
+      statusSelect.value = order.status || 'submitted';
+
+      body.innerHTML = `
+        <div class="modal-row"><span class="label">Customer</span><span class="value">${escapeHTML(order.customer?.fullName || '')}</span></div>
+        <div class="modal-row"><span class="label">Email</span><span class="value">${escapeHTML(order.customer?.email || '')}</span></div>
+        <div class="modal-row"><span class="label">Package</span><span class="value">$${order.amountUSD || 0} USD</span></div>
+        <div class="modal-row"><span class="label">Rental Fee</span><span class="value" style="color:var(--primary);">${formatUSD(order.fee || 0)}</span></div>
+        <div class="modal-row"><span class="label">Payment Method</span><span class="value">${escapeHTML(order.paymentMethodLabel || order.paymentMethod || '—')}</span></div>
+        <div class="modal-row"><span class="label">Platform</span><span class="value">${escapeHTML(order.platform || '—')}</span></div>
+        <div class="modal-row"><span class="label">Binance UID</span><span class="value">${escapeHTML(order.binanceUid || '—')}</span></div>
+        <div class="modal-row"><span class="label">Status</span><span class="value"><span class="badge badge-${order.status || 'submitted'}">${(order.status || 'submitted').replace('_', ' ')}</span></span></div>
+        <div class="modal-row"><span class="label">Created</span><span class="value">${order.createdAt ? new Date(order.createdAt).toLocaleString() : '—'}</span></div>
+        ${order.screenshotUrl ? `<div style="margin-top:12px;"><strong style="font-size:13px;">Payment Screenshot:</strong><br><img src="${order.screenshotUrl}" class="modal-screenshot" alt="Payment proof"></div>` : ''}
+        ${order.adminNote ? `<div class="modal-row"><span class="label">Admin Note</span><span class="value">${escapeHTML(order.adminNote)}</span></div>` : ''}
+      `;
+
+      modal.classList.add('active');
+    };
+
+    // Quick approve/reject
+    window._quickAction = async function(orderId, status) {
+      try {
+        const ref = doc(db, 'orders', orderId);
+        await updateDoc(ref, { status, updatedAt: new Date().toISOString(), updatedBy: admin.email });
+        showToast(`Order ${status === 'approved' ? 'approved' : 'rejected'} successfully!`, status === 'approved' ? 'success' : 'warning');
+      } catch (err) {
+        showToast('Failed to update order: ' + err.message, 'error');
+      }
+    };
+
+    // Modal save
+    document.getElementById('modal-save').addEventListener('click', async () => {
+      if (!selectedOrderId) return;
+      const newStatus = document.getElementById('modal-status').value;
+      try {
+        const ref = doc(db, 'orders', selectedOrderId);
+        await updateDoc(ref, { status: newStatus, updatedAt: new Date().toISOString(), updatedBy: admin.email });
+        showToast('Order status updated!', 'success');
+        document.getElementById('order-modal').classList.remove('active');
+      } catch (err) {
+        showToast('Update failed: ' + err.message, 'error');
+      }
+    });
+
+    // Modal close
+    document.getElementById('modal-close').addEventListener('click', () => {
+      document.getElementById('order-modal').classList.remove('active');
+    });
+    document.getElementById('order-modal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) e.currentTarget.classList.remove('active');
+    });
+  </script>
+</body>
+</html>

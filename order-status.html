@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Status — DollarRent</title>
+  <link rel="icon" href="assets/logo.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/logo.png">
+  <link rel="manifest" href="manifest.json">
+  <style>
+    :root {
+      --bg-color: #F8FAFC;
+      --card-solid: #FFFFFF;
+      --border-color: #E5E7EB;
+      --primary: #0F62FE;
+      --secondary: #2ECC71;
+      --heading: #111827;
+      --body: #6B7280;
+      --radius-lg: 24px;
+      --radius-md: 16px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif;
+      background-color: var(--bg-color);
+      color: var(--heading);
+      padding-bottom: 80px;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    .container {
+      max-width: 680px;
+      margin: 36px auto;
+      padding: 0 20px;
+    }
+
+    .status-card {
+      background: var(--card-solid);
+      border-radius: var(--radius-lg);
+      padding: 38px 28px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.05);
+      text-align: center;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 22px;
+      border-radius: 30px;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .badge-submitted { background: rgba(15, 98, 254, 0.12); color: var(--primary); }
+    .badge-under_review { background: rgba(245, 158, 11, 0.12); color: #D97706; }
+    .badge-approved { background: rgba(46, 204, 113, 0.15); color: #059669; }
+    .badge-rejected { background: rgba(239, 68, 68, 0.12); color: #DC2626; }
+
+    .order-ref { font-size: 32px; font-weight: 800; color: var(--heading); margin-bottom: 4px; letter-spacing: -0.5px; }
+
+    .stepper {
+      display: flex;
+      justify-content: space-between;
+      margin: 36px 0;
+      position: relative;
+    }
+    .stepper::before {
+      content: '';
+      position: absolute;
+      top: 18px;
+      left: 10%;
+      width: 80%;
+      height: 3px;
+      background: #E5E7EB;
+      z-index: 1;
+    }
+    .step-item {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      width: 33%;
+    }
+    .step-circle {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      border: 3px solid #E5E7EB;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--body);
+      transition: all 0.3s ease;
+    }
+    .step-item.active .step-circle {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 0 0 4px rgba(15, 98, 254, 0.2);
+    }
+    .step-item.done .step-circle {
+      border-color: var(--secondary);
+      background: var(--secondary);
+      color: white;
+    }
+    .step-label { font-size: 13px; font-weight: 600; color: var(--body); }
+
+    .details-table {
+      background: var(--bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 18px 22px;
+      text-align: left;
+      margin-bottom: 28px;
+    }
+    .table-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #E5E7EB;
+      font-size: 14px;
+    }
+    .table-row:last-child { border-bottom: none; }
+    .table-row span:first-child { color: var(--body); }
+    .table-row span:last-child { font-weight: 700; color: var(--heading); }
+
+    .admin-note-box {
+      background: rgba(15, 98, 254, 0.05);
+      border: 1px solid rgba(15, 98, 254, 0.15);
+      border-radius: 12px;
+      padding: 16px;
+      font-size: 14px;
+      color: var(--heading);
+      margin-bottom: 24px;
+      text-align: left;
+    }
+
+    .btn-telegram {
+      background: linear-gradient(135deg, #0088cc, #006699);
+      color: white;
+      padding: 14px 26px;
+      border-radius: var(--radius-md);
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 8px 22px rgba(0, 136, 204, 0.28);
+    }
+  </style>
+</head>
+<body>
+
+  <main class="container">
+    <div class="status-card">
+      <div id="status-badge-container">
+        <div class="status-badge badge-submitted">
+          <span>Processing Order...</span>
+        </div>
+      </div>
+
+      <div class="order-ref" id="display-order-id">DR-000000</div>
+      <p style="font-size:14px; color:var(--body);" id="display-date">Submitted on Jul 24, 2026</p>
+
+      <div class="stepper">
+        <div class="step-item done" id="step-1">
+          <div class="step-circle">1</div>
+          <div class="step-label">Submitted</div>
+        </div>
+        <div class="step-item" id="step-2">
+          <div class="step-circle">2</div>
+          <div class="step-label">Under Review</div>
+        </div>
+        <div class="step-item" id="step-3">
+          <div class="step-circle">3</div>
+          <div class="step-label" id="step-3-label">Approved</div>
+        </div>
+      </div>
+
+      <div class="admin-note-box" id="admin-note-container">
+        <strong>Verification Update:</strong> <span id="admin-note-text">Your payment receipt and KYC documents have been submitted and are under review (~20-30 minutes).</span>
+      </div>
+
+      <div class="details-table">
+        <div class="table-row">
+          <span>Package Amount:</span>
+          <span id="dt-amount">$50.00 USD</span>
+        </div>
+        <div class="table-row">
+          <span>Rental Fee Paid:</span>
+          <span id="dt-fee">$9.00 USD</span>
+        </div>
+        <div class="table-row">
+          <span>Delivery Platform:</span>
+          <span id="dt-platform">Binance Pay</span>
+        </div>
+        <div class="table-row">
+          <span>Binance Pay UID / Address:</span>
+          <span id="dt-uid">284910293</span>
+        </div>
+        <div class="table-row">
+          <span>Payment Reference ID:</span>
+          <span id="dt-trx">TRX9284019284</span>
+        </div>
+      </div>
+
+      <a href="https://t.me/RENTAL_DOLLOR" target="_blank" class="btn-telegram">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
+        Need Instant Help? Contact @RENTAL_DOLLOR
+      </a>
+    </div>
+  </main>
+
+  <script type="module">
+    import './app.js';
+    import { subscribeToOrder } from './firestore.js';
+    import { formatUSD } from './utils.js';
+
+    const params = new URLSearchParams(window.location.search);
+    const orderId = params.get('orderId') || 'DR-DEMO123';
+
+    document.getElementById('display-order-id').textContent = orderId;
+
+    subscribeToOrder(orderId, (order) => {
+      if (!order) return;
+
+      document.getElementById('dt-amount').textContent = `$${order.amountUSD || 50}.00 USD`;
+      document.getElementById('dt-fee').textContent = `${formatUSD(order.fee || 9)}`;
+      if (order.customer) {
+        if (order.customer.deliveryPlatform) document.getElementById('dt-platform').textContent = order.customer.deliveryPlatform;
+        if (order.customer.binanceUid) document.getElementById('dt-uid').textContent = order.customer.binanceUid;
+      }
+      if (order.payment && order.payment.referenceId) {
+        document.getElementById('dt-trx').textContent = order.payment.referenceId;
+      }
+      if (order.createdAt) {
+        document.getElementById('display-date').textContent = `Submitted on ${new Date(order.createdAt).toLocaleDateString()}`;
+      }
+
+      if (order.adminNote) {
+        document.getElementById('admin-note-text').textContent = order.adminNote;
+      }
+
+      const badgeContainer = document.getElementById('status-badge-container');
+      const step2 = document.getElementById('step-2');
+      const step3 = document.getElementById('step-3');
+      const step3Label = document.getElementById('step-3-label');
+
+      if (order.status === 'submitted') {
+        badgeContainer.innerHTML = `<div class="status-badge badge-submitted">Payment Submitted — Waiting Verification</div>`;
+        step2.className = 'step-item';
+        step3.className = 'step-item';
+      } else if (order.status === 'under_review') {
+        badgeContainer.innerHTML = `<div class="status-badge badge-under_review">Payment Under Admin Review</div>`;
+        step2.className = 'step-item active';
+        step3.className = 'step-item';
+      } else if (order.status === 'approved') {
+        badgeContainer.innerHTML = `<div class="status-badge badge-approved">✓ Payment Approved & USD Delivered</div>`;
+        step2.className = 'step-item done';
+        step3.className = 'step-item done';
+        step3Label.textContent = 'Delivered';
+      } else if (order.status === 'rejected') {
+        badgeContainer.innerHTML = `<div class="status-badge badge-rejected">✕ Payment Rejected</div>`;
+        step2.className = 'step-item done';
+        step3.className = 'step-item active';
+        step3Label.textContent = 'Rejected';
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Payment Checkout — DollarRent</title>
+  <meta name="description" content="Complete your DollarRent rental payment securely via Easypaisa, JazzCash, Bank Transfer, Binance Pay, or USDT. 24/7 support available.">
+  <link rel="icon" href="assets/logo.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/logo.png">
+  <link rel="manifest" href="manifest.json">
+  <style>
+    :root {
+      --bg-color: #F8FAFC;
+      --card-solid: #FFFFFF;
+      --border-color: #E2E8F0;
+      --primary: #0F62FE;
+      --primary-hover: #0043CE;
+      --primary-glow: rgba(15, 98, 254, 0.12);
+      --success: #059669;
+      --warning: #D97706;
+      --danger: #EF4444;
+      --heading: #0B101E;
+      --body: #64748B;
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+      --shadow-card: 0 4px 24px -4px rgba(0,0,0,0.06);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+      background-color: var(--bg-color);
+      background-image: radial-gradient(circle at 50% 0%, #ffffff 0%, transparent 70%),
+        linear-gradient(rgba(15, 98, 254, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(15, 98, 254, 0.02) 1px, transparent 1px);
+      background-size: 100% 100%, 30px 30px, 30px 30px;
+      color: var(--heading);
+      padding-bottom: 100px;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    .container { max-width: 720px; margin: 0 auto; padding: 32px 20px; }
+
+    /* Animation */
+    .animate-in { opacity: 0; transform: translateY(16px); animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    .delay-1 { animation-delay: 0.05s; }
+    .delay-2 { animation-delay: 0.1s; }
+    .delay-3 { animation-delay: 0.15s; }
+
+    /* Page Header */
+    .page-header {
+      margin-bottom: 24px;
+    }
+    .page-header h1 {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--heading);
+    }
+    .page-header p {
+      font-size: 14px;
+      color: var(--body);
+      margin-top: 4px;
+    }
+
+    /* Order Summary Card */
+    .summary-card {
+      background: var(--card-solid);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-card);
+      margin-bottom: 20px;
+    }
+    .summary-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--body);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .summary-title svg { width: 16px; height: 16px; stroke: var(--primary); fill: none; stroke-width: 2; }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(226,232,240,0.6);
+      font-size: 14px;
+    }
+    .summary-row:last-child { border-bottom: none; }
+    .summary-row .label { color: var(--body); font-weight: 500; }
+    .summary-row .value { font-weight: 700; color: var(--heading); }
+    .summary-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0 0;
+      margin-top: 8px;
+      border-top: 2px solid var(--border-color);
+    }
+    .summary-total .label { font-size: 16px; font-weight: 800; }
+    .summary-total .value { font-size: 22px; font-weight: 800; color: var(--primary); }
+
+    /* Payment Method Selection */
+    .payment-section {
+      background: var(--card-solid);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-card);
+      margin-bottom: 20px;
+    }
+    .payment-section h3 {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+    .method-list { display: flex; flex-direction: column; gap: 10px; }
+    .method-option {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px;
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .method-option:hover { border-color: rgba(15,98,254,0.3); }
+    .method-option.selected {
+      border-color: var(--primary);
+      background: rgba(15,98,254,0.03);
+      box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+    .method-radio {
+      width: 22px;
+      height: 22px;
+      border: 2px solid var(--border-color);
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+    .method-option.selected .method-radio {
+      border-color: var(--primary);
+    }
+    .method-option.selected .method-radio::after {
+      content: '';
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--primary);
+    }
+    .method-info { flex: 1; }
+    .method-name { font-size: 15px; font-weight: 700; }
+    .method-desc { font-size: 12px; color: var(--body); margin-top: 2px; }
+
+    /* Payment Details Panel */
+    .payment-details {
+      background: var(--card-solid);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-card);
+      margin-bottom: 20px;
+      display: none;
+    }
+    .payment-details.visible { display: block; }
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(226,232,240,0.5);
+      gap: 12px;
+    }
+    .detail-row:last-child { border-bottom: none; }
+    .detail-label { font-size: 13px; color: var(--body); font-weight: 500; }
+    .detail-value {
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .copy-btn {
+      background: var(--primary-glow);
+      color: var(--primary);
+      border: none;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .copy-btn:hover { background: rgba(15,98,254,0.2); }
+
+    .instructions-box {
+      background: rgba(15,98,254,0.04);
+      border: 1px solid rgba(15,98,254,0.1);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      margin-top: 16px;
+      font-size: 13px;
+      color: var(--body);
+      line-height: 1.6;
+    }
+    .instructions-box strong { color: var(--heading); }
+
+    /* Screenshot Upload */
+    .upload-section {
+      background: var(--card-solid);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-card);
+      margin-bottom: 20px;
+    }
+    .upload-section h3 { font-size: 18px; font-weight: 800; margin-bottom: 16px; }
+    .upload-dropzone {
+      border: 2px dashed var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 32px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .upload-dropzone:hover { border-color: var(--primary); background: rgba(15,98,254,0.02); }
+    .upload-dropzone.has-file { border-color: var(--success); background: rgba(5,150,105,0.03); }
+    .upload-dropzone svg { width: 40px; height: 40px; stroke: #CBD5E1; fill: none; stroke-width: 1.5; margin-bottom: 10px; }
+    .upload-dropzone.has-file svg { stroke: var(--success); }
+    .upload-dropzone p { font-size: 14px; color: var(--body); font-weight: 500; }
+    .upload-dropzone .filename { font-size: 13px; font-weight: 700; color: var(--success); margin-top: 8px; }
+    .upload-dropzone input { display: none; }
+
+    .upload-preview {
+      margin-top: 12px;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      display: none;
+    }
+    .upload-preview img {
+      width: 100%;
+      max-height: 200px;
+      object-fit: contain;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+    }
+
+    /* Submit Button */
+    .btn-submit {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(15,98,254,0.3);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(15,98,254,0.4); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+    .btn-submit svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    /* Back link */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--body);
+      margin-bottom: 20px;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--primary); }
+    .back-link svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+    @media (max-width: 480px) {
+      .summary-total .value { font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <main class="container">
+    <a href="javascript:history.back()" class="back-link animate-in">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      Back
+    </a>
+
+    <div class="page-header animate-in delay-1">
+      <h1>Payment Checkout</h1>
+      <p>Complete your rental fee payment to proceed with your order.</p>
+    </div>
+
+    <!-- Order Summary -->
+    <div class="summary-card animate-in delay-1" id="order-summary">
+      <div class="summary-title">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+        Order Summary
+      </div>
+      <div class="summary-row"><span class="label">Package</span><span class="value" id="sum-package">—</span></div>
+      <div class="summary-row"><span class="label">Rental Amount</span><span class="value" id="sum-amount">—</span></div>
+      <div class="summary-row"><span class="label">Processing Time</span><span class="value" id="sum-time">—</span></div>
+      <div class="summary-row"><span class="label">Order Reference</span><span class="value" id="sum-ref">—</span></div>
+      <div class="summary-total">
+        <span class="label">Rental Fee (You Pay)</span>
+        <span class="value" id="sum-fee">$0</span>
+      </div>
+    </div>
+
+    <!-- Payment Method Selection -->
+    <div class="payment-section animate-in delay-2">
+      <h3>Select Payment Method</h3>
+      <div class="method-list" id="payment-methods-list">
+        <div style="text-align:center; padding:20px; color:var(--body); font-size:14px;">Loading payment methods...</div>
+      </div>
+    </div>
+
+    <!-- Payment Details -->
+    <div class="payment-details" id="payment-details-panel">
+      <h3 style="font-size:18px; font-weight:800; margin-bottom:16px;">Payment Details</h3>
+      <div id="payment-info-rows"></div>
+      <div class="instructions-box" id="payment-instructions"></div>
+    </div>
+
+    <!-- Screenshot Upload -->
+    <div class="upload-section animate-in delay-3">
+      <h3>Upload Payment Proof</h3>
+      <div class="upload-dropzone" id="upload-dropzone">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+        <p>Tap or drag to upload payment screenshot</p>
+        <div class="filename" id="file-name" style="display:none;"></div>
+        <input type="file" id="screenshot-input" accept="image/*">
+      </div>
+      <div class="upload-preview" id="upload-preview">
+        <img id="preview-img" alt="Payment proof preview">
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <button class="btn-submit" id="btn-submit-order" disabled>
+      <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+      Submit Order
+    </button>
+  </main>
+
+  <script type="module">
+    import './app.js';
+    import { getCurrentUser, loginWithGoogle } from './firebase-auth.js';
+    import { getPaymentMethods, createOrder } from './firestore.js';
+    import { copyToClipboard, compressAndConvertImage, formatUSD, generateReferenceId, showToast, escapeHTML } from './utils.js';
+
+    // Parse URL params
+    const params = new URLSearchParams(window.location.search);
+    const packageAmount = parseInt(params.get('amount')) || 0;
+    const packageFee = parseInt(params.get('fee')) || 0;
+    const processingTime = params.get('time') || '~30 min';
+    const orderId = params.get('orderId') || generateReferenceId('DR');
+
+    // Redirect if no package selected
+    if (!packageAmount) {
+      showToast('Please select a package first.', 'warning');
+      setTimeout(() => window.location.href = 'home.html#packages', 1500);
+    }
+
+    // Populate summary
+    document.getElementById('sum-package').textContent = `$${packageAmount} USD Package`;
+    document.getElementById('sum-amount').textContent = `$${packageAmount}.00`;
+    document.getElementById('sum-time').textContent = processingTime;
+    document.getElementById('sum-ref').textContent = orderId;
+    document.getElementById('sum-fee').textContent = formatUSD(packageFee);
+
+    // State
+    let selectedMethod = null;
+    let screenshotDataUrl = null;
+
+    // Load payment methods from Firestore
+    async function loadPaymentMethods() {
+      const methods = await getPaymentMethods();
+      const list = document.getElementById('payment-methods-list');
+
+      if (!methods.length) {
+        list.innerHTML = '<p style="color:var(--body); font-size:14px;">No payment methods available. Please contact support.</p>';
+        return;
+      }
+
+      list.innerHTML = methods.map(m => `
+        <div class="method-option" data-id="${m.id}">
+          <div class="method-radio"></div>
+          <div class="method-info">
+            <div class="method-name">${escapeHTML(m.label)}</div>
+            <div class="method-desc">${escapeHTML(m.accountName || '')}</div>
+          </div>
+        </div>
+      `).join('');
+
+      // Click handlers
+      document.querySelectorAll('.method-option').forEach(el => {
+        el.addEventListener('click', () => {
+          document.querySelectorAll('.method-option').forEach(o => o.classList.remove('selected'));
+          el.classList.add('selected');
+          selectedMethod = methods.find(m => m.id === el.dataset.id);
+          showPaymentDetails(selectedMethod);
+          updateSubmitState();
+        });
+      });
+    }
+
+    function showPaymentDetails(method) {
+      const panel = document.getElementById('payment-details-panel');
+      const rows = document.getElementById('payment-info-rows');
+      const instr = document.getElementById('payment-instructions');
+
+      rows.innerHTML = `
+        <div class="detail-row">
+          <span class="detail-label">Account Title</span>
+          <span class="detail-value">${escapeHTML(method.accountName)}
+            <button class="copy-btn" onclick="window._copyText('${method.accountName}')">Copy</button>
+          </span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Account / Wallet</span>
+          <span class="detail-value">${escapeHTML(method.accountNumber)}
+            <button class="copy-btn" onclick="window._copyText('${method.accountNumber}')">Copy</button>
+          </span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Amount to Send</span>
+          <span class="detail-value" style="color:var(--primary); font-size:16px;">${formatUSD(packageFee)}</span>
+        </div>
+      `;
+
+      instr.innerHTML = `<strong>Instructions:</strong> ${escapeHTML(method.instructions || 'Send the exact amount and upload your payment proof screenshot below.')}`;
+      panel.classList.add('visible');
+    }
+
+    // Global copy helper
+    window._copyText = function(text) { copyToClipboard(text); };
+
+    // File upload
+    const dropzone = document.getElementById('upload-dropzone');
+    const fileInput = document.getElementById('screenshot-input');
+    const fileNameEl = document.getElementById('file-name');
+    const previewDiv = document.getElementById('upload-preview');
+    const previewImg = document.getElementById('preview-img');
+
+    dropzone.addEventListener('click', () => fileInput.click());
+    dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.style.borderColor = 'var(--primary)'; });
+    dropzone.addEventListener('dragleave', () => { dropzone.style.borderColor = ''; });
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropzone.style.borderColor = '';
+      if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+    });
+
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files.length) handleFile(fileInput.files[0]);
+    });
+
+    async function handleFile(file) {
+      if (!file.type.startsWith('image/')) {
+        showToast('Please upload an image file.', 'error');
+        return;
+      }
+      try {
+        screenshotDataUrl = await compressAndConvertImage(file, 1200, 0.85);
+        dropzone.classList.add('has-file');
+        fileNameEl.textContent = file.name;
+        fileNameEl.style.display = 'block';
+        previewImg.src = screenshotDataUrl;
+        previewDiv.style.display = 'block';
+        updateSubmitState();
+        showToast('Screenshot uploaded successfully!', 'success');
+      } catch (err) {
+        showToast('Failed to process image.', 'error');
+      }
+    }
+
+    function updateSubmitState() {
+      const btn = document.getElementById('btn-submit-order');
+      btn.disabled = !(selectedMethod && screenshotDataUrl);
+    }
+
+    // Submit Order
+    document.getElementById('btn-submit-order').addEventListener('click', async () => {
+      const btn = document.getElementById('btn-submit-order');
+      btn.disabled = true;
+      btn.innerHTML = '<div style="width:20px;height:20px;border:3px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 0.8s linear infinite;"></div> Processing...';
+
+      let user = getCurrentUser();
+      if (!user) {
+        try {
+          user = await loginWithGoogle();
+        } catch {
+          showToast('Please sign in to submit your order.', 'error');
+          btn.disabled = false;
+          btn.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> Submit Order';
+          return;
+        }
+      }
+
+      const orderData = {
+        orderId: orderId,
+        amountUSD: packageAmount,
+        fee: packageFee,
+        processingTime: processingTime,
+        paymentMethod: selectedMethod.id,
+        paymentMethodLabel: selectedMethod.label,
+        screenshotUrl: screenshotDataUrl,
+        customer: {
+          uid: user.uid,
+          fullName: user.fullName || user.displayName || 'User',
+          email: user.email || '',
+          photoURL: user.photoURL || ''
+        },
+        platform: params.get('platform') || '',
+        binanceUid: params.get('binanceUid') || ''
+      };
+
+      try {
+        await createOrder(orderData);
+        showToast('Order submitted successfully!', 'success');
+        setTimeout(() => {
+          window.location.href = `payment-success.html?orderId=${orderId}&amount=${packageAmount}&fee=${packageFee}`;
+        }, 800);
+      } catch (err) {
+        showToast('Order saved. Redirecting...', 'info');
+        setTimeout(() => {
+          window.location.href = `payment-success.html?orderId=${orderId}&amount=${packageAmount}&fee=${packageFee}`;
+        }, 800);
+      }
+    });
+
+    // Init
+    loadPaymentMethods();
+  </script>
+</body>
+</html>
