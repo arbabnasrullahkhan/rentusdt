@@ -174,13 +174,48 @@
   </nav>
 
   <script type="module">
-    import { getAdminUser } from '../firebase-auth.js';
+    import { initAuthObserver, getAdminUser } from '../firebase-auth.js';
     import { db } from '../firebase-config.js';
     import { collection, addDoc, onSnapshot, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
     import { showToast, escapeHTML } from '../utils.js';
 
-    const admin = getAdminUser();
-    if (!admin) window.location.href = 'login.html';
+    let currentAdmin = null;
+    let notifsUnsubscribe = null;
+
+    initAuthObserver((user) => {
+      const adminUser = getAdminUser();
+      if (!adminUser && !user) {
+        window.location.href = 'login.html';
+        return;
+      }
+      currentAdmin = adminUser || user;
+
+      if (!notifsUnsubscribe) {
+        const q = query(collection(db, 'notifications'), where('userId', '==', 'GLOBAL'));
+        notifsUnsubscribe = onSnapshot(q, (snapshot) => {
+          const notifs = [];
+          snapshot.forEach(doc => notifs.push(doc.data()));
+          notifs.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+          const historyDiv = document.getElementById('notifications-history');
+          if (notifs.length === 0) {
+            historyDiv.innerHTML = '<div style="text-align:center; padding:20px; color:var(--body);">No global notifications sent.</div>';
+            return;
+          }
+
+          historyDiv.innerHTML = notifs.map(n => `
+            <div class="history-item">
+              <h4>${escapeHTML(n.title)}</h4>
+              <p>${escapeHTML(n.message)}</p>
+              <div class="history-meta">
+                <span>Global Alert</span>
+                <span>${new Date(n.createdAt).toLocaleDateString()}</span>
+              </div>
+            </div>
+          `).join('');
+        });
+      }
+    });
 
     // Send Notification
     document.getElementById('btn-send').addEventListener('click', async () => {
@@ -212,30 +247,7 @@
       btn.textContent = 'Send Notification';
     });
 
-    // Load recent global notifications
-    const q = query(collection(db, 'notifications'), where('userId', '==', 'GLOBAL'));
-    onSnapshot(q, (snapshot) => {
-      const notifs = [];
-      snapshot.forEach(doc => notifs.push(doc.data()));
-      notifs.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-      const historyDiv = document.getElementById('notifications-history');
-      if (notifs.length === 0) {
-        historyDiv.innerHTML = '<div style="text-align:center; padding:20px; color:var(--body);">No global notifications sent.</div>';
-        return;
-      }
-
-      historyDiv.innerHTML = notifs.map(n => `
-        <div class="history-item">
-          <h4>${escapeHTML(n.title)}</h4>
-          <p>${escapeHTML(n.message)}</p>
-          <div class="history-meta">
-            <span>Global Alert</span>
-            <span>${new Date(n.createdAt).toLocaleDateString()}</span>
-          </div>
-        </div>
-      `).join('');
-    });
   </script>
 </body>
 </html>
