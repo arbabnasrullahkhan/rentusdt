@@ -4,232 +4,224 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Referral Program — DollarRent</title>
+  
   <meta name="description" content="Earn rewards by referring friends to DollarRent. Share your unique referral link and track your earnings.">
   <link rel="icon" href="assets/logo.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/logo.png">
   <link rel="manifest" href="manifest.json">
+
+  <!-- ================= PREMIUM FINTECH CSS ================= -->
   <style>
     :root {
-      --bg-color: #F8FAFC; --card-solid: #FFFFFF; --border-color: #E2E8F0;
-      --primary: #0F62FE; --primary-glow: rgba(15,98,254,0.12);
-      --success: #059669; --warning: #D97706; --heading: #0B101E; --body: #64748B;
-      --radius-lg: 24px; --radius-md: 16px; --radius-sm: 12px;
-      --shadow-card: 0 4px 24px -4px rgba(0,0,0,0.06);
+      /* Base Variables (Will adapt to dark/light mode via app.js) */
+      --bg-color: #F8FAFC; 
+      --card-solid: #FFFFFF; 
+      --border-color: #E2E8F0;
+      --primary: #0F62FE; 
+      --primary-hover: #004EE6;
+      --primary-glow: rgba(15, 98, 254, 0.15);
+      --success: #00E676; 
+      --warning: #F59E0B; 
+      --heading: #0B101E; 
+      --body: #475569;
+      --radius-lg: 24px; 
+      --radius-md: 16px; 
+      --radius-sm: 12px;
+      --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 12px 24px -4px rgba(0, 0, 0, 0.1);
     }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
       font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
       background-color: var(--bg-color);
-      background-image: radial-gradient(circle at 50% 0%, #ffffff 0%, transparent 70%),
-        linear-gradient(rgba(15,98,254,0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(15,98,254,0.02) 1px, transparent 1px);
-      background-size: 100% 100%, 30px 30px, 30px 30px;
-      color: var(--heading); padding-bottom: 100px; -webkit-font-smoothing: antialiased;
-    }
-    a { text-decoration: none; color: inherit; }
-    .container { max-width: 680px; margin: 0 auto; padding: 32px 20px; }
-
-    .animate-in { opacity: 0; transform: translateY(16px); animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) forwards; }
-    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
-    .delay-1 { animation-delay: 0.05s; }
-    .delay-2 { animation-delay: 0.1s; }
-    .delay-3 { animation-delay: 0.15s; }
-    .delay-4 { animation-delay: 0.2s; }
-
-    .page-header { margin-bottom: 24px; }
-    .page-header h1 { font-size: 26px; font-weight: 800; }
-    .page-header p { font-size: 14px; color: var(--body); margin-top: 4px; }
-
-    /* Hero Banner */
-    .referral-hero {
-      background: linear-gradient(135deg, var(--primary) 0%, #4A8BFF 100%);
-      border-radius: var(--radius-lg);
-      padding: 32px 24px;
-      color: white;
-      text-align: center;
-      margin-bottom: 20px;
-      position: relative;
-      overflow: hidden;
-    }
-    .referral-hero::before {
-      content: '';
-      position: absolute;
-      top: -50%; right: -30%;
-      width: 200px; height: 200px;
-      background: rgba(255,255,255,0.08);
-      border-radius: 50%;
-    }
-    .referral-hero h2 { font-size: 22px; font-weight: 800; margin-bottom: 8px; position: relative; z-index: 1; }
-    .referral-hero p { font-size: 14px; opacity: 0.85; line-height: 1.6; position: relative; z-index: 1; }
-
-    /* Stats Grid */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-    .stat-card {
-      background: var(--card-solid);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-md);
-      padding: 18px 14px;
-      text-align: center;
-      box-shadow: var(--shadow-card);
-    }
-    .stat-value { font-size: 24px; font-weight: 800; color: var(--primary); }
-    .stat-label { font-size: 11px; font-weight: 600; color: var(--body); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
-
-    /* Referral Link */
-    .link-card {
-      background: var(--card-solid);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-lg);
-      padding: 24px;
-      box-shadow: var(--shadow-card);
-      margin-bottom: 20px;
-    }
-    .link-card h3 { font-size: 16px; font-weight: 800; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
-    .link-card h3 svg { width: 18px; height: 18px; stroke: var(--primary); fill: none; stroke-width: 2; }
-    .link-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .link-input {
-      flex: 1;
-      padding: 12px 14px;
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-sm);
-      font-size: 14px;
-      font-weight: 600;
       color: var(--heading);
-      background: var(--bg-color);
-      outline: none;
+      padding-bottom: 120px; /* Space for Mobile Dock */
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.4s ease, color 0.4s ease;
     }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* Main Container (Padded for Island Header) */
+    .container { 
+      max-width: 680px; 
+      margin: 0 auto; 
+      padding: 100px 20px 40px; 
+    }
+
+    /* Animations */
+    .animate-in { opacity: 0; transform: translateY(20px); animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) forwards; }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+
+    /* Page Header */
+    .page-header { text-align: center; margin-bottom: 32px; }
+    .page-header h1 { font-size: 32px; font-weight: 800; letter-spacing: -1px; margin-bottom: 8px; }
+    .page-header p { font-size: 15px; color: var(--body); font-weight: 500; }
+
+    /* ================= LOGIN PROMPT (If Logged Out) ================= */
+    .login-prompt {
+      background: var(--card-solid); border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg); padding: 48px 24px; text-align: center;
+      box-shadow: var(--shadow-md); margin-top: 20px;
+    }
+    .login-icon {
+      width: 80px; height: 80px; margin: 0 auto 20px; background: var(--primary-glow);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary);
+    }
+    .login-icon svg { width: 40px; height: 40px; stroke: currentColor; fill: none; stroke-width: 2; }
+    .login-prompt h2 { font-size: 24px; font-weight: 800; margin-bottom: 12px; }
+    .login-prompt p { font-size: 15px; color: var(--body); margin-bottom: 32px; line-height: 1.6; }
+    .btn-login {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%; max-width: 300px; padding: 16px 24px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-hover)); color: white;
+      border: none; border-radius: 30px; font-size: 16px; font-weight: 800; cursor: pointer;
+      box-shadow: 0 8px 20px rgba(15,98,254,0.3); transition: all 0.3s ease;
+    }
+    .btn-login:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(15,98,254,0.4); }
+
+    /* ================= HERO BANNER ================= */
+    .referral-hero {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+      border-radius: var(--radius-lg); padding: 36px 24px; color: white;
+      text-align: center; margin-bottom: 24px; position: relative; overflow: hidden;
+      box-shadow: var(--shadow-md);
+    }
+    .referral-hero::after {
+      content: ''; position: absolute; top: -50%; right: -20%; width: 250px; height: 250px;
+      background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%); border-radius: 50%;
+    }
+    .referral-hero h2 { font-size: 26px; font-weight: 900; margin-bottom: 10px; position: relative; z-index: 1; letter-spacing: -0.5px;}
+    .referral-hero p { font-size: 15px; opacity: 0.9; line-height: 1.6; position: relative; z-index: 1; font-weight: 500; }
+
+    /* ================= STATS GRID ================= */
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+    .stat-card {
+      background: var(--card-solid); border: 1px solid var(--border-color);
+      border-radius: var(--radius-md); padding: 20px 16px; text-align: center;
+      box-shadow: var(--shadow-sm); transition: 0.3s;
+    }
+    .stat-card:hover { transform: translateY(-3px); border-color: var(--primary); box-shadow: var(--shadow-md); }
+    .stat-value { font-size: 28px; font-weight: 900; color: var(--primary); }
+    .stat-label { font-size: 11px; font-weight: 700; color: var(--body); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 6px; }
+
+    /* ================= LINK CARD & SHARE BUTTONS ================= */
+    .link-card {
+      background: var(--card-solid); border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg); padding: 32px 24px;
+      box-shadow: var(--shadow-sm); margin-bottom: 24px;
+    }
+    .link-card h3 { font-size: 18px; font-weight: 800; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+    .link-card h3 svg { width: 22px; height: 22px; stroke: var(--primary); fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+    
+    .link-row { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .link-input {
+      flex: 1; padding: 16px 20px; border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm); font-size: 15px; font-weight: 600;
+      color: var(--heading); background: var(--bg-color); outline: none; transition: 0.3s;
+    }
+    .link-input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-glow); background: var(--card-solid); }
+    
     .btn-copy {
-      padding: 12px 18px;
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: var(--radius-sm);
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.25s ease;
-      white-space: nowrap;
+      padding: 16px 24px; background: var(--primary); color: white;
+      border: none; border-radius: var(--radius-sm); font-size: 15px; font-weight: 800;
+      cursor: pointer; transition: all 0.25s ease; white-space: nowrap; box-shadow: 0 4px 12px rgba(15, 98, 254, 0.2);
     }
-    .btn-copy:hover { background: #0043CE; }
-    .share-row { display: flex; gap: 10px; margin-top: 14px; }
+    .btn-copy:hover { background: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(15, 98, 254, 0.3); }
+
+    .share-row { display: flex; gap: 12px; }
     .share-btn {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      padding: 10px;
-      border-radius: var(--radius-sm);
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      border: none;
-      transition: all 0.25s ease;
+      flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 14px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 800;
+      cursor: pointer; border: none; transition: all 0.25s ease;
     }
-    .share-btn svg { width: 16px; height: 16px; }
+    .share-btn svg { width: 20px; height: 20px; fill: currentColor; }
+    
     .share-whatsapp { background: rgba(37,211,102,0.1); color: #25D366; }
+    .share-whatsapp:hover { background: #25D366; color: white; box-shadow: 0 6px 16px rgba(37,211,102,0.3); }
+    
     .share-telegram { background: rgba(0,136,204,0.1); color: #0088cc; }
-    .share-whatsapp:hover { background: rgba(37,211,102,0.2); }
-    .share-telegram:hover { background: rgba(0,136,204,0.2); }
+    .share-telegram:hover { background: #0088cc; color: white; box-shadow: 0 6px 16px rgba(0,136,204,0.3); }
 
-    /* How It Works */
+    /* ================= HOW IT WORKS ================= */
     .how-card {
-      background: var(--card-solid);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-lg);
-      padding: 24px;
-      box-shadow: var(--shadow-card);
-      margin-bottom: 20px;
+      background: var(--card-solid); border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg); padding: 32px 24px; box-shadow: var(--shadow-sm); margin-bottom: 24px;
     }
-    .how-card h3 { font-size: 16px; font-weight: 800; margin-bottom: 16px; }
-    .step {
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-      padding: 12px 0;
-      border-bottom: 1px solid rgba(226,232,240,0.5);
-    }
-    .step:last-child { border-bottom: none; }
+    .how-card h3 { font-size: 18px; font-weight: 800; margin-bottom: 20px; color: var(--heading); }
+    .step { display: flex; align-items: flex-start; gap: 16px; padding: 16px 0; border-bottom: 1px solid rgba(226,232,240,0.3); }
+    .step:last-child { border-bottom: none; padding-bottom: 0; }
+    
     .step-num {
-      width: 32px; height: 32px;
-      background: var(--primary-glow);
-      color: var(--primary);
-      border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 14px; font-weight: 800; flex-shrink: 0;
+      width: 36px; height: 36px; background: var(--primary-glow); color: var(--primary);
+      border-radius: 12px; display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 900; flex-shrink: 0;
     }
-    .step-text h4 { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
-    .step-text p { font-size: 13px; color: var(--body); line-height: 1.5; }
+    .step-text h4 { font-size: 16px; font-weight: 800; margin-bottom: 4px; color: var(--heading); }
+    .step-text p { font-size: 14px; color: var(--body); line-height: 1.6; font-weight: 500; }
 
-    /* Recent Referrals */
+    /* ================= RECENT REFERRALS ================= */
     .recent-card {
-      background: var(--card-solid);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-lg);
-      padding: 24px;
-      box-shadow: var(--shadow-card);
+      background: var(--card-solid); border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg); padding: 32px 24px; box-shadow: var(--shadow-sm);
     }
-    .recent-card h3 { font-size: 16px; font-weight: 800; margin-bottom: 16px; }
+    .recent-card h3 { font-size: 18px; font-weight: 800; margin-bottom: 20px; color: var(--heading); }
     .referral-item {
-      display: flex; align-items: center; gap: 12px;
-      padding: 12px 0;
-      border-bottom: 1px solid rgba(226,232,240,0.5);
+      display: flex; align-items: center; gap: 16px; padding: 16px 0;
+      border-bottom: 1px solid rgba(226,232,240,0.3);
     }
-    .referral-item:last-child { border-bottom: none; }
+    .referral-item:last-child { border-bottom: none; padding-bottom: 0; }
+    
     .referral-avatar {
-      width: 36px; height: 36px; border-radius: 50%;
-      background: var(--primary-glow);
+      width: 44px; height: 44px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
       display: flex; align-items: center; justify-content: center;
-      color: var(--primary); font-weight: 800; font-size: 14px; flex-shrink: 0;
+      color: white; font-weight: 800; font-size: 16px; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
     .referral-info { flex: 1; }
-    .referral-name { font-size: 14px; font-weight: 700; }
-    .referral-date { font-size: 12px; color: var(--body); }
-    .referral-reward { font-size: 14px; font-weight: 800; color: var(--success); }
+    .referral-name { font-size: 15px; font-weight: 800; color: var(--heading); }
+    .referral-date { font-size: 13px; color: var(--body); font-weight: 500; text-transform: capitalize; }
+    .referral-reward { font-size: 15px; font-weight: 800; }
 
+    /* Empty States */
     .empty-state { text-align: center; padding: 40px 20px; }
-    .empty-state svg { width: 48px; height: 48px; stroke: #CBD5E1; fill: none; stroke-width: 1.5; margin-bottom: 12px; }
-    .empty-state p { font-size: 14px; color: var(--body); }
+    .empty-state svg { width: 56px; height: 56px; stroke: var(--body); fill: none; stroke-width: 1.5; margin-bottom: 16px; opacity: 0.5; }
+    .empty-state p { font-size: 15px; color: var(--body); font-weight: 600; }
 
-    /* Not logged in */
-    .login-prompt { text-align: center; padding: 60px 20px; }
-    .login-prompt h2 { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
-    .login-prompt p { font-size: 14px; color: var(--body); margin-bottom: 24px; }
-    .btn-login {
-      display: inline-flex; align-items: center; gap: 10px;
-      padding: 14px 28px; background: var(--primary); color: white;
-      border: none; border-radius: 14px; font-size: 15px; font-weight: 700; cursor: pointer;
-      box-shadow: 0 8px 20px rgba(15,98,254,0.25);
-    }
-
-    @media (max-width: 480px) {
-      .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
-      .stat-value { font-size: 20px; }
+    @media (max-width: 767px) {
+      .container { padding-top: 80px; }
+      .link-row { flex-direction: column; }
+      .link-input, .btn-copy { width: 100%; }
       .share-row { flex-direction: column; }
     }
   </style>
 </head>
 <body>
 
+  <!-- Main Container -->
   <main class="container" id="referral-container">
     <div class="page-header animate-in">
       <h1>Referral Program</h1>
       <p>Invite friends and earn rewards on every successful rental</p>
     </div>
+    
     <div id="referral-content">
-      <div style="text-align:center; padding:20px; color:var(--body); font-size:14px;">Loading...</div>
+      <!-- Loading State (Matches Dark/Light Mode automatically) -->
+      <div style="text-align:center; padding:40px; color:var(--body); font-size:15px; font-weight:600;">
+        <svg style="animation: spin 1s linear infinite; width:24px; height:24px; stroke:var(--primary); fill:none; stroke-width:3; margin-bottom:10px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-dashoffset="32"></circle></svg>
+        <br>Loading Referral Dashboard...
+      </div>
     </div>
   </main>
 
+  <!-- ================= FIREBASE & UI LOGIC ================= -->
+  <!-- app.js handles Theme Toggle, Floating Island Header, and Mobile Dock automatically -->
   <script type="module">
     import './app.js';
     import { getCurrentUser, loginWithGoogle } from './firebase-auth.js';
@@ -237,38 +229,51 @@
     import { collection, query, where, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
     import { copyToClipboard, showToast, escapeHTML } from './utils.js';
 
+    // Spinner Animation for loader
+    const style = document.createElement('style');
+    style.innerHTML = `@keyframes spin { 100% { transform: rotate(360deg); } }`;
+    document.head.appendChild(style);
+
     const content = document.getElementById('referral-content');
 
     function getRefCode(user) {
-      // Generate a unique referral code from UID
       return 'DR-' + (user.uid || '').substring(0, 8).toUpperCase();
     }
 
     async function renderReferralPage() {
       const user = getCurrentUser();
 
+      // NOT LOGGED IN STATE
       if (!user) {
         content.innerHTML = `
           <div class="login-prompt animate-in delay-1">
-            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle>
-              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-            </svg>
+            <div class="login-icon">
+              <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            </div>
             <h2>Sign In to Access Referrals</h2>
-            <p>Sign in to get your unique referral link and start earning.</p>
-            <button id="btn-login-ref" class="btn-login">Sign In with Google</button>
+            <p>Sign in securely with Google to get your unique referral link and start tracking your earnings instantly.</p>
+            <button id="btn-login-ref" class="btn-login">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.545 10.239v3.821h5.445c-.712 2.315-2.647 3.972-5.445 3.972a5.95 5.95 0 1 1 0-11.9 5.636 5.636 0 0 1 3.96 1.583l2.836-2.836A9.968 9.968 0 1 0 22 12h-9.455z"/></svg>
+              Sign In with Google
+            </button>
           </div>
         `;
         document.getElementById('btn-login-ref')?.addEventListener('click', async () => {
-          try { await loginWithGoogle(); renderReferralPage(); } catch {}
+          try { 
+            await loginWithGoogle(); 
+            renderReferralPage(); // Re-render after successful login
+          } catch (error) {
+            console.error("Login failed:", error);
+          }
         });
         return;
       }
 
+      // LOGGED IN STATE
       const refCode = getRefCode(user);
       const refLink = `${window.location.origin}/home.html?ref=${refCode}`;
 
-      // Try to fetch referral settings
+      // 1. Try to fetch referral reward settings from Admin Panel
       let rewardAmount = 'a discount';
       try {
         const settingsRef = doc(db, 'admin_settings', 'referral');
@@ -277,9 +282,11 @@
           const data = settingsSnap.data();
           if (data.rewardAmount) rewardAmount = `$${data.rewardAmount} off`;
         }
-      } catch {}
+      } catch (err) {
+        console.warn("Could not load admin referral settings. Using default text.");
+      }
 
-      // Fetch referral stats
+      // 2. Fetch referral stats from Firestore
       let referralCount = 0;
       let referralList = [];
       try {
@@ -288,24 +295,27 @@
         const snap = await getDocs(q);
         referralCount = snap.size;
         snap.forEach(doc => referralList.push({ id: doc.id, ...doc.data() }));
-      } catch {}
+      } catch (err) {
+        console.warn("Could not load user referrals.");
+      }
 
+      // 3. Render Dashboard HTML
       content.innerHTML = `
         <div class="referral-hero animate-in delay-1">
           <h2>Earn ${escapeHTML(rewardAmount)} Per Referral!</h2>
-          <p>Share your unique link with friends. When they complete a rental, you both earn rewards.</p>
+          <p>Share your unique link with friends. When they complete a rental, you both earn rewards directly on your account.</p>
         </div>
 
         <div class="stats-grid animate-in delay-1">
           <div class="stat-card">
             <div class="stat-value">${referralCount}</div>
-            <div class="stat-label">Referrals</div>
+            <div class="stat-label">Total Referrals</div>
           </div>
-          <div class="stat-card">
+          <div class="stat-card" style="border-color: rgba(0, 230, 118, 0.3);">
             <div class="stat-value" style="color:var(--success);">${referralList.filter(r => r.status === 'completed').length}</div>
             <div class="stat-label">Successful</div>
           </div>
-          <div class="stat-card">
+          <div class="stat-card" style="border-color: rgba(245, 158, 11, 0.3);">
             <div class="stat-value" style="color:var(--warning);">${referralList.filter(r => r.status === 'pending').length}</div>
             <div class="stat-label">Pending</div>
           </div>
@@ -313,20 +323,20 @@
 
         <div class="link-card animate-in delay-2">
           <h3>
-            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
-            Your Referral Link
+            <svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+            Your Unique Referral Link
           </h3>
           <div class="link-row">
             <input type="text" class="link-input" id="ref-link" value="${refLink}" readonly>
-            <button class="btn-copy" id="btn-copy-link">Copy</button>
+            <button class="btn-copy" id="btn-copy-link">Copy Link</button>
           </div>
           <div class="share-row">
             <button class="share-btn share-whatsapp" id="share-wa">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.955 9.955 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
               WhatsApp
             </button>
             <button class="share-btn share-telegram" id="share-tg">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
               Telegram
             </button>
           </div>
@@ -363,51 +373,49 @@
         </div>
       `;
 
-      // Referral list rendering
+      // 4. Referral List Rendering
       const listEl = document.getElementById('referral-list');
       if (referralList.length === 0) {
         listEl.innerHTML = `
           <div class="empty-state">
-            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle>
-              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-            </svg>
+            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
             <p>No referrals yet. Share your link to get started!</p>
           </div>
         `;
       } else {
         listEl.innerHTML = referralList.map(r => {
           const initial = (r.referredName || 'U')[0].toUpperCase();
-          const date = r.createdAt ? new Date(r.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+          const date = r.createdAt ? new Date(r.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'Recently';
           return `
             <div class="referral-item">
               <div class="referral-avatar">${initial}</div>
               <div class="referral-info">
                 <div class="referral-name">${escapeHTML(r.referredName || 'User')}</div>
-                <div class="referral-date">${date} · ${r.status || 'pending'}</div>
+                <div class="referral-date">${date} &bull; <span style="color: ${r.status === 'completed' ? 'var(--success)' : 'var(--warning)'};">${r.status || 'Pending'}</span></div>
               </div>
-              <div class="referral-reward">${r.status === 'completed' ? '+Reward' : 'Pending'}</div>
+              <div class="referral-reward" style="color: ${r.status === 'completed' ? 'var(--success)' : 'var(--body)'};">${r.status === 'completed' ? '+Reward' : 'Pending'}</div>
             </div>
           `;
         }).join('');
       }
 
-      // Bind buttons
+      // 5. Button Event Listeners
       document.getElementById('btn-copy-link')?.addEventListener('click', () => {
-        copyToClipboard(refLink, 'Referral link copied!');
+        copyToClipboard(refLink, 'Referral link copied successfully!');
       });
 
       document.getElementById('share-wa')?.addEventListener('click', () => {
-        const text = encodeURIComponent(`Hey! Check out DollarRent for digital USD rentals. Use my link: ${refLink}`);
+        const text = encodeURIComponent(`Hey! Check out DollarRent for secure digital USD rentals. Use my link to get a reward: ${refLink}`);
         window.open(`https://wa.me/?text=${text}`, '_blank');
       });
 
       document.getElementById('share-tg')?.addEventListener('click', () => {
-        const text = encodeURIComponent(`Hey! Rent digital USD easily with DollarRent: ${refLink}`);
+        const text = encodeURIComponent(`Hey! Rent digital USD easily with DollarRent. Use my link for a reward: ${refLink}`);
         window.open(`https://t.me/share/url?url=${encodeURIComponent(refLink)}&text=${text}`, '_blank');
       });
     }
 
+    // Initialize Page
     renderReferralPage();
   </script>
 </body>
