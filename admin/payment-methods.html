@@ -5,88 +5,195 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Payment Methods — DollarRent Admin</title>
   <meta name="robots" content="noindex, nofollow">
+  
   <link rel="icon" href="../assets/logo.png" type="image/png">
+  <link rel="apple-touch-icon" href="../assets/logo.png">
+
+  <!-- ================= PREMIUM FINTECH CSS ================= -->
   <style>
-    :root { --bg: #F1F5F9; --card: #FFFFFF; --border: #E2E8F0; --primary: #0F62FE; --primary-glow: rgba(15,98,254,0.1); --success: #059669; --danger: #EF4444; --heading: #0B101E; --body: #64748B; --radius: 20px; --radius-sm: 12px; --shadow: 0 4px 24px -4px rgba(0,0,0,0.06); --sidebar-w: 260px; }
+    :root { 
+      --bg: #F8FAFC; 
+      --card: #FFFFFF; 
+      --border: #E2E8F0; 
+      --primary: #0F62FE; 
+      --primary-hover: #0043CE;
+      --primary-glow: rgba(15,98,254,0.12); 
+      --success: #00E676; 
+      --danger: #EF4444; 
+      --heading: #0B101E; 
+      --body: #475569; 
+      --radius: 24px; 
+      --radius-sm: 12px; 
+      --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 12px 24px -4px rgba(15, 98, 254, 0.08); 
+      --sidebar-w: 280px; 
+    }
+    
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", sans-serif; background: var(--bg); color: var(--heading); display: flex; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+    
+    body { 
+      font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", sans-serif; 
+      background: var(--bg); 
+      background-image: radial-gradient(circle at 50% 0%, #ffffff 0%, transparent 70%),
+                        linear-gradient(rgba(15, 98, 254, 0.03) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(15, 98, 254, 0.03) 1px, transparent 1px);
+      background-size: 100% 100%, 30px 30px, 30px 30px;
+      color: var(--heading); 
+      display: flex; 
+      min-height: 100vh; 
+      -webkit-font-smoothing: antialiased; 
+    }
+    
     a { text-decoration: none; color: inherit; }
-    .sidebar { width: var(--sidebar-w); background: var(--card); border-right: 1px solid var(--border); padding: 24px 16px; display: flex; flex-direction: column; justify-content: space-between; position: fixed; top: 0; bottom: 0; left: 0; z-index: 100; }
-    .sidebar-brand { display: flex; align-items: center; gap: 10px; padding: 0 8px; margin-bottom: 28px; }
-    .sidebar-brand img { width: 32px; height: 32px; }
-    .sidebar-brand span { font-size: 18px; font-weight: 800; }
+
+    /* ================= ANIMATIONS ================= */
+    .animate-in { opacity: 0; transform: translateY(20px); animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) forwards; }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+
+    /* ================= DESKTOP SIDEBAR ================= */
+    .sidebar { 
+      width: var(--sidebar-w); background: var(--card); border-right: 1px solid var(--border); 
+      padding: 32px 20px; display: flex; flex-direction: column; justify-content: space-between; 
+      position: fixed; top: 0; bottom: 0; left: 0; z-index: 100; box-shadow: var(--shadow-sm);
+    }
+    .sidebar-brand { display: flex; align-items: center; gap: 12px; padding: 0 8px; margin-bottom: 40px; }
+    .sidebar-brand img { width: 40px; height: 40px; filter: drop-shadow(0 4px 6px rgba(15,98,254,0.2)); }
+    .sidebar-brand span { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
     .sidebar-brand span b { color: var(--primary); }
-    .sidebar-menu { list-style: none; display: flex; flex-direction: column; gap: 4px; }
-    .sidebar-menu a { display: flex; align-items: center; gap: 10px; padding: 11px 14px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 600; color: var(--body); transition: all 0.2s; }
-    .sidebar-menu a:hover, .sidebar-menu a.active { background: var(--primary-glow); color: var(--primary); }
-    .sidebar-menu svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-    .sidebar-footer { padding: 0 8px; }
-    .sidebar-footer a { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--body); }
-    .sidebar-footer svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; }
+    
+    .sidebar-menu { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .sidebar-menu a { 
+      display: flex; align-items: center; gap: 12px; padding: 14px 18px; 
+      border-radius: var(--radius-sm); font-size: 15px; font-weight: 700; color: var(--body); transition: all 0.3s ease; 
+    }
+    .sidebar-menu a:hover { background: var(--primary-glow); color: var(--primary); transform: translateX(4px); }
+    .sidebar-menu a.active { background: var(--primary); color: white; box-shadow: 0 8px 16px rgba(15,98,254,0.25); }
+    .sidebar-menu svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+    
+    /* Admin Profile Avatar Section */
+    .sidebar-footer { padding: 20px 12px; border-top: 1px solid var(--border); margin-top: 20px; display: flex; align-items: center; justify-content: space-between;}
+    .admin-profile { display: flex; align-items: center; gap: 10px; }
+    .admin-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-glow); }
+    .admin-avatar-fallback { width: 40px; height: 40px; border-radius: 50%; background: var(--primary-glow); color: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; }
+    .admin-info h4 { font-size: 14px; font-weight: 800; color: var(--heading); }
+    .admin-info p { font-size: 12px; font-weight: 600; color: var(--primary); }
+    
+    .btn-exit { color: var(--danger); background: rgba(239, 68, 68, 0.1); padding: 8px; border-radius: 10px; transition: 0.3s; display: flex; align-items: center; justify-content: center;}
+    .btn-exit:hover { background: var(--danger); color: white; }
+    .btn-exit svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2.5; }
 
-    .main { flex: 1; margin-left: var(--sidebar-w); padding: 28px 32px; }
-    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-    .page-header h1 { font-size: 26px; font-weight: 800; }
-    .page-header p { font-size: 14px; color: var(--body); }
+    /* ================= MAIN CONTENT ================= */
+    .main { flex: 1; margin-left: var(--sidebar-w); padding: 40px 48px; max-width: 1200px; }
+    
+    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+    .page-header h1 { font-size: 32px; font-weight: 800; letter-spacing: -1px; margin-bottom: 4px;}
+    .page-header p { font-size: 15px; color: var(--body); font-weight: 500;}
 
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
-    .method-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); }
-    .method-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-    .method-name { font-size: 16px; font-weight: 800; }
-    .method-badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
-    .method-badge.active { background: rgba(5,150,105,0.1); color: var(--success); }
+    .btn-add { 
+      display: inline-flex; align-items: center; gap: 8px; padding: 14px 24px; 
+      background: linear-gradient(135deg, var(--primary), var(--primary-hover)); color: white; 
+      border: none; border-radius: 30px; font-size: 15px; font-weight: 800; cursor: pointer; 
+      box-shadow: 0 8px 20px rgba(15,98,254,0.3); transition: all 0.3s ease; 
+    }
+    .btn-add:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(15,98,254,0.4); }
+    .btn-add svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2.5; }
+
+    /* ================= GRID & CARDS ================= */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 24px; }
+    .method-card { 
+      background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); 
+      padding: 28px; box-shadow: var(--shadow-sm); transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .method-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); border-color: var(--primary); }
+    
+    .method-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid rgba(226,232,240,0.6); padding-bottom: 16px;}
+    .method-title-wrap { display: flex; align-items: center; gap: 10px; }
+    .method-icon { width: 36px; height: 36px; border-radius: 10px; background: var(--primary-glow); display: flex; align-items: center; justify-content: center; color: var(--primary); }
+    .method-icon svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2.5; }
+    .method-name { font-size: 18px; font-weight: 800; color: var(--heading);}
+    
+    .method-badge { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 800; text-transform: uppercase; }
+    .method-badge.active { background: rgba(0,230,118,0.15); color: #00A650; }
     .method-badge.inactive { background: rgba(239,68,68,0.1); color: var(--danger); }
-    .method-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 14px; border-bottom: 1px solid rgba(226,232,240,0.5); }
+    
+    .method-row { display: flex; justify-content: space-between; padding: 12px 0; font-size: 14px; border-bottom: 1px dashed var(--border); }
     .method-row:last-child { border-bottom: none; }
-    .method-row .label { color: var(--body); font-weight: 500; }
-    .method-row .value { font-weight: 700; font-size: 13px; word-break: break-all; max-width: 60%; text-align: right; }
-    .method-actions { display: flex; gap: 8px; margin-top: 14px; }
-    .btn-edit { flex: 1; padding: 10px; background: var(--primary-glow); color: var(--primary); border: none; border-radius: var(--radius-sm); font-size: 13px; font-weight: 700; cursor: pointer; }
-    .btn-toggle { flex: 1; padding: 10px; border: none; border-radius: var(--radius-sm); font-size: 13px; font-weight: 700; cursor: pointer; }
+    .method-row .label { color: var(--body); font-weight: 600; }
+    .method-row .value { font-weight: 800; font-size: 14px; word-break: break-all; max-width: 60%; text-align: right; color: var(--heading); }
+    
+    .method-actions { display: flex; gap: 12px; margin-top: 20px; }
+    .btn-edit { flex: 1; padding: 12px; background: var(--primary-glow); color: var(--primary); border: none; border-radius: var(--radius-sm); font-size: 14px; font-weight: 800; cursor: pointer; transition: 0.3s; }
+    .btn-edit:hover { background: var(--primary); color: white; }
+    
+    .btn-toggle { flex: 1; padding: 12px; border: none; border-radius: var(--radius-sm); font-size: 14px; font-weight: 800; cursor: pointer; transition: 0.3s; }
 
-    .btn-add { display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px; background: var(--primary); color: white; border: none; border-radius: var(--radius-sm); font-size: 13px; font-weight: 700; cursor: pointer; }
-    .btn-add svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; }
+    /* ================= GLASSMORPHIC MODAL ================= */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(11, 16, 30, 0.6); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 1000; opacity: 0; transition: opacity 0.3s ease; }
+    .modal-overlay.active { display: flex; opacity: 1; }
+    
+    .modal { 
+      background: var(--card); border-radius: var(--radius); padding: 40px; 
+      width: 90%; max-width: 500px; box-shadow: 0 24px 48px -12px rgba(0,0,0,0.3); 
+      transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .modal-overlay.active .modal { transform: scale(1); }
+    
+    .modal h3 { font-size: 24px; font-weight: 800; margin-bottom: 24px; color: var(--heading); }
+    
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-size: 14px; font-weight: 800; margin-bottom: 8px; color: var(--heading); }
+    .form-group input, .form-group textarea { 
+      width: 100%; padding: 14px 16px; border: 2px solid var(--border); border-radius: var(--radius-sm); 
+      font-size: 15px; font-weight: 600; outline: none; font-family: inherit; transition: 0.3s; background: var(--bg);
+    }
+    .form-group input:focus, .form-group textarea:focus { border-color: var(--primary); background: var(--card); box-shadow: 0 0 0 4px var(--primary-glow); }
+    .form-group textarea { resize: vertical; min-height: 100px; }
+    
+    .modal-btns { display: flex; gap: 12px; margin-top: 28px; }
+    .modal-btns button { flex: 1; padding: 16px; border: none; border-radius: 30px; font-size: 15px; font-weight: 800; cursor: pointer; transition: 0.3s; }
+    .btn-save { background: linear-gradient(135deg, var(--primary), var(--primary-hover)); color: white; box-shadow: 0 8px 20px rgba(15,98,254,0.3); }
+    .btn-save:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(15,98,254,0.4); }
+    .btn-cancel { background: var(--border); color: var(--heading); }
+    .btn-cancel:hover { background: #CBD5E1; }
 
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 1000; }
-    .modal-overlay.active { display: flex; }
-    .modal { background: var(--card); border-radius: var(--radius); padding: 28px; width: 90%; max-width: 480px; box-shadow: 0 24px 48px -12px rgba(0,0,0,0.2); max-height: 85vh; overflow-y: auto; }
-    .modal h3 { font-size: 20px; font-weight: 800; margin-bottom: 20px; }
-    .form-group { margin-bottom: 14px; }
-    .form-group label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; }
-    .form-group input, .form-group textarea { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; outline: none; font-family: inherit; }
-    .form-group textarea { resize: vertical; min-height: 60px; }
-    .modal-btns { display: flex; gap: 10px; margin-top: 16px; }
-    .modal-btns button { flex: 1; padding: 12px; border: none; border-radius: var(--radius-sm); font-size: 14px; font-weight: 700; cursor: pointer; }
-    .btn-save { background: var(--primary); color: white; }
-    .btn-cancel { background: var(--bg); color: var(--body); }
-
+    /* ================= MOBILE FLOATING ISLAND DOCK ================= */
+    .mobile-dock { display: none; }
     @media (max-width: 768px) { 
       .sidebar { display: none; } 
-      .main { margin-left: 0; padding: 20px 16px 100px; } /* Bottom padding for dock */
+      .main { margin-left: 0; padding: 30px 20px 120px; } /* Bottom padding for dock */
+      .page-header { flex-direction: column; align-items: flex-start; gap: 16px; }
       
-      /* Mobile Dock */
       .mobile-dock {
         display: flex; justify-content: space-around; align-items: center;
-        position: fixed; bottom: 16px; left: 16px; right: 16px;
-        background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
-        border: 1px solid rgba(229, 231, 235, 0.7); border-radius: 30px;
-        padding: 10px 16px; z-index: 10000; box-shadow: 0 10px 30px -5px rgba(0,0,0,0.15);
+        position: fixed; bottom: 20px; left: 16px; right: 16px;
+        background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+        border: 1px solid rgba(229, 231, 235, 0.8); border-radius: 40px;
+        padding: 12px 10px; z-index: 10000; box-shadow: 0 16px 40px -8px rgba(0,0,0,0.15);
+        animation: slideUpDock 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
       }
+      @keyframes slideUpDock { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
       .mobile-dock a {
         display: flex; flex-direction: column; align-items: center; justify-content: center;
-        color: var(--body); font-size: 10px; font-weight: 700; gap: 4px; flex: 1; transition: all 0.2s ease;
+        color: var(--body); font-size: 10px; font-weight: 700; gap: 5px; flex: 1; transition: all 0.2s ease;
       }
-      .mobile-dock a svg { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 2; transition: all 0.3s; }
+      .mobile-dock a svg { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; transition: all 0.3s; }
       .mobile-dock a.active { color: var(--primary); }
-      .mobile-dock a.active svg { transform: translateY(-2px); stroke-width: 2.5; filter: drop-shadow(0 2px 4px rgba(0,102,204,0.4)); }
+      .mobile-dock a.active svg { stroke-width: 2.5; fill: var(--primary-glow); transform: scale(1.1); }
     }
-    @media (min-width: 769px) { .mobile-dock { display: none; } }
   </style>
 </head>
 <body>
+
+  <!-- Desktop Sidebar -->
   <aside class="sidebar">
     <div>
-      <div class="sidebar-brand"><img src="../assets/logo.png" alt="DollarRent"><span>Dollar<b>Admin</b></span></div>
+      <div class="sidebar-brand">
+        <img src="../assets/logo.png" alt="DollarRent">
+        <span>Dollar<b>Admin</b></span>
+      </div>
       <ul class="sidebar-menu">
         <li><a href="dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg> Dashboard</a></li>
         <li><a href="orders.html"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg> Orders</a></li>
@@ -96,39 +203,63 @@
         <li><a href="settings.html"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle></svg> Settings</a></li>
       </ul>
     </div>
-    <div class="sidebar-footer"><a href="../home.html"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg> Exit</a></div>
+    
+    <!-- Admin Profile Display -->
+    <div class="sidebar-footer">
+      <div class="admin-profile" id="desktop-admin-profile">
+        <div class="admin-avatar-fallback">A</div>
+        <div class="admin-info">
+          <h4>Admin User</h4>
+          <p>Superadmin</p>
+        </div>
+      </div>
+      <a href="../home.html" class="btn-exit" title="Exit to Website">
+        <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+      </a>
+    </div>
   </aside>
 
   <main class="main">
-    <div class="page-header">
-      <div><h1>Payment Methods</h1><p>Manage payment options available to customers at checkout</p></div>
-      <button class="btn-add" id="btn-add-method"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> Add Method</button>
+    <div class="page-header animate-in">
+      <div>
+        <h1>Payment Methods</h1>
+        <p>Manage secure payment gateways available to customers at checkout.</p>
+      </div>
+      <button class="btn-add" id="btn-add-method">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> 
+        Add New Method
+      </button>
     </div>
-    <div class="grid" id="methods-grid">
-      <div style="text-align:center; padding:40px; color:var(--body); grid-column:1/-1;">Loading payment methods...</div>
+    
+    <!-- Render Grid -->
+    <div class="grid animate-in delay-1" id="methods-grid">
+      <div style="text-align:center; padding:40px; color:var(--body); grid-column:1/-1; font-weight:600;">
+        <svg style="animation: spin 1s linear infinite; width:24px; height:24px; stroke:var(--primary); fill:none; stroke-width:3; margin-bottom:10px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-dashoffset="32"></circle></svg>
+        <br>Loading payment methods...
+      </div>
     </div>
   </main>
 
-  <!-- Edit Modal -->
+  <!-- Glassmorphic Edit Modal -->
   <div class="modal-overlay" id="method-modal">
     <div class="modal">
       <h3 id="modal-title">Edit Payment Method</h3>
-      <div class="form-group"><label>Label</label><input type="text" id="m-label" placeholder="e.g. Easypaisa Mobile Account"></div>
-      <div class="form-group"><label>Account Name</label><input type="text" id="m-name" placeholder="e.g. DollarRent Official"></div>
-      <div class="form-group"><label>Account Number / Wallet</label><input type="text" id="m-number" placeholder="e.g. 0300-1234567"></div>
-      <div class="form-group"><label>Instructions</label><textarea id="m-instructions" placeholder="Payment instructions for the customer..."></textarea></div>
+      <div class="form-group"><label>Method Name (Label)</label><input type="text" id="m-label" placeholder="e.g. Easypaisa / Binance Pay"></div>
+      <div class="form-group"><label>Account Holder Name</label><input type="text" id="m-name" placeholder="e.g. DollarRent Official"></div>
+      <div class="form-group"><label>Account Number / Wallet ID</label><input type="text" id="m-number" placeholder="e.g. 0300-1234567 or 0x..."></div>
+      <div class="form-group"><label>Customer Instructions</label><textarea id="m-instructions" placeholder="Enter step-by-step payment instructions for the user..."></textarea></div>
       <div class="modal-btns">
-        <button class="btn-save" id="modal-save">Save</button>
         <button class="btn-cancel" id="modal-cancel">Cancel</button>
+        <button class="btn-save" id="modal-save">Save Method</button>
       </div>
     </div>
   </div>
 
-  <!-- Mobile Dock (Bottom Navigation) -->
+  <!-- Mobile Floating Island Dock -->
   <nav class="mobile-dock">
     <a href="dashboard.html">
       <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-      <span>Home</span>
+      <span>Dash</span>
     </a>
     <a href="orders.html">
       <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg>
@@ -140,7 +271,7 @@
     </a>
     <a href="payment-methods.html" class="active">
       <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
-      <span>Methods</span>
+      <span>Pay</span>
     </a>
     <a href="settings.html">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle></svg>
@@ -148,25 +279,54 @@
     </a>
   </nav>
 
+  <!-- ================= FIREBASE & APP LOGIC ================= -->
   <script type="module">
     import { initAuthObserver, getAdminUser } from '../firebase-auth.js';
     import { db } from '../firebase-config.js';
     import { collection, onSnapshot, doc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
     import { showToast, escapeHTML } from '../utils.js';
 
+    // Animation for Loading Spinner
+    const style = document.createElement('style');
+    style.innerHTML = `@keyframes spin { 100% { transform: rotate(360deg); } }`;
+    document.head.appendChild(style);
+
     let methods = [];
     let editingId = null;
     let methodsUnsubscribe = null;
-    let currentAdmin = null;
 
+    // Load Admin Profile
     initAuthObserver((user) => {
       const adminUser = getAdminUser();
       if (!adminUser && !user) {
         window.location.href = 'login.html';
         return;
       }
-      currentAdmin = adminUser || user;
+      
+      const currentAdmin = adminUser || user;
+      
+      // Update Sidebar Profile UI Dynamically
+      const profileContainer = document.getElementById('desktop-admin-profile');
+      if (profileContainer && currentAdmin) {
+        const name = currentAdmin.fullName || currentAdmin.email || 'Admin';
+        const initial = name.charAt(0).toUpperCase();
+        let avatarHtml = `<div class="admin-avatar-fallback">${initial}</div>`;
+        
+        if (currentAdmin.photoURL) {
+          avatarHtml = `<img src="${currentAdmin.photoURL}" class="admin-avatar" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="admin-avatar-fallback" style="display:none;">${initial}</div>`;
+        }
+        
+        profileContainer.innerHTML = `
+          ${avatarHtml}
+          <div class="admin-info">
+            <h4>${escapeHTML(name.split(' ')[0])}</h4>
+            <p>Superadmin</p>
+          </div>
+        `;
+      }
 
+      // Fetch Payment Methods
       if (!methodsUnsubscribe) {
         methodsUnsubscribe = onSnapshot(collection(db, 'paymentMethods'), (snapshot) => {
           if (!snapshot.empty) {
@@ -180,29 +340,43 @@
           renderMethods();
         }, (err) => {
           console.warn("Error fetching methods:", err);
-          document.getElementById('methods-grid').innerHTML = '<div style="text-align:center; padding:40px; color:var(--body); grid-column:1/-1;">Unable to load payment methods. Check Firestore permissions.</div>';
+          document.getElementById('methods-grid').innerHTML = '<div style="text-align:center; padding:40px; color:var(--danger); grid-column:1/-1; font-weight:800;">Unable to load payment methods. Check internet connection.</div>';
         });
       }
     });
 
     function renderMethods() {
       const grid = document.getElementById('methods-grid');
-      grid.innerHTML = methods.map(m => `
+      grid.innerHTML = methods.map(m => {
+        const isActive = m.active !== false;
+        
+        // Dynamically assign an icon based on bank/crypto
+        let iconSvg = '<svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>';
+        if (m.label.toLowerCase().includes('binance') || m.label.toLowerCase().includes('usdt')) {
+          iconSvg = '<svg viewBox="0 0 24 24"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"></polygon></svg>';
+        }
+
+        return `
         <div class="method-card">
           <div class="method-header">
-            <div class="method-name">${escapeHTML(m.label)}</div>
-            <span class="method-badge ${m.active !== false ? 'active' : 'inactive'}">${m.active !== false ? 'Active' : 'Disabled'}</span>
+            <div class="method-title-wrap">
+              <div class="method-icon">${iconSvg}</div>
+              <div class="method-name">${escapeHTML(m.label)}</div>
+            </div>
+            <span class="method-badge ${isActive ? 'active' : 'inactive'}">${isActive ? 'Active' : 'Disabled'}</span>
           </div>
-          <div class="method-row"><span class="label">Account Name</span><span class="value">${escapeHTML(m.accountName)}</span></div>
-          <div class="method-row"><span class="label">Account #</span><span class="value">${escapeHTML(m.accountNumber)}</span></div>
+          <div class="method-row"><span class="label">Holder Name</span><span class="value">${escapeHTML(m.accountName)}</span></div>
+          <div class="method-row"><span class="label">Account No.</span><span class="value">${escapeHTML(m.accountNumber)}</span></div>
           <div class="method-actions">
-            <button class="btn-edit" onclick="window._editMethod('${m.id}')">Edit</button>
-            <button class="btn-toggle" style="background:${m.active !== false ? 'rgba(239,68,68,0.06)' : 'rgba(5,150,105,0.06)'}; color:${m.active !== false ? 'var(--danger)' : 'var(--success)'};" onclick="window._toggleMethod('${m.id}', ${m.active !== false})">${m.active !== false ? 'Disable' : 'Enable'}</button>
+            <button class="btn-edit" onclick="window._editMethod('${m.id}')">Edit Setup</button>
+            <button class="btn-toggle" style="background:${isActive ? 'rgba(239,68,68,0.1)' : 'rgba(0,230,118,0.1)'}; color:${isActive ? 'var(--danger)' : 'var(--success)'};" onclick="window._toggleMethod('${m.id}', ${isActive})">${isActive ? 'Disable' : 'Enable'}</button>
           </div>
         </div>
-      `).join('');
+        `
+      }).join('');
     }
 
+    // Modal Triggers
     window._editMethod = function(id) {
       const m = methods.find(x => x.id === id);
       if (!m) return;
@@ -218,7 +392,7 @@
     window._toggleMethod = async function(id, active) {
       try {
         await updateDoc(doc(db, 'paymentMethods', id), { active: !active });
-        showToast(`Method ${active ? 'disabled' : 'enabled'}!`, 'success');
+        showToast(`Payment method successfully ${active ? 'disabled' : 'enabled'}!`, 'success');
       } catch (err) { showToast('Failed: ' + err.message, 'error'); }
     };
 
@@ -232,6 +406,7 @@
       document.getElementById('method-modal').classList.add('active');
     });
 
+    // Save Logic
     document.getElementById('modal-save').addEventListener('click', async () => {
       const data = {
         label: document.getElementById('m-label').value,
@@ -240,6 +415,16 @@
         instructions: document.getElementById('m-instructions').value,
         active: true
       };
+      
+      if (!data.label || !data.accountNumber) {
+        showToast('Label and Account Number are required!', 'error');
+        return;
+      }
+
+      const btn = document.getElementById('modal-save');
+      btn.textContent = 'Saving...';
+      btn.disabled = true;
+
       try {
         if (editingId) {
           await updateDoc(doc(db, 'paymentMethods', editingId), data);
@@ -249,7 +434,12 @@
         }
         showToast('Payment method saved!', 'success');
         document.getElementById('method-modal').classList.remove('active');
-      } catch (err) { showToast('Save failed: ' + err.message, 'error'); }
+      } catch (err) { 
+        showToast('Save failed: ' + err.message, 'error'); 
+      } finally {
+        btn.textContent = 'Save Method';
+        btn.disabled = false;
+      }
     });
 
     document.getElementById('modal-cancel').addEventListener('click', () => document.getElementById('method-modal').classList.remove('active'));
