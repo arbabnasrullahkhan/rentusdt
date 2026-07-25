@@ -1,14 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" class="light">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Withdrawal Details - Transaction Receipt</title>
+    <title>Transaction Receipt Console</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
-            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
@@ -34,15 +33,23 @@
     <style>
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #0B0E11;
+            background-color: #080B10;
         }
-        /* Mobile-first card container matches original pixel ratios */
         .binance-card {
             background-color: #FFFFFF;
             max-width: 415px;
             width: 100%;
-            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 16px 64px rgba(0, 0, 0, 0.4);
             border-radius: 20px;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        /* Custom fading and rotating keyframes for receipt transitions */
+        .fade-in-data {
+            animation: fadeIn 0.4s ease forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         @media print {
             body {
@@ -72,54 +79,50 @@
         <div class="no-print w-full max-w-[415px] mb-4 space-y-3">
             
             <!-- Main Core Generator Button [1] -->
-            <button id="btnGenerate" class="w-full py-4 bg-gradient-to-r from-yellow-500 to-[#F0B90B] hover:from-yellow-400 hover:to-[#E0A808] text-black font-extrabold rounded-xl text-sm transition-all tracking-wider uppercase shadow-xl shadow-yellow-500/10 flex items-center justify-center gap-2">
-                <i class="fa-solid fa-wand-magic-sparkles animate-pulse"></i> Generate Demo Receipt
+            <button id="btnGenerate" class="w-full py-4 bg-gradient-to-r from-yellow-500 to-[#F0B90B] hover:from-yellow-400 hover:to-[#E0A808] text-black font-extrabold rounded-xl text-sm tracking-wider uppercase shadow-xl shadow-yellow-500/25 flex items-center justify-center gap-2 transform active:scale-95 transition-all">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Generate Demo Receipt
             </button>
 
             <!-- Export and Download Row [1] -->
             <div class="grid grid-cols-3 gap-2 text-[10px] font-bold text-gray-300">
-                <button onclick="downloadPNG()" class="py-2 px-1 bg-gray-900 hover:bg-gray-800 border border-gray-800 rounded-lg flex items-center justify-center gap-1 transition-colors">
+                <button onclick="downloadPNG()" class="py-2.5 px-1 bg-gray-900 hover:bg-gray-800 border border-gray-800 rounded-lg flex items-center justify-center gap-1 transition-colors">
                     <i class="fa-solid fa-file-image text-blue-400"></i> Save PNG
                 </button>
-                <button onclick="downloadPDF()" class="py-2 px-1 bg-gray-900 hover:bg-gray-800 border border-gray-800 rounded-lg flex items-center justify-center gap-1 transition-colors">
+                <button onclick="downloadPDF()" class="py-2.5 px-1 bg-gray-900 hover:bg-gray-800 border border-gray-800 rounded-lg flex items-center justify-center gap-1 transition-colors">
                     <i class="fa-solid fa-file-pdf text-red-400"></i> Save PDF
                 </button>
-                <button onclick="window.print()" class="py-2 px-1 bg-gray-900 hover:bg-gray-800 border border-gray-800 rounded-lg flex items-center justify-center gap-1 transition-colors">
+                <button onclick="window.print()" class="py-2.5 px-1 bg-gray-900 hover:bg-gray-800 border border-gray-800 rounded-lg flex items-center justify-center gap-1 transition-colors">
                     <i class="fa-solid fa-print text-yellow-500"></i> Print Card
                 </button>
-            </div>
-            
-            <!-- Clean Non-Distracting Safety Label Bar (Outside Card) [1] -->
-            <div class="bg-red-500/10 text-red-400 border border-red-500/25 py-2 px-3 rounded-lg text-[9px] font-bold uppercase tracking-wider text-center flex flex-col justify-center gap-0.5">
-                <span class="flex items-center justify-center gap-1">
-                    <i class="fa-solid fa-circle-exclamation text-[10px]"></i> SAMPLE ONLY – NOT A REAL TRANSACTION
-                </span>
-                <span class="text-[8px] font-normal lowercase tracking-normal text-gray-400">This is a demonstration sandbox receipt.</span>
             </div>
         </div>
 
         <!-- The Highly Realistic Card Render Container -->
         <div id="receipt-canvas" class="binance-card p-6 relative overflow-hidden">
             
-            <!-- Subtle Demo Marker Header -->
-            <div class="text-right -mt-2 -mr-2 select-none pointer-events-none">
-                <span class="text-[8px] font-semibold text-gray-300 uppercase bg-gray-100 py-0.5 px-2 rounded-md">Demo Receipt</span>
+            <!-- Red Warning Safety Watermark Bar [1] -->
+            <div id="demoSafetyBanner" class="relative z-10 bg-red-600/5 text-red-600 border border-red-600/15 py-2 px-3 rounded-lg text-[9px] font-bold uppercase tracking-wider text-center flex flex-col justify-center gap-0.5 mb-5 select-none">
+                <span class="flex items-center justify-center gap-1">
+                    <i class="fa-solid fa-circle-exclamation text-[10px]"></i> SAMPLE ONLY – NOT A REAL TRANSACTION
+                </span>
             </div>
 
             <!-- Top Centered Core Value Section -->
-            <div class="relative z-10 text-center mt-2">
+            <div class="relative z-10 text-center mt-1">
                 <span class="text-binanceGray text-xs font-normal">Amount</span>
-                <div class="text-[28px] font-bold text-binanceBlack mt-0.5 tracking-tight font-sans leading-none" id="display-amount-row">43,860 USDT</div>
+                <div class="text-[28px] font-bold text-binanceBlack mt-0.5 tracking-tight font-sans leading-none" id="display-amount-row">0.00 USDT</div>
                 
-                <!-- Status Row -->
+                <!-- Status Row containing interactive dynamic Checkmark Spinner -->
                 <div class="flex items-center justify-center gap-1.5 mt-2">
-                    <span class="w-3.5 h-3.5 bg-binanceGreen text-white rounded-full flex items-center justify-center text-[9px] font-black">✓</span>
+                    <div id="statusIndicator" class="flex items-center justify-center">
+                        <span class="w-3.5 h-3.5 bg-binanceGreen text-white rounded-full flex items-center justify-center text-[9px] font-black">✓</span>
+                    </div>
                     <span class="text-binanceGreen font-semibold text-[13px] tracking-wide">Completed</span>
                 </div>
                 
-                <!-- Dynamic text matches original description -->
+                <!-- Helper text matches original structure -->
                 <p class="text-binanceGray text-[10px] mt-4 px-2 leading-relaxed font-normal">
-                    Crypto transferred out of Binance. Please contact the recipient platform for your transaction receipt.
+                    Crypto transferred successfully. Please contact the recipient platform for your transaction receipt.
                 </p>
                 <a href="#" class="text-binanceGold text-[10px] font-medium mt-1 inline-block hover:underline">Why hasn't my withdrawal arrived?</a>
             </div>
@@ -127,17 +130,12 @@
             <!-- Main Divider -->
             <div class="border-t border-[#F5F5F5] my-4 relative z-10"></div>
             
-            <!-- Structural Meta Values -->
-            <div class="relative z-10 space-y-3 px-0.5 text-xs">
+            <!-- Structured Meta Values -->
+            <div id="receiptDataBody" class="relative z-10 space-y-3 px-0.5 text-xs">
                 
                 <div class="flex justify-between items-start">
                     <span class="text-binanceGray">Rental Amount</span>
                     <span class="text-binanceBlack font-medium" id="display-rental-val">$0.00</span>
-                </div>
-
-                <div class="flex justify-between items-start">
-                    <span class="text-binanceGray">Advance Fee</span>
-                    <span class="text-binanceBlack font-medium" id="display-advance-val">$0.00</span>
                 </div>
 
                 <div class="flex justify-between items-start">
@@ -147,12 +145,12 @@
 
                 <div class="flex justify-between items-start">
                     <span class="text-binanceGray">Withdrawal Wallet</span>
-                    <span class="text-binanceBlack font-medium">Spot Wallet</span>
+                    <span class="text-binanceBlack font-medium" id="display-wallet">Spot Wallet</span>
                 </div>
                 
                 <div class="flex justify-between items-start">
                     <span class="text-binanceGray">Network</span>
-                    <span class="text-binanceBlack font-medium">TRX</span>
+                    <span class="text-binanceBlack font-medium" id="display-network">TRX</span>
                 </div>
                 
                 <!-- Destination Address Block -->
@@ -160,7 +158,7 @@
                     <span class="text-binanceGray shrink-0">Address</span>
                     <div class="text-right max-w-[70%]">
                         <div class="flex items-start justify-end gap-1">
-                            <span class="text-binanceBlack font-medium text-right leading-[1.3] inline-block font-sans break-all" id="display-address" style="word-break: break-all;">TXGPsdSfx3j7WrJn6yTaeSYWSibdmhNRcV</span>
+                            <span class="text-binanceBlack font-medium text-right leading-[1.3] inline-block font-sans break-all" id="display-address" style="word-break: break-all;">-</span>
                             <!-- Working Copy Trigger Button -->
                             <button id="btnCopyAddress" class="text-binanceGray hover:text-binanceBlack transition-colors shrink-0 p-0.5" title="Copy Address">
                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path></svg>
@@ -174,7 +172,7 @@
                 <div class="flex justify-between items-start gap-4">
                     <span class="text-binanceGray shrink-0">Txid</span>
                     <div class="flex items-start gap-1 max-w-[70%] justify-end">
-                        <span class="text-binanceBlack font-medium underline break-all text-right leading-[1.3]" id="display-txid" style="text-decoration-color: #848E9C; text-underline-offset: 2px; word-break: break-all;">Internal transfer 134469932233</span>
+                        <span class="text-binanceBlack font-medium underline break-all text-right leading-[1.3]" id="display-txid" style="text-decoration-color: #848E9C; text-underline-offset: 2px; word-break: break-all;">-</span>
                         <!-- Working Copy Trigger Button -->
                         <button id="btnCopyTxId" class="text-binanceGray hover:text-binanceBlack transition-colors shrink-0 p-0.5" title="Copy TXID">
                             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path></svg>
@@ -199,16 +197,16 @@
                 
                 <div class="flex justify-between items-start">
                     <span class="text-binanceGray">Date</span>
-                    <span class="text-binanceBlack font-medium font-sans" id="display-date">2023-05-30 16:09:09</span>
+                    <span class="text-binanceBlack font-medium font-sans" id="display-date">-</span>
                 </div>
 
                 <div class="flex justify-between items-start">
                     <span class="text-binanceGray">Notes</span>
-                    <span class="text-binanceBlack font-medium text-right italic" id="display-note">-</span>
+                    <span class="text-binanceBlack font-medium text-right italic text-[11px]" id="display-note">-</span>
                 </div>
             </div>
             
-            <!-- Yellow Whitelisted Promotion Banner -->
+            <!-- Whitelisted Promo Banner matches image layout elements -->
             <div class="relative z-10 bg-[#F6F6F6] rounded-xl p-3.5 mt-5 flex items-center justify-between gap-3 border border-[#EAECEF]">
                 <div class="flex items-start gap-2.5">
                     <div class="w-5 h-5 bg-[#F0B90B] rounded-[4px] flex items-center justify-center shrink-0 mt-0.5 shadow-sm" style="clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);">
@@ -221,7 +219,7 @@
                 <span class="text-[#767F8D] text-xs font-bold leading-none shrink-0">➔</span>
             </div>
             
-            <!-- Bottom Help Center -->
+            <!-- Bottom Help Center Link -->
             <div class="text-center mt-4">
                 <a href="#" class="text-binanceGold text-xs font-semibold hover:underline">Need help? View FAQs</a>
             </div>
@@ -230,8 +228,8 @@
     </div>
 
     <!-- Persistent Bottom Disclaimer Section -->
-    <footer class="no-print w-full bg-[#090B0E] border-t border-gray-900 py-4 text-center z-10 mt-6">
-        <p class="text-[10px] text-gray-500 font-medium px-4">
+    <footer class="no-print w-full bg-[#05070A] border-t border-gray-900 py-4 text-center z-10">
+        <p class="text-[10px] text-gray-500 font-medium px-4 leading-normal">
             This is a Demo Receipt generated for testing, UI preview, and educational purposes only. It does not represent a real blockchain transaction or actual payment.
         </p>
     </footer>
@@ -243,8 +241,8 @@
     </div>
 
     <script>
-        // Weighted probability configuration array [1]
-        // Weights: $50 (60%), $100 (10%), $200 (10%), $250 (5%), remaining share rest of 15% (1.875% each)
+        // Rental Plan configuration weights:
+        // $50 (60%), $100 (10%), $200 (10%), $250 (5%), and others sharing the remaining 15% equally (1.875% each)
         const rentalPlans = [
             { amount: 50, fee: 9, duration: "4 Hours", weight: 0.60 },
             { amount: 100, fee: 20, duration: "4 Hours", weight: 0.10 },
@@ -260,6 +258,20 @@
             { amount: 50000, fee: 4500, duration: "10 Days", weight: 0.01875 }
         ];
 
+        // Trending popular worldwide digital wallets, crypto networks, and exchanges
+        const trendingWallets = [
+            "Spot Wallet (Binance)",
+            "Funding Account (Binance)",
+            "Funding Wallet (OKX)",
+            "Spot Wallet (Bybit)",
+            "Quotex Main Balance",
+            "Bitget Spot Wallet",
+            "Trust Wallet (Multi-Coin)",
+            "MetaMask (ERC-20 Ledger)",
+            "Phantom Wallet (Solana Main)",
+            "KuCoin Main Account"
+        ];
+
         const sampleAddresses = [
             "TXGPsdSfx3j7WrJn6yTaeSYWSibdmhNRcV",
             "TYs5g6R7hP2a19e5a193c233a2510204d19",
@@ -267,23 +279,17 @@
             "TKs7a4G8yH2w19d5f193g222h2410204k88"
         ];
         
-        const sampleNotes = [
-            "Rental system verification transfer block.",
-            "Visual demo validation sandbox transfer.",
-            "Automated payment protocol check - Success.",
-            "Fictional rental account confirmation."
-        ];
+        const sampleNetworks = ["TRX", "ETH", "BSC"];
 
-        // Global variables holding full, unshortened values for copy buttons [3]
         let currentFullAddress = "TXGPsdSfx3j7WrJn6yTaeSYWSibdmhNRcV";
         let currentFullTxid = "Internal transfer 134469932233";
 
-        // Format raw amounts with standard commas
+        // Number formatter matching commas inside screenshot details
         function formatCommas(value) {
             return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }
 
-        // Weighted generation picker selection algorithm [1]
+        // Weighted randomization selection engine [1]
         function getWeightedPlan() {
             const r = Math.random();
             let cumulative = 0;
@@ -296,48 +302,75 @@
             return rentalPlans[0]; 
         }
 
-        // Main core generator execution function [1]
+        // Generate Demo Receipt and trigger transition animation [1]
         function generateDemoReceipt() {
-            const selectedPlan = getWeightedPlan(); // Retrieve matching weighted plan [1]
+            const btn = document.getElementById('btnGenerate');
+            const body = document.getElementById('receiptDataBody');
+            const statusBox = document.getElementById('statusIndicator');
 
-            // Dynamic localized real-time stamps [2]
-            const now = new Date();
-            const dateStr = now.toISOString().slice(0, 10);
-            const timeStr = now.toTimeString().slice(0, 8);
+            // 1. Trigger micro spinner animation inside checkmark
+            btn.disabled = true;
+            statusBox.innerHTML = `
+                <div class="w-3.5 h-3.5 border-2 border-binanceGreen border-t-transparent rounded-full animate-spin"></div>
+            `;
 
-            // Compute total price values
-            const rentalVal = selectedPlan.amount;
-            const feeVal = selectedPlan.fee;
-            const gasFeeVal = 0; // standard constant TRX fee
-            const totalUSD = rentalVal + feeVal + gasFeeVal;
+            // 2. Perform smooth fade data updates
+            body.classList.remove('fade-in-data');
 
-            // Generate address and txid strings
-            currentFullAddress = sampleAddresses[Math.floor(Math.random() * sampleAddresses.length)];
-            currentFullTxid = "Internal transfer " + Math.floor(100000000000 + Math.random() * 900000000000);
-            const refNum = "REF-" + Math.floor(10000000 + Math.random() * 90000000);
-            const receiptNum = "REC-" + Math.floor(100000 + Math.random() * 900000);
-            const randomNote = sampleNotes[Math.floor(Math.random() * sampleNotes.length)];
+            setTimeout(() => {
+                const selectedPlan = getWeightedPlan(); // Retrieve matching weighted plan [1]
 
-            // Push randomized updates to UI fields
-            document.getElementById('display-amount-row').innerText = `${formatCommas(totalUSD)} USDT`;
-            document.getElementById('display-rental-val').innerText = `$${formatCommas(rentalVal)}`;
-            document.getElementById('display-advance-val').innerText = `$${formatCommas(feeVal)}`;
-            document.getElementById('display-duration-val').innerText = selectedPlan.duration;
-            document.getElementById('display-fee').innerText = `${gasFeeVal} USDT`;
-            
-            document.getElementById('display-address').innerText = currentFullAddress;
-            document.getElementById('display-txid').innerText = currentFullTxid;
-            document.getElementById('display-date').innerText = `${dateStr} ${timeStr}`;
-            
-            document.getElementById('display-receipt-num').innerText = receiptNum;
-            document.getElementById('display-ref-num').innerText = refNum;
-            document.getElementById('display-note').innerText = randomNote;
+                // Dynamic localized real-world stamps
+                const now = new Date();
+                const dateStr = now.toISOString().slice(0, 10);
+                const timeStr = now.toTimeString().slice(0, 8);
 
-            // Trigger success alert [1]
-            showToastAlert(`Generated Plan: $${rentalVal}`);
+                // Setup variables
+                const rentalVal = selectedPlan.amount;
+                const feeVal = selectedPlan.fee;
+                
+                // Platforms & network options randomization
+                const randomPlatform = trendingWallets[Math.floor(Math.random() * trendingWallets.length)];
+                const randomNetwork = sampleNetworks[Math.floor(Math.random() * sampleNetworks.length)];
+                
+                currentFullAddress = sampleAddresses[Math.floor(Math.random() * sampleAddresses.length)];
+                currentFullTxid = "Internal transfer " + Math.floor(100000000000 + Math.random() * 900000000000);
+                const refNum = "REF-" + Math.floor(10000000 + Math.random() * 90000000);
+                const receiptNum = "REC-" + Math.floor(100000 + Math.random() * 900000);
+                
+                // Clean context notes
+                const cleanNote = `Transfer verified through standard contract on ${randomPlatform.split(" ")[0]} platform API.`;
+
+                // Update UI nodes - Amount is STRICTLY the rental cost (no extra mathematically added values) [1]
+                document.getElementById('display-amount-row').innerText = `${formatCommas(rentalVal)} USDT`;
+                document.getElementById('display-rental-val').innerText = `$${formatCommas(rentalVal)}`;
+                document.getElementById('display-duration-val').innerText = selectedPlan.duration;
+                document.getElementById('display-wallet').innerText = randomPlatform;
+                document.getElementById('display-network').innerText = randomNetwork;
+                
+                // Network fee displays plan fee value exactly [1]
+                document.getElementById('display-fee').innerText = `${feeVal} USDT`;
+                
+                document.getElementById('display-address').innerText = currentFullAddress;
+                document.getElementById('display-txid').innerText = currentFullTxid;
+                document.getElementById('display-date').innerText = `${dateStr} ${timeStr}`;
+                
+                document.getElementById('display-receipt-num').innerText = receiptNum;
+                document.getElementById('display-ref-num').innerText = refNum;
+                document.getElementById('display-note').innerText = cleanNote;
+
+                // Stop loading animations smoothly
+                statusBox.innerHTML = `
+                    <span class="w-3.5 h-3.5 bg-binanceGreen text-white rounded-full flex items-center justify-center text-[9px] font-black">✓</span>
+                `;
+                body.classList.add('fade-in-data');
+                btn.disabled = false;
+
+                showToastAlert(`Generated Plan: $${rentalVal}`);
+            }, 550); // micro loading block
         }
 
-        // Show toast notification messages
+        // Show toast notifications
         function showToastAlert(msg) {
             const toast = document.getElementById('toast');
             document.getElementById('toast-message').innerText = msg;
@@ -349,7 +382,7 @@
             }, 2500);
         }
 
-        // Fully functional copy event listeners for dynamic variables [3]
+        // Copy events
         document.getElementById('btnCopyAddress').addEventListener('click', () => {
             navigator.clipboard.writeText(currentFullAddress).then(() => {
                 showToastAlert("Address Copied!");
@@ -401,10 +434,10 @@
             }
         }
 
-        // Main lifecycle hook initialization
+        // Initial lifecycle hooks
         window.addEventListener('DOMContentLoaded', () => {
             document.getElementById('btnGenerate').addEventListener('click', generateDemoReceipt);
-            generateDemoReceipt(); // Generate initial preview data
+            generateDemoReceipt(); // load values on start
         });
     </script>
 </body>
