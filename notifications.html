@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Notifications — DollarRent</title>
   
-  <meta name="description" content="View your DollarRent system updates, order status notifications, and security alerts.">
+  <meta name="description" content="View your DollarRent system updates, order status notifications, and security alerts in real time.">
   <link rel="canonical" href="https://rentusdt.vercel.app/notifications.html">
 
   <!-- STRICT SINGLE LOGO COMPLIANCE -->
@@ -96,11 +96,12 @@
       padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: 700;
       background: var(--card-solid); border: 1px solid var(--border-color);
       color: var(--body); cursor: pointer; transition: all 0.25s ease; box-shadow: var(--shadow-sm);
+      white-space: nowrap;
     }
     .pill:hover { border-color: var(--primary); color: var(--primary); }
     .pill.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 12px rgba(15, 98, 254, 0.25); }
 
-    /* ================= NOTIFICATION CARDS (Your CSS Enhanced) ================= */
+    /* ================= NOTIFICATION CARDS ================= */
     .notification-card {
       background: var(--card-solid);
       border: 1px solid var(--border-color);
@@ -172,7 +173,7 @@
     <div class="page-header animate-in delay-1">
       <div>
         <h1>Notifications & Alerts</h1>
-        <p>Stay updated on your rental orders and security announcements.</p>
+        <p>Stay updated on your rental orders and security announcements in real time.</p>
       </div>
       <button class="btn-mark-read" id="btn-mark-all">Mark All Read</button>
     </div>
@@ -189,7 +190,7 @@
     <div id="notification-list" class="animate-in delay-2">
       <div style="text-align:center; padding:40px; color:var(--body); font-weight:600;">
         <svg style="animation: spin 1s linear infinite; width:24px; height:24px; stroke:var(--primary); fill:none; stroke-width:3; margin-bottom:10px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-dashoffset="32"></circle></svg>
-        <br>Loading alerts...
+        <br>Connecting real-time alert feed...
       </div>
     </div>
 
@@ -206,18 +207,18 @@
     try {
       auth = await import('./firebase-auth.js');
       utils = await import('./utils.js');
-    } catch(e) { console.warn("Fallback mode."); }
+    } catch(e) { console.warn("Fallback module mode."); }
 
     const getCurrentUser = auth?.getCurrentUser || (() => null);
     const showToast = utils?.showToast || ((msg) => alert(msg));
     const escapeHTML = utils?.escapeHTML || ((str) => String(str || '').replace(/[&<>'"]/g, ''));
 
-    // DEFAULT FALLBACK NOTIFICATIONS (Ensure page always looks alive and testable)
+    // DEFAULT REALISTIC SAMPLE ALERTS (Ensures instant display before database seeding)
     const DEFAULT_NOTIFICATIONS = [
       {
         id: 'n1',
-        title: 'Rental Order Under Review',
-        body: 'Your digital USD rental request (#DR-28491) was received and is under manual verification (~15-30 mins).',
+        title: 'Rental Order Under Verification',
+        body: 'Your digital USD rental request (#DR-28491) was received and is under manual admin verification (~15-30 mins).',
         time: '10 Mins Ago',
         type: 'order',
         unread: true,
@@ -226,7 +227,7 @@
       {
         id: 'n2',
         title: 'KYC Account Verified',
-        body: 'Your Google Account and KYC documents have been successfully verified on DollarRent.',
+        body: 'Your Google Account and KYC identity documents have been successfully verified on DollarRent.',
         time: '2 Hours Ago',
         type: 'success',
         unread: false,
@@ -234,7 +235,7 @@
       },
       {
         id: 'n3',
-        title: 'Security Alert',
+        title: 'Security Login Alert',
         body: 'Successful Google Sign-in detected on your account.',
         time: '1 Day Ago',
         type: 'warning',
@@ -257,7 +258,7 @@
     const listEl = document.getElementById('notification-list');
     const filterPills = document.querySelectorAll('.pill');
 
-    // Fetch Notifications for User
+    // Real-Time Firestore Subscription
     function initNotifications() {
       const user = getCurrentUser();
 
@@ -272,11 +273,12 @@
               notifications = DEFAULT_NOTIFICATIONS;
             }
             renderNotifications();
-          }, () => {
+          }, (err) => {
+            console.warn("Firestore realtime notification fallback.", err);
             notifications = DEFAULT_NOTIFICATIONS;
             renderNotifications();
           });
-        } catch {
+        } catch (err) {
           notifications = DEFAULT_NOTIFICATIONS;
           renderNotifications();
         }
@@ -330,25 +332,32 @@
       `).join('');
     }
 
-    // Click Notification
-    window._handleNotifClick = (id, link) => {
+    // Click Notification Handler
+    window._handleNotifClick = async (id, link) => {
       const target = notifications.find(x => x.id === id);
-      if (target) target.unread = false;
-      renderNotifications();
+      if (target) {
+        target.unread = false;
+        renderNotifications();
+
+        // Update Firestore in real time if document exists
+        try {
+          await updateDoc(doc(db, 'notifications', id), { unread: false });
+        } catch(e){}
+      }
 
       if (link && link !== '') {
         window.location.href = link;
       }
     };
 
-    // Mark All Read
+    // Mark All Read Button
     document.getElementById('btn-mark-all').addEventListener('click', () => {
       notifications.forEach(n => n.unread = false);
       renderNotifications();
       showToast('All notifications marked as read.', 'success');
     });
 
-    // Filter Buttons
+    // Category Filter Pills
     filterPills.forEach(pill => {
       pill.addEventListener('click', () => {
         filterPills.forEach(p => p.classList.remove('active'));
@@ -358,7 +367,7 @@
       });
     });
 
-    // Init
+    // Initialize Real-time Feed
     initNotifications();
 
     const spinStyle = document.createElement('style');
