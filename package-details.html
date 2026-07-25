@@ -11,7 +11,7 @@
   <link rel="apple-touch-icon" href="assets/logo.png">
   <link rel="manifest" href="manifest.json">
 
-  <!-- ================= PREMIUM PRODUCT FINTECH CSS ================= -->
+  <!-- ================= NEXT-LEVEL FINTECH CSS ================= -->
   <style>
     :root {
       --bg-color: #F8FAFC;
@@ -19,19 +19,19 @@
       --border-color: #E2E8F0;
       --primary: #0F62FE;
       --primary-hover: #0043CE;
-      --primary-glow: rgba(15, 98, 254, 0.12);
+      --primary-glow: rgba(15, 98, 254, 0.15);
       --secondary: #00E676;
       --secondary-glow: rgba(0, 230, 118, 0.15);
       --danger: #EF4444;
       --warning: #F59E0B;
       --heading: #0B101E;
       --body: #475569;
-      --radius-lg: 28px;
-      --radius-md: 18px;
+      --radius-lg: 32px;
+      --radius-md: 20px;
       --radius-sm: 12px;
-      --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.04);
       --shadow-md: 0 16px 36px -6px rgba(15, 98, 254, 0.12);
-      --shadow-hover: 0 24px 48px -12px rgba(15, 98, 254, 0.22);
+      --shadow-hover: 0 24px 48px -12px rgba(15, 98, 254, 0.25);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -39,23 +39,41 @@
     body {
       font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
       background-color: var(--bg-color);
-      /* Subtle FinTech Background */
-      background-image: radial-gradient(circle at 50% 0%, #ffffff 0%, transparent 70%),
+      /* Modern FinTech Grid Background */
+      background-image: radial-gradient(circle at 50% 0%, #ffffff 0%, transparent 75%),
         linear-gradient(rgba(15, 98, 254, 0.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(15, 98, 254, 0.03) 1px, transparent 1px);
       background-size: 100% 100%, 30px 30px, 30px 30px;
       color: var(--heading);
       padding-bottom: 130px; /* Space for Mobile Dock from app.js */
       -webkit-font-smoothing: antialiased;
+      position: relative;
+      overflow-x: hidden;
     }
 
     a { text-decoration: none; color: inherit; }
 
+    /* Ambient Background Light Blobs */
+    .bg-blob {
+      position: absolute; border-radius: 50%; filter: blur(90px);
+      opacity: 0.35; pointer-events: none; z-index: 1;
+      animation: floatBlob 8s ease-in-out infinite alternate;
+    }
+    .blob-1 { width: 300px; height: 300px; background: rgba(15, 98, 254, 0.25); top: 5%; left: -10%; }
+    .blob-2 { width: 320px; height: 320px; background: rgba(0, 230, 118, 0.2); top: 40%; right: -10%; animation-delay: -4s; }
+
+    @keyframes floatBlob {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(30px, 40px) scale(1.15); }
+    }
+
     /* ================= MAIN CONTAINER ================= */
     .container {
-      max-width: 720px;
+      max-width: 740px;
       margin: 0 auto;
       padding: 100px 20px 40px; /* Clears app.js Floating Header */
+      position: relative;
+      z-index: 10;
     }
 
     /* Animations */
@@ -69,7 +87,7 @@
     .back-bubble {
       display: inline-flex; align-items: center; gap: 8px;
       background: var(--card-solid); border: 1px solid var(--border-color);
-      padding: 8px 16px; border-radius: 30px; font-size: 14px; font-weight: 700;
+      padding: 10px 18px; border-radius: 30px; font-size: 14px; font-weight: 700;
       color: var(--body); box-shadow: var(--shadow-sm); transition: all 0.3s ease;
       cursor: pointer;
     }
@@ -78,36 +96,37 @@
 
     /* ================= PRODUCT SHOWCASE CARD ================= */
     .product-card {
-      background: var(--card-solid);
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px);
       border-radius: var(--radius-lg);
-      padding: 40px 32px;
-      border: 1px solid var(--border-color);
+      padding: 44px 36px;
+      border: 1px solid rgba(226, 232, 240, 0.9);
       box-shadow: var(--shadow-md);
       position: relative;
       overflow: hidden;
       transition: all 0.3s ease;
     }
 
-    /* Accent Top Line */
+    /* Accent Top Gradient Bar */
     .product-card::before {
       content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px;
       background: linear-gradient(90deg, var(--primary), var(--secondary));
     }
 
-    /* Top Status Bar */
+    /* Product Status Bar */
     .product-top-bar {
       display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color);
+      margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color);
     }
     
     .stock-badge {
-      display: inline-flex; align-items: center; gap: 6px;
+      display: inline-flex; align-items: center; gap: 8px;
       background: var(--secondary-glow); color: #00A650;
       padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 800;
       text-transform: uppercase; letter-spacing: 0.5px;
     }
     .stock-dot { width: 8px; height: 8px; border-radius: 50%; background: #00A650; animation: pulseDot 2s infinite; }
-    @keyframes pulseDot { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.2); } }
+    @keyframes pulseDot { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.3); } }
 
     .category-badge {
       background: var(--primary-glow); color: var(--primary);
@@ -115,26 +134,45 @@
       text-transform: uppercase; letter-spacing: 0.5px;
     }
 
-    /* Product Hero Price Area */
+    /* Product Price Display */
     .product-hero-price { text-align: center; margin-bottom: 32px; }
-    .hero-amount { font-size: 54px; font-weight: 900; color: var(--heading); letter-spacing: -2px; line-height: 1; }
-    .hero-amount span { font-size: 24px; color: var(--body); font-weight: 700; letter-spacing: 0; }
-    .hero-fee { font-size: 18px; color: var(--primary); font-weight: 800; margin-top: 10px; }
+    .hero-amount { font-size: 58px; font-weight: 900; color: var(--heading); letter-spacing: -2.5px; line-height: 1; }
+    .hero-amount span { font-size: 26px; color: var(--body); font-weight: 700; letter-spacing: 0; }
+    .hero-fee {
+      display: inline-block; background: var(--primary-glow); color: var(--primary);
+      padding: 8px 20px; border-radius: 30px; font-size: 16px; font-weight: 800; margin-top: 12px;
+    }
 
-    /* ================= SUPPORTED OUTLETS TICKER (GOOGLE ICONS) ================= */
+    /* ================= LIVE PROFIT CALCULATOR WIDGET ================= */
+    .calculator-widget {
+      background: var(--bg-color); border: 1px solid var(--border-color);
+      border-radius: var(--radius-md); padding: 20px; margin-bottom: 32px;
+      box-shadow: var(--shadow-sm);
+    }
+    .calc-header { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--body); margin-bottom: 14px; display: flex; justify-content: space-between; }
+    .calc-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px dashed var(--border-color); }
+    .calc-row:last-child { border-bottom: none; }
+    .calc-label { font-size: 14px; font-weight: 600; color: var(--body); }
+    .calc-value { font-size: 15px; font-weight: 800; color: var(--heading); }
+    .calc-value.highlight { color: var(--secondary); font-size: 16px; }
+
+    /* ================= SUPPORTED PLATFORM TICKER (GOOGLE ICONS) ================= */
     .supported-outlets-box {
       background: var(--bg-color); border: 1px solid var(--border-color);
-      border-radius: var(--radius-md); padding: 18px 20px; margin-bottom: 32px;
-      display: flex; flex-direction: column; align-items: center; gap: 12px;
+      border-radius: var(--radius-md); padding: 20px; margin-bottom: 32px;
+      display: flex; flex-direction: column; align-items: center; gap: 14px;
     }
     .outlets-title { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--body); }
-    .outlets-icons { display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; }
-    .outlets-icons img {
-      width: 32px; height: 32px; border-radius: 50%; object-fit: contain;
-      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.08)); transition: transform 0.3s ease;
-      cursor: pointer;
+    .outlets-icons { display: flex; align-items: center; justify-content: center; gap: 18px; flex-wrap: wrap; }
+    
+    .outlet-item {
+      display: flex; align-items: center; gap: 6px; background: var(--card-solid);
+      padding: 8px 14px; border-radius: 30px; border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm); transition: transform 0.3s ease;
     }
-    .outlets-icons img:hover { transform: translateY(-3px) scale(1.15); }
+    .outlet-item:hover { transform: translateY(-3px) scale(1.05); border-color: var(--primary); }
+    .outlet-item img { width: 22px; height: 22px; border-radius: 50%; object-fit: contain; }
+    .outlet-item span { font-size: 12px; font-weight: 800; color: var(--heading); }
 
     /* ================= SPECIFICATIONS GRID ================= */
     .specs-grid {
@@ -142,7 +180,7 @@
     }
     .spec-box {
       background: var(--bg-color); border: 1px solid var(--border-color);
-      border-radius: var(--radius-md); padding: 16px; display: flex; flex-direction: column; gap: 4px;
+      border-radius: var(--radius-md); padding: 18px; display: flex; flex-direction: column; gap: 4px;
     }
     .spec-lbl { font-size: 12px; color: var(--body); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
     .spec-val { font-size: 16px; font-weight: 800; color: var(--heading); }
@@ -155,46 +193,51 @@
     .check-item b { color: var(--heading); font-weight: 800; }
     
     .check-icon {
-      width: 24px; height: 24px; border-radius: 50%;
+      width: 26px; height: 26px; border-radius: 50%;
       background: var(--secondary-glow); color: #00A650;
       display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px;
     }
-    .check-icon svg { width: 14px; height: 14px; stroke: currentColor; stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    .check-icon svg { width: 15px; height: 15px; stroke: currentColor; stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round; }
 
     /* ================= TRUST BADGES BAR ================= */
     .trust-bar {
       display: flex; justify-content: space-around; gap: 8px; margin-bottom: 32px;
-      padding: 16px; background: var(--bg-color); border-radius: var(--radius-md);
+      padding: 18px; background: var(--bg-color); border-radius: var(--radius-md);
       border: 1px solid var(--border-color);
     }
     .trust-pill {
       display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 800; color: var(--heading);
     }
-    .trust-pill svg { width: 16px; height: 16px; stroke: var(--primary); fill: none; stroke-width: 2.2; }
+    .trust-pill svg { width: 18px; height: 18px; stroke: var(--primary); fill: none; stroke-width: 2.2; }
 
     /* ================= MAIN PROCEED BUTTON ================= */
     .btn-proceed {
-      width: 100%; padding: 18px; border-radius: 30px;
+      width: 100%; padding: 20px; border-radius: 30px;
       background: linear-gradient(135deg, var(--primary), var(--primary-hover));
       color: white; font-size: 16px; font-weight: 800; border: none; cursor: pointer;
-      box-shadow: 0 10px 24px rgba(15, 98, 254, 0.35); display: flex; align-items: center; justify-content: center; gap: 10px;
+      box-shadow: 0 10px 25px rgba(15, 98, 254, 0.35); display: flex; align-items: center; justify-content: center; gap: 10px;
       transition: all 0.3s ease;
     }
     .btn-proceed:hover { transform: translateY(-3px); box-shadow: 0 14px 35px rgba(15, 98, 254, 0.45); }
     .btn-proceed svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
 
-    /* Mobile adjustments */
+    /* Mobile Responsive Optimizations */
     @media (max-width: 767px) {
       .container { padding-top: 80px; padding-left: 16px; padding-right: 16px; }
       .product-card { padding: 32px 20px; }
-      .hero-amount { font-size: 44px; }
+      .hero-amount { font-size: 46px; }
       .specs-grid { grid-template-columns: 1fr; }
-      .trust-bar { flex-direction: column; gap: 10px; align-items: flex-start; }
+      .trust-bar { flex-direction: column; gap: 12px; align-items: flex-start; }
+      .outlets-icons { gap: 10px; }
     }
   </style>
 </head>
 
 <body>
+
+  <!-- Ambient Light Orbs -->
+  <div class="bg-blob blob-1"></div>
+  <div class="bg-blob blob-2"></div>
 
   <main class="container">
 
@@ -209,7 +252,7 @@
     <!-- Product Details Card -->
     <div class="product-card animate-in delay-1">
 
-      <!-- Product Header & Availability -->
+      <!-- Header Status Bar -->
       <div class="product-top-bar">
         <div class="stock-badge">
           <span class="stock-dot"></span> In Stock & Ready
@@ -223,57 +266,77 @@
         <div class="hero-fee" id="pkg-fee">Advance Rental Fee: $0.00</div>
       </div>
 
-      <!-- Supported Delivery Outlets (Google Icons) -->
+      <!-- Profit Retention Widget -->
+      <div class="calculator-widget">
+        <div class="calc-header">
+          <span>Rental Margin Terms</span>
+          <span style="color:var(--secondary);">100% Profit Policy</span>
+        </div>
+        <div class="calc-row">
+          <span class="calc-label">Rental Balance Provided</span>
+          <span class="calc-value" id="calc-balance">$0.00 USD</span>
+        </div>
+        <div class="calc-row">
+          <span class="calc-label">Trading Profit Earned</span>
+          <span class="calc-value highlight">100% Yours to Keep</span>
+        </div>
+        <div class="calc-row">
+          <span class="calc-label">Amount Returned After Term</span>
+          <span class="calc-value">Base Amount Only</span>
+        </div>
+      </div>
+
+      <!-- Supported Delivery Outlets Ticker (Official Logos from Google) -->
       <div class="supported-outlets-box">
         <div class="outlets-title">Compatible Delivery Destinations</div>
         <div class="outlets-icons">
-          <img src="https://www.google.com/s2/favicons?domain=binance.com&sz=128" alt="Binance" title="Binance Pay">
-          <img src="https://www.google.com/s2/favicons?domain=tether.to&sz=128" alt="USDT" title="USDT TRC20/BEP20">
-          <img src="https://www.google.com/s2/favicons?domain=quotex.com&sz=128" alt="Quotex" title="Quotex">
-          <img src="https://www.google.com/s2/favicons?domain=metatrader5.com&sz=128" alt="MT5" title="MetaTrader 5">
-          <img src="https://www.google.com/s2/favicons?domain=exness.com&sz=128" alt="Exness" title="Exness">
-          <img src="https://www.google.com/s2/favicons?domain=okx.com&sz=128" alt="OKX" title="OKX Wallet">
+          <div class="outlet-item"><img src="https://www.google.com/s2/favicons?domain=binance.com&sz=128" alt="Binance"><span>Binance</span></div>
+          <div class="outlet-item"><img src="https://www.google.com/s2/favicons?domain=tether.to&sz=128" alt="USDT"><span>USDT</span></div>
+          <div class="outlet-item"><img src="https://www.google.com/s2/favicons?domain=quotex.com&sz=128" alt="Quotex"><span>Quotex</span></div>
+          <div class="outlet-item"><img src="https://www.google.com/s2/favicons?domain=metatrader5.com&sz=128" alt="MT5"><span>MT5</span></div>
+          <div class="outlet-item"><img src="https://www.google.com/s2/favicons?domain=exness.com&sz=128" alt="Exness"><span>Exness</span></div>
+          <div class="outlet-item"><img src="https://www.google.com/s2/favicons?domain=okx.com&sz=128" alt="OKX"><span>OKX</span></div>
         </div>
       </div>
 
       <!-- Specifications Grid -->
       <div class="specs-grid">
         <div class="spec-box">
-          <span class="spec-lbl">Est. Processing</span>
+          <span class="spec-lbl">Est. Delivery Time</span>
           <span class="spec-val" id="pkg-time">15 - 30 Minutes</span>
         </div>
         <div class="spec-box">
-          <span class="spec-lbl">Trading Profit</span>
-          <span class="spec-val" style="color:var(--secondary);">100% Yours</span>
+          <span class="spec-lbl">Verification Mode</span>
+          <span class="spec-val">Manual Admin Review</span>
         </div>
         <div class="spec-box">
-          <span class="spec-lbl">Verification</span>
-          <span class="spec-val">Manual Admin</span>
+          <span class="spec-lbl">Margin Security</span>
+          <span class="spec-val" style="color:var(--secondary);">Guaranteed Escrow</span>
         </div>
         <div class="spec-box">
-          <span class="spec-lbl">Hidden Fees</span>
-          <span class="spec-val" style="color:var(--primary);">$0.00 (Zero)</span>
+          <span class="spec-lbl">Hidden Charges</span>
+          <span class="spec-val" style="color:var(--primary);">$0.00 (None)</span>
         </div>
       </div>
 
-      <!-- Package Rules & Highlights -->
+      <!-- Specifications & Rules Checklist -->
       <h3 class="section-title">Rental Specifications & Rules</h3>
       <div class="checklist">
         <div class="check-item">
           <div class="check-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
-          <span><b>Direct Outlet Transfer:</b> Funds will be deposited directly to your chosen Binance UID, USDT wallet address, Quotex ID, or MT5 account upon KYC approval.</span>
+          <span><b>Direct Destination Transfer:</b> Funds are deposited directly into your designated Binance UID, USDT TRC20/BEP20 address, Quotex ID, or MetaTrader 5 account after verification.</span>
         </div>
         <div class="check-item">
           <div class="check-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
-          <span><b>Full Profit Margin Retention:</b> All trading profits generated using the rented balance are 100% yours to keep. You only return the base rented amount.</span>
+          <span><b>100% Profit Retention:</b> All trading profits generated using the rented USD balance belong entirely to you. You only return the base principal amount.</span>
         </div>
         <div class="check-item">
           <div class="check-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
-          <span><b>Simple Identity Verification:</b> Requires a valid CNIC, active WhatsApp number, and a clear Live Selfie on the next step.</span>
+          <span><b>Identity Verification Required:</b> You will be asked to provide a valid CNIC, active WhatsApp number, and a clear Live Selfie in the next step.</span>
         </div>
         <div class="check-item">
           <div class="check-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
-          <span><b>24/7 Order Tracking:</b> Real-time status tracking with direct access to our Telegram operators (<strong>@rental_dollor</strong>).</span>
+          <span><b>24/7 Live Order Support:</b> Track order status in real time and connect directly with our Telegram support operators (<strong>@rental_dollor</strong>).</span>
         </div>
       </div>
 
@@ -289,7 +352,7 @@
         </div>
         <div class="trust-pill">
           <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-          Live Operator
+          24/7 Operator
         </div>
       </div>
 
@@ -302,8 +365,8 @@
     </div>
   </main>
 
-  <!-- ================= FIREBASE & APP.JS LOGIC ================= -->
-  <!-- app.js handles Floating Island Header and Mobile Dock -->
+  <!-- ================= FIREBASE & APP LOGIC ================= -->
+  <!-- app.js automatically injects Floating Island Header & Mobile Dock -->
   <script type="module">
     import './app.js';
     import { getCurrentUser, loginWithGoogle } from './firebase-auth.js';
@@ -318,6 +381,7 @@
     // 2. Populate the UI dynamically
     document.getElementById('pkg-amount').innerHTML = `$${amount}.00 <span>USD</span>`;
     document.getElementById('pkg-fee').textContent = `Advance Rental Fee: ${formatUSD(fee)}`;
+    document.getElementById('calc-balance').textContent = `$${amount}.00 USD`;
 
     // 3. Handle Order Flow Button
     document.getElementById('btn-order-flow').addEventListener('click', async () => {
@@ -334,10 +398,10 @@
         }
       }
 
-      // Navigate to order form with data
+      // Navigate to order form with parameters
       window.location.href = `order.html?packageId=${id}&amount=${amount}&fee=${fee}`;
     });
   </script>
 </body>
 
-</html>
+</html
