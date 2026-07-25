@@ -6,6 +6,9 @@
   <title>404 — Page Not Found | DollarRent</title>
   
   <meta name="description" content="The page you are looking for does not exist. Return to DollarRent homepage.">
+  <link rel="canonical" href="https://dollarrent.vercel.app/404.html">
+
+  <!-- STRICT LOGO COMPLIANCE -->
   <link rel="icon" href="assets/logo.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/logo.png">
   <link rel="manifest" href="manifest.json">
@@ -14,16 +17,17 @@
   <style>
     :root {
       --bg-color: #F8FAFC;
-      --card-solid: #FFFFFF;
-      --border-color: #E2E8F0;
+      --card-solid: rgba(255, 255, 255, 0.88);
+      --border-color: rgba(226, 232, 240, 0.9);
       --primary: #0F62FE;
       --primary-hover: #0043CE;
-      --primary-glow: rgba(15, 98, 254, 0.12);
+      --primary-glow: rgba(15, 98, 254, 0.15);
+      --secondary: #00E676;
       --heading: #0B101E;
       --body: #475569;
       --radius-lg: 32px;
       --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-      --shadow-md: 0 20px 40px -8px rgba(15, 98, 254, 0.15);
+      --shadow-md: 0 24px 48px -12px rgba(15, 98, 254, 0.18);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -31,109 +35,155 @@
     body {
       font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
       background-color: var(--bg-color);
-      /* Premium Grid Background */
-      background-image: radial-gradient(circle at 50% 0%, #ffffff 0%, transparent 70%), 
-                        linear-gradient(rgba(15, 98, 254, 0.03) 1px, transparent 1px), 
-                        linear-gradient(90deg, rgba(15, 98, 254, 0.03) 1px, transparent 1px);
-      background-size: 100% 100%, 30px 30px, 30px 30px;
+      /* Dynamic Ambient Grid Background */
+      background-image: 
+        radial-gradient(circle at 50% 30%, rgba(15, 98, 254, 0.06) 0%, transparent 60%), 
+        radial-gradient(circle at 50% 100%, rgba(0, 230, 118, 0.05) 0%, transparent 50%),
+        linear-gradient(rgba(15, 98, 254, 0.03) 1px, transparent 1px), 
+        linear-gradient(90deg, rgba(15, 98, 254, 0.03) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 30px 30px, 30px 30px;
       color: var(--heading);
       min-height: 100vh;
       display: flex; align-items: center; justify-content: center;
-      padding: 20px; -webkit-font-smoothing: antialiased;
+      padding: 20px;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
     }
 
     /* ================= MAIN CONTAINER ================= */
     .container {
-      max-width: 500px; width: 100%;
+      max-width: 520px; width: 100%;
       text-align: center;
       z-index: 10;
     }
 
-    /* ================= ERROR CARD ================= */
+    /* ================= FLOATING GLASS CARD ================= */
     .error-card {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      border: 1px solid rgba(226, 232, 240, 0.8);
+      background: var(--card-solid);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1px solid var(--border-color);
       border-radius: var(--radius-lg);
-      padding: 48px 32px;
+      padding: 52px 36px;
       box-shadow: var(--shadow-md);
-      opacity: 0; transform: translateY(20px);
-      animation: fadeUp 0.8s cubic-bezier(0.16,1,0.3,1) forwards;
+      position: relative;
+      overflow: hidden;
+      animation: floatCard 6s ease-in-out infinite;
     }
 
-    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    @keyframes floatCard {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
 
-    /* ================= ANIMATED RADAR ICON ================= */
+    /* Top glowing accent bar */
+    .error-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary), var(--primary));
+      background-size: 200% 100%;
+      animation: gradientMove 3s linear infinite;
+    }
+    @keyframes gradientMove { 0% { background-position: 0% 0%; } 100% { background-position: 200% 0%; } }
+
+    /* ================= STAGGERED ENTRANCE ANIMATIONS ================= */
+    .anim-item {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+    .delay-5 { animation-delay: 0.5s; }
+
+    @keyframes slideUpFade { to { opacity: 1; transform: translateY(0); } }
+
+    /* ================= TRIPLE RADAR PULSE ICON ================= */
     .radar-icon {
-      position: relative; width: 80px; height: 80px; margin: 0 auto 24px;
+      position: relative; width: 88px; height: 88px; margin: 0 auto 28px;
       background: var(--primary-glow); border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       color: var(--primary);
     }
-    .radar-icon svg { width: 40px; height: 40px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; z-index: 2; }
+    .radar-icon svg { width: 44px; height: 44px; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; z-index: 2; }
     
+    /* Staggered Sonar Rings */
     .radar-pulse {
       position: absolute; width: 100%; height: 100%;
       border-radius: 50%; border: 2px solid var(--primary);
-      opacity: 0; animation: radarScan 2s infinite ease-out;
+      opacity: 0; animation: radarScan 2.8s infinite cubic-bezier(0.25, 1, 0.5, 1);
     }
+    .pulse-2 { animation-delay: 0.9s; }
+    .pulse-3 { animation-delay: 1.8s; }
+
     @keyframes radarScan {
-      0% { transform: scale(1); opacity: 0.8; }
-      100% { transform: scale(2); opacity: 0; }
+      0% { transform: scale(0.9); opacity: 0.8; border-color: var(--primary); }
+      100% { transform: scale(2.2); opacity: 0; border-color: var(--secondary); }
     }
 
-    /* ================= TYPOGRAPHY ================= */
+    /* ================= SHIMMERING 404 TYPOGRAPHY ================= */
     .error-code {
       font-size: 110px; font-weight: 900;
-      background: linear-gradient(135deg, var(--primary), #00E676);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      line-height: 1; margin-bottom: 12px; letter-spacing: -4px;
-      filter: drop-shadow(0 10px 15px rgba(15, 98, 254, 0.2));
+      line-height: 0.95; margin-bottom: 12px; letter-spacing: -4px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, #4A8BFF 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shineText 4s linear infinite;
+      filter: drop-shadow(0 12px 20px rgba(15, 98, 254, 0.2));
+    }
+
+    @keyframes shineText {
+      0% { background-position: 0% center; }
+      100% { background-position: 200% center; }
     }
     
-    h1 { font-size: 26px; font-weight: 800; margin-bottom: 12px; letter-spacing: -0.5px; }
+    h1 { font-size: 28px; font-weight: 800; color: var(--heading); margin-bottom: 10px; letter-spacing: -0.8px; }
     p { font-size: 15px; color: var(--body); margin-bottom: 36px; line-height: 1.6; font-weight: 500; }
 
-    /* ================= ACTION BUTTONS ================= */
-    .actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+    /* ================= BUTTONS ================= */
+    .actions { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; }
 
     .btn-primary {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 14px 28px; border-radius: 30px;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 16px 30px; border-radius: 30px;
       background: linear-gradient(135deg, var(--primary), var(--primary-hover));
-      color: white; font-size: 15px; font-weight: 700; text-decoration: none;
-      box-shadow: 0 8px 20px rgba(15,98,254,0.25); border: none; cursor: pointer;
+      color: white; font-size: 15px; font-weight: 800; text-decoration: none;
+      box-shadow: 0 10px 24px rgba(15,98,254,0.3); border: none; cursor: pointer;
       transition: all 0.3s ease;
     }
-    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(15,98,254,0.35); }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 14px 32px rgba(15,98,254,0.4); }
 
     .btn-secondary {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 14px 28px; border-radius: 30px; background: var(--card-solid);
-      color: var(--heading); font-size: 15px; font-weight: 700; text-decoration: none;
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 16px 30px; border-radius: 30px; background: #FFFFFF;
+      color: var(--heading); font-size: 15px; font-weight: 800; text-decoration: none;
       border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);
       transition: all 0.3s ease;
     }
-    .btn-secondary:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-3px); }
+    .btn-secondary:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-3px); box-shadow: var(--shadow-sm); }
 
-    .btn-primary svg, .btn-secondary svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+    .btn-primary svg, .btn-secondary svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
 
     @media (max-width: 480px) {
+      .error-card { padding: 40px 20px; }
       .actions { flex-direction: column; }
-      .btn-primary, .btn-secondary { width: 100%; justify-content: center; }
-      .error-code { font-size: 90px; }
+      .btn-primary, .btn-secondary { width: 100%; }
+      .error-code { font-size: 92px; }
     }
   </style>
 </head>
 <body>
 
-  <div class="container">
+  <main class="container">
     <div class="error-card">
       
-      <!-- Animated Radar / Search Graphic -->
-      <div class="radar-icon">
+      <!-- Triple Sonar Radar Pulse -->
+      <div class="radar-icon anim-item delay-1">
         <div class="radar-pulse"></div>
+        <div class="radar-pulse pulse-2"></div>
+        <div class="radar-pulse pulse-3"></div>
         <svg viewBox="0 0 24 24">
           <circle cx="11" cy="11" r="8"></circle>
           <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
@@ -142,13 +192,13 @@
         </svg>
       </div>
 
-      <!-- 404 Text -->
-      <div class="error-code">404</div>
-      <h1>Page Not Found</h1>
-      <p>The page you're looking for doesn't exist, has been moved, or you don't have access. Let's get you back on track.</p>
+      <!-- Shimmering Code & Titles -->
+      <div class="error-code anim-item delay-2">404</div>
+      <h1 class="anim-item delay-3">Page Not Found</h1>
+      <p class="anim-item delay-4">The page you're looking for doesn't exist, has been moved, or is temporarily offline. Let's get you back on track.</p>
       
       <!-- Buttons -->
-      <div class="actions">
+      <div class="actions anim-item delay-5">
         <a href="home.html" class="btn-primary">
           <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
           Back to Home
@@ -160,10 +210,10 @@
       </div>
 
     </div>
-  </div>
+  </main>
 
   <!-- ================= FIREBASE & APP.JS INJECTION ================= -->
-  <!-- app.js handles the Floating Header and Mobile Dock so the user can easily navigate away -->
+  <!-- app.js handles the Floating Island Header and Mobile Dock for seamless navigation -->
   <script type="module">
     import './app.js';
   </script>
