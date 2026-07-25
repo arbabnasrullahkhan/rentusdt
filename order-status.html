@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Order Status — DollarRent</title>
   
-  <meta name="description" content="Track your DollarRent digital USD rental order status in real time.">
+  <meta name="description" content="Track your digital USD rental order in real-time with DollarRent live verification.">
   <link rel="icon" href="assets/logo.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/logo.png">
   <link rel="manifest" href="manifest.json">
@@ -20,11 +20,8 @@
       --primary-hover: #0043CE;
       --primary-glow: rgba(15, 98, 254, 0.12);
       --secondary: #00E676;
-      --secondary-glow: rgba(0, 230, 118, 0.15);
       --warning: #F59E0B;
-      --warning-glow: rgba(245, 158, 11, 0.12);
       --danger: #EF4444;
-      --danger-glow: rgba(239, 68, 68, 0.12);
       --heading: #0B101E;
       --body: #475569;
       --radius-lg: 24px;
@@ -32,6 +29,7 @@
       --radius-sm: 12px;
       --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
       --shadow-md: 0 12px 24px -4px rgba(15, 98, 254, 0.1);
+      --shadow-hover: 0 20px 40px -8px rgba(15, 98, 254, 0.2);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -39,23 +37,25 @@
     body {
       font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
       background-color: var(--bg-color);
-      /* FinTech Background Grid */
       background-image: radial-gradient(circle at 50% 0%, #ffffff 0%, transparent 70%),
         linear-gradient(rgba(15, 98, 254, 0.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(15, 98, 254, 0.03) 1px, transparent 1px);
       background-size: 100% 100%, 30px 30px, 30px 30px;
       color: var(--heading);
-      padding-bottom: 120px; /* Space for Mobile Dock from app.js */
+      padding-bottom: 120px; /* Space for Mobile Dock */
       -webkit-font-smoothing: antialiased;
     }
-
+    
     a { text-decoration: none; color: inherit; }
 
-    .container { max-width: 720px; margin: 0 auto; padding: 100px 20px 40px; }
+    .container { max-width: 740px; margin: 0 auto; padding: 100px 20px 40px; }
 
     /* ================= ANIMATIONS ================= */
     .animate-in { opacity: 0; transform: translateY(16px); animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
 
     /* ================= BACK BUBBLE ================= */
     .back-bubble-wrapper { margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; }
@@ -69,39 +69,25 @@
     .back-bubble:hover { border-color: var(--primary); color: var(--primary); transform: translateX(-4px); box-shadow: var(--shadow-md); }
     .back-bubble svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
 
-    /* ================= STATUS CARD ================= */
+    /* ================= STATUS CARDS ================= */
     .status-card {
-      background: var(--card-solid); border-radius: var(--radius-lg);
-      padding: 40px 32px; border: 1px solid var(--border-color);
-      box-shadow: var(--shadow-md); text-align: center; position: relative; overflow: hidden;
+      background: var(--card-solid); border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg); padding: 40px 32px;
+      box-shadow: var(--shadow-md); text-align: center; margin-bottom: 24px;
+      position: relative; overflow: hidden;
     }
 
-    /* Live Pulse Dot for Realtime Connection */
-    .live-indicator {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
-      color: var(--secondary); background: var(--secondary-glow);
-      padding: 4px 12px; border-radius: 20px; margin-bottom: 16px;
-    }
-    .pulse-dot {
-      width: 8px; height: 8px; border-radius: 50%; background: var(--secondary);
-      animation: livePulse 1.8s infinite;
-    }
-    @keyframes livePulse { 0% { transform: scale(0.9); opacity: 1; } 50% { transform: scale(1.4); opacity: 0.4; } 100% { transform: scale(0.9); opacity: 1; } }
-
-    /* Dynamic Badges */
     .status-badge {
       display: inline-flex; align-items: center; gap: 8px;
-      padding: 10px 24px; border-radius: 30px; font-size: 15px; font-weight: 800;
-      margin-bottom: 20px; box-shadow: var(--shadow-sm);
+      padding: 8px 22px; border-radius: 30px; font-size: 13px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 20px;
     }
-    .badge-submitted { background: var(--primary-glow); color: var(--primary); border: 1px solid rgba(15,98,254,0.2); }
-    .badge-under_review { background: var(--warning-glow); color: #B45309; border: 1px solid rgba(245,158,11,0.3); }
-    .badge-approved { background: var(--secondary-glow); color: #00A650; border: 1px solid rgba(0,230,118,0.3); }
-    .badge-rejected { background: var(--danger-glow); color: var(--danger); border: 1px solid rgba(239,68,68,0.2); }
+    .badge-submitted { background: rgba(15, 98, 254, 0.1); color: var(--primary); }
+    .badge-under_review { background: rgba(245, 158, 11, 0.12); color: #D97706; }
+    .badge-approved { background: rgba(0, 230, 118, 0.15); color: #00A650; }
+    .badge-rejected { background: rgba(239, 68, 68, 0.12); color: var(--danger); }
 
-    .order-ref { font-size: 36px; font-weight: 900; color: var(--heading); margin-bottom: 4px; letter-spacing: -1px; font-family: monospace; }
-    .order-date { font-size: 14px; color: var(--body); font-weight: 500; margin-bottom: 32px; }
+    .order-ref { font-size: 34px; font-weight: 900; color: var(--heading); margin-bottom: 4px; letter-spacing: -1px; }
 
     /* ================= STEPPER TIMELINE ================= */
     .stepper {
@@ -109,79 +95,96 @@
       position: relative;
     }
     .stepper::before {
-      content: ''; position: absolute; top: 20px; left: 12%; width: 76%;
-      height: 4px; background: var(--border-color); z-index: 1; border-radius: 2px;
+      content: ''; position: absolute; top: 20px; left: 15%; width: 70%;
+      height: 3px; background: var(--border-color); z-index: 1;
     }
     .step-item {
-      position: relative; z-index: 2; display: flex; flex-direction: column;
-      align-items: center; gap: 10px; width: 33%;
+      position: relative; z-index: 2; display: flex;
+      flex-direction: column; align-items: center; gap: 8px; width: 33%;
     }
     .step-circle {
-      width: 44px; height: 44px; border-radius: 50%; background: var(--card-solid);
-      border: 3px solid var(--border-color); display: flex; align-items: center;
-      justify-content: center; font-size: 15px; font-weight: 800; color: var(--body);
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: var(--shadow-sm);
+      width: 42px; height: 42px; border-radius: 50%; background: var(--card-solid);
+      border: 3px solid var(--border-color); display: flex; align-items: center; justify-content: center;
+      font-size: 15px; font-weight: 800; color: var(--body); transition: all 0.4s ease;
     }
-    
     .step-item.active .step-circle {
       border-color: var(--primary); background: var(--primary); color: white;
-      box-shadow: 0 0 0 6px var(--primary-glow); transform: scale(1.1);
+      box-shadow: 0 0 0 5px var(--primary-glow);
     }
     .step-item.done .step-circle {
       border-color: var(--secondary); background: var(--secondary); color: white;
-      box-shadow: 0 0 0 4px var(--secondary-glow);
     }
-    .step-item.rejected .step-circle {
+    .step-item.failed .step-circle {
       border-color: var(--danger); background: var(--danger); color: white;
     }
-    
-    .step-label { font-size: 13px; font-weight: 700; color: var(--body); transition: 0.3s; }
-    .step-item.active .step-label { color: var(--primary); font-weight: 800; }
-    .step-item.done .step-label { color: #00A650; font-weight: 800; }
+    .step-label { font-size: 13px; font-weight: 700; color: var(--body); }
 
-    /* ================= ADMIN NOTE BANNER ================= */
+    /* ================= ADMIN UPDATE BOX ================= */
     .admin-note-box {
       background: rgba(15, 98, 254, 0.03); border: 1px solid rgba(15, 98, 254, 0.15);
-      border-radius: var(--radius-md); padding: 20px; font-size: 14.5px;
+      border-radius: var(--radius-md); padding: 20px; font-size: 14px;
       color: var(--heading); margin-bottom: 28px; text-align: left; line-height: 1.6;
-      box-shadow: var(--shadow-sm);
     }
-    .admin-note-box strong { color: var(--primary); font-weight: 800; display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+    .admin-note-box strong { color: var(--primary); font-weight: 800; }
 
     /* ================= DETAILS TABLE ================= */
     .details-table {
       background: var(--bg-color); border: 1px solid var(--border-color);
-      border-radius: var(--radius-md); padding: 20px 24px; text-align: left; margin-bottom: 32px;
+      border-radius: var(--radius-md); padding: 20px 24px; text-align: left; margin-bottom: 28px;
     }
     .table-row {
       display: flex; justify-content: space-between; align-items: center;
-      padding: 12px 0; border-bottom: 1px solid rgba(226,232,240,0.8); font-size: 14.5px;
+      padding: 12px 0; border-bottom: 1px solid rgba(226,232,240,0.8); font-size: 14px; gap: 12px;
     }
     .table-row:last-child { border-bottom: none; }
-    .table-row span:first-child { color: var(--body); font-weight: 600; }
-    .table-row span:last-child { font-weight: 800; color: var(--heading); display: flex; align-items: center; gap: 8px; }
+    .table-row .lbl { color: var(--body); font-weight: 600; }
+    .table-row .val { font-weight: 800; color: var(--heading); text-align: right; word-break: break-all; }
 
-    .btn-copy {
-      background: var(--primary-glow); color: var(--primary); border: none;
-      padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer;
-    }
-
-    /* ================= TELEGRAM SUPPORT BUTTON ================= */
+    /* Telegram Button */
     .btn-telegram {
       background: linear-gradient(135deg, #0088cc, #005580); color: white;
       padding: 16px 28px; border-radius: 30px; font-size: 15px; font-weight: 800;
-      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-      box-shadow: 0 10px 24px rgba(0, 136, 204, 0.35); transition: all 0.3s ease; width: 100%;
+      display: inline-flex; align-items: center; gap: 10px;
+      box-shadow: 0 10px 24px rgba(0, 136, 204, 0.3); transition: all 0.3s ease; width: 100%;
+      justify-content: center;
     }
-    .btn-telegram:hover { transform: translateY(-3px); box-shadow: 0 14px 32px rgba(0, 136, 204, 0.45); }
+    .btn-telegram:hover { transform: translateY(-3px); box-shadow: 0 14px 32px rgba(0, 136, 204, 0.4); }
     .btn-telegram svg { width: 22px; height: 22px; fill: currentColor; }
+
+    /* ================= ORDER HISTORY LIST VIEW ================= */
+    .order-list-card {
+      background: var(--card-solid); border: 1px solid var(--border-color);
+      border-radius: var(--radius-md); padding: 20px; margin-bottom: 14px;
+      display: flex; justify-content: space-between; align-items: center;
+      cursor: pointer; transition: all 0.3s ease; box-shadow: var(--shadow-sm);
+    }
+    .order-list-card:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .order-list-info h4 { font-size: 16px; font-weight: 800; color: var(--heading); margin-bottom: 4px; }
+    .order-list-info p { font-size: 13px; color: var(--body); font-weight: 600; }
+
+    /* ================= EMPTY STATE ================= */
+    .empty-state {
+      background: var(--card-solid); border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg); padding: 60px 24px; text-align: center;
+      box-shadow: var(--shadow-sm);
+    }
+    .empty-state svg { width: 64px; height: 64px; stroke: #CBD5E1; fill: none; stroke-width: 1.5; margin-bottom: 16px; }
+    .empty-state h3 { font-size: 22px; font-weight: 800; color: var(--heading); margin-bottom: 8px; }
+    .empty-state p { font-size: 14px; color: var(--body); margin-bottom: 24px; font-weight: 500; }
+    .btn-rent-now {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 28px; background: var(--primary); color: white;
+      border-radius: 30px; font-weight: 800; font-size: 15px; box-shadow: 0 8px 20px rgba(15,98,254,0.3);
+    }
 
     @media (max-width: 767px) {
       .container { padding-top: 80px; padding-left: 16px; padding-right: 16px; }
       .status-card { padding: 32px 20px; }
-      .order-ref { font-size: 28px; }
+      .order-ref { font-size: 26px; }
+      .stepper::before { top: 18px; }
+      .step-circle { width: 36px; height: 36px; font-size: 13px; }
       .table-row { flex-direction: column; align-items: flex-start; gap: 4px; }
-      .table-row span:last-child { align-self: flex-end; }
+      .table-row .val { text-align: left; }
     }
   </style>
 </head>
@@ -189,212 +192,276 @@
 
   <main class="container">
     
-    <!-- Premium Back Bubble -->
-    <div class="back-bubble-wrapper animate-in">
+    <!-- Premium Back Navigation Bubble -->
+    <div class="back-bubble-wrapper animate-in" id="nav-bubble-wrap">
       <a href="home.html" class="back-bubble">
         <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
-        Return to Home
+        Back to Home
       </a>
     </div>
 
-    <div class="status-card animate-in">
-      
-      <!-- Live Realtime Indicator -->
-      <div class="live-indicator">
-        <div class="pulse-dot"></div>
-        Live Realtime Updates
+    <!-- VIEW 1: SINGLE ORDER DETAILED STATUS -->
+    <div id="single-order-view" style="display: none;">
+      <div class="status-card animate-in delay-1">
+        <div id="status-badge-container">
+          <div class="status-badge badge-submitted">
+            <span>Checking Order Status...</span>
+          </div>
+        </div>
+
+        <div class="order-ref" id="display-order-id">DR-000000</div>
+        <p style="font-size:14px; color:var(--body); font-weight:600;" id="display-date">Submitted on Recently</p>
+
+        <!-- Stepper -->
+        <div class="stepper">
+          <div class="step-item done" id="step-1">
+            <div class="step-circle">1</div>
+            <div class="step-label">Submitted</div>
+          </div>
+          <div class="step-item" id="step-2">
+            <div class="step-circle">2</div>
+            <div class="step-label">Under Review</div>
+          </div>
+          <div class="step-item" id="step-3">
+            <div class="step-circle">3</div>
+            <div class="step-label" id="step-3-label">Approved</div>
+          </div>
+        </div>
+
+        <!-- Admin Update Note -->
+        <div class="admin-note-box" id="admin-note-container">
+          <strong>Verification Update:</strong> <span id="admin-note-text">Your order details and KYC documents have been submitted and are under admin review (~15-30 minutes).</span>
+        </div>
+
+        <!-- Comprehensive Details Table -->
+        <div class="details-table">
+          <div class="table-row">
+            <span class="lbl">Package Amount:</span>
+            <span class="val" id="dt-amount">$0.00 USD</span>
+          </div>
+          <div class="table-row">
+            <span class="lbl">Rental Fee Paid:</span>
+            <span class="val" id="dt-fee">$0.00 USD</span>
+          </div>
+          <div class="table-row">
+            <span class="lbl">Payment Gateway Used:</span>
+            <span class="val" id="dt-gateway">Direct Transfer</span>
+          </div>
+          <div class="table-row">
+            <span class="lbl">Transaction Reference / ID:</span>
+            <span class="val" id="dt-trx" style="font-family: monospace;">—</span>
+          </div>
+          <div class="table-row">
+            <span class="lbl">Receiving Platform:</span>
+            <span class="val" id="dt-platform">Binance Pay</span>
+          </div>
+          <div class="table-row">
+            <span class="lbl">Destination UID / Wallet:</span>
+            <span class="val" id="dt-uid" style="font-family: monospace;">—</span>
+          </div>
+          <div class="table-row">
+            <span class="lbl">Receiver Account Title:</span>
+            <span class="val" id="dt-receiver">—</span>
+          </div>
+        </div>
+
+        <!-- Direct Telegram Support Link -->
+        <a href="https://t.me/rental_dollor" target="_blank" class="btn-telegram">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
+          Need Instant Support? Chat @rental_dollor
+        </a>
       </div>
-
-      <!-- Dynamic Badge Container -->
-      <div id="status-badge-container">
-        <div class="status-badge badge-submitted">
-          <span>Connecting to Firestore...</span>
-        </div>
-      </div>
-
-      <div class="order-ref" id="display-order-id">DR-00000000</div>
-      <p class="order-date" id="display-date">Fetching timestamps...</p>
-
-      <!-- Dynamic 3-Step Timeline -->
-      <div class="stepper">
-        <div class="step-item done" id="step-1">
-          <div class="step-circle">✓</div>
-          <div class="step-label">Submitted</div>
-        </div>
-        <div class="step-item" id="step-2">
-          <div class="step-circle">2</div>
-          <div class="step-label">Under Review</div>
-        </div>
-        <div class="step-item" id="step-3">
-          <div class="step-circle">3</div>
-          <div class="step-label" id="step-3-label">USD Delivered</div>
-        </div>
-      </div>
-
-      <!-- Verification Note Banner -->
-      <div class="admin-note-box" id="admin-note-container">
-        <strong>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-          Verification Status Note:
-        </strong>
-        <span id="admin-note-text">Your order has been recorded and is currently waiting for manual admin review (~15-30 minutes).</span>
-      </div>
-
-      <!-- Details Summary Table -->
-      <div class="details-table">
-        <div class="table-row">
-          <span>Package Amount:</span>
-          <span id="dt-amount">$0.00 USD</span>
-        </div>
-        <div class="table-row">
-          <span>Rental Fee Paid:</span>
-          <span id="dt-fee" style="color:var(--primary);">$0.00</span>
-        </div>
-        <div class="table-row">
-          <span>Delivery Platform:</span>
-          <span id="dt-platform">Binance Pay / Wallet</span>
-        </div>
-        <div class="table-row">
-          <span>Receiver UID / Address:</span>
-          <span id="dt-uid">—</span>
-        </div>
-        <div class="table-row">
-          <span>Transaction ID (TrxID):</span>
-          <span id="dt-trx">—</span>
-        </div>
-      </div>
-
-      <!-- Direct Telegram Link (@rental_dollor) -->
-      <a href="https://t.me/rental_dollor" target="_blank" class="btn-telegram">
-        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
-        Need Instant Help? Contact @rental_dollor
-      </a>
-
     </div>
+
+    <!-- VIEW 2: ORDER HISTORY LIST VIEW -->
+    <div id="order-list-view" style="display: none;">
+      <h2 style="font-size:24px; font-weight:800; margin-bottom:20px;">My Rental Orders</h2>
+      <div id="order-cards-container"></div>
+    </div>
+
+    <!-- VIEW 3: EMPTY STATE (No Orders Found) -->
+    <div id="empty-order-view" class="animate-in" style="display: none;">
+      <div class="empty-state">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+        <h3>No Rental Orders Found</h3>
+        <p>You have not submitted any digital USD balance rental orders yet.</p>
+        <a href="home.html#packages" class="btn-rent-now">Rent USD Balance Now →</a>
+      </div>
+    </div>
+
   </main>
 
-  <!-- ================= FIREBASE & APP LOGIC ================= -->
-  <!-- app.js handles Floating Header and Mobile Dock -->
+  <!-- ================= FIREBASE MODULE & LOGIC ================= -->
   <script type="module">
     import './app.js';
-    
-    // Safe fallbacks for utilities
-    const safeFormatUSD = (val) => `$${Number(val).toFixed(2)}`;
-    const safeEscapeHTML = (str) => String(str || '').replace(/[&<>'"]/g, match => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[match]));
+    import { db } from './firebase-config.js';
+    import { doc, onSnapshot, collection, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    let firestore, utils;
+    // Safe fallbacks
+    let utils, auth;
     try {
-      firestore = await import('./firestore.js');
       utils = await import('./utils.js');
-    } catch (err) {
-      console.warn("Module import running in fallback mode.", err);
-    }
+      auth = await import('./firebase-auth.js');
+    } catch(e) { console.warn("Fallback modules."); }
 
-    const formatUSD = utils?.formatUSD || safeFormatUSD;
-    const escapeHTML = utils?.escapeHTML || safeEscapeHTML;
-    const copyToClipboard = utils?.copyToClipboard || ((txt) => { navigator.clipboard.writeText(txt); alert("Copied!"); });
+    const formatUSD = utils?.formatUSD || ((val) => `$${Number(val || 0).toFixed(2)}`);
+    const escapeHTML = utils?.escapeHTML || ((str) => String(str || '').replace(/[&<>'"]/g, ''));
+    const getCurrentUser = auth?.getCurrentUser || (() => null);
 
-    // Parse URL Parameter
     const params = new URLSearchParams(window.location.search);
-    const orderId = params.get('orderId') || 'DR-PREVIEW';
+    const orderIdParam = params.get('orderId');
 
-    document.getElementById('display-order-id').textContent = orderId;
+    const singleView = document.getElementById('single-order-view');
+    const listView = document.getElementById('order-list-view');
+    const emptyView = document.getElementById('empty-order-view');
 
-    // Helper to format date
-    function formatDate(dateStr) {
-      if (!dateStr) return 'Just Now';
-      try {
-        const d = new Date(dateStr);
-        return `Submitted on ${d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} at ${d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
-      } catch {
-        return 'Submitted Recently';
-      }
-    }
+    // ================= REALTIME SINGLE ORDER SUBSCRIPTION =================
+    if (orderIdParam) {
+      singleView.style.display = 'block';
 
-    // Global copy handler
-    window._copyTxt = (t) => copyToClipboard(t);
-
-    // ================= REALTIME FIRESTORE LISTENER =================
-    if (firestore && firestore.subscribeToOrder) {
-      firestore.subscribeToOrder(orderId, (order) => {
-        if (!order) {
-          // Check local draft fallback if order isn't in Firestore yet
-          const localDraft = sessionStorage.getItem('dollarrent_last_submitted_order');
-          if (localDraft) {
-            const parsed = JSON.parse(localDraft);
-            updateUI(parsed);
+      // 1. Try to load local backup draft if user is offline or permission error occurred
+      const localBackupRaw = sessionStorage.getItem('dollarrent_last_submitted_order');
+      if (localBackupRaw) {
+        try {
+          const localOrder = JSON.parse(localBackupRaw);
+          if (localOrder.orderId === orderIdParam) {
+            renderSingleOrderData(localOrder);
           }
-          return;
+        } catch(e){}
+      }
+
+      // 2. Attach Firestore Realtime Listener
+      try {
+        const orderRef = doc(db, "orders", orderIdParam);
+        onSnapshot(orderRef, (docSnap) => {
+          if (docSnap.exists()) {
+            renderSingleOrderData({ id: docSnap.id, ...docSnap.data() });
+          } else {
+            console.warn("Order document not found in Firestore yet, displaying reference state.");
+          }
+        }, (err) => {
+          console.warn("Firestore realtime permission block, using cached/URL display.", err);
+        });
+      } catch (err) {
+        console.warn("Firestore error:", err);
+      }
+    } 
+    // ================= REALTIME ORDER HISTORY LIST VIEW =================
+    else {
+      const user = getCurrentUser();
+      
+      if (!user) {
+        emptyView.style.display = 'block';
+      } else {
+        try {
+          const q = query(
+            collection(db, "orders"), 
+            where("customer.uid", "==", user.uid)
+          );
+
+          onSnapshot(q, (snapshot) => {
+            if (snapshot.empty) {
+              emptyView.style.display = 'block';
+              listView.style.display = 'none';
+            } else {
+              emptyView.style.display = 'none';
+              listView.style.display = 'block';
+              
+              const orders = [];
+              snapshot.forEach(d => orders.push({ id: d.id, ...d.data() }));
+              renderOrderList(orders);
+            }
+          }, (err) => {
+            console.warn("Error fetching user order list:", err);
+            emptyView.style.display = 'block';
+          });
+        } catch (err) {
+          emptyView.style.display = 'block';
         }
-        updateUI(order);
-      });
-    } else {
-      // Fallback preview mode
-      const localDraft = sessionStorage.getItem('dollarrent_last_submitted_order');
-      if (localDraft) {
-        updateUI(JSON.parse(localDraft));
       }
     }
 
-    function updateUI(order) {
-      // 1. Details Table Update
-      const amount = order.amountUSD || order.amount || 50;
-      const fee = order.feeUSD || order.fee || 9;
+    // Render Single Order View
+    function renderSingleOrderData(order) {
+      document.getElementById('display-order-id').textContent = order.orderId || orderIdParam;
       
-      document.getElementById('dt-amount').textContent = `$${amount}.00 USD`;
-      document.getElementById('dt-fee').textContent = formatUSD(fee);
-      
-      const destPlatform = order.customer?.deliveryPlatform || order.deliveryPlatform || 'Binance Pay';
-      const destId = order.customer?.destinationId || order.customer?.binanceUid || order.binanceUid || '—';
-      const trxId = order.transactionId || order.payment?.referenceId || '—';
+      document.getElementById('dt-amount').textContent = `$${order.amountUSD || order.amount || 50}.00 USD`;
+      document.getElementById('dt-fee').textContent = formatUSD(order.feeUSD || order.fee || 9);
+      document.getElementById('dt-gateway').textContent = order.paymentMethod || 'Direct Transfer';
+      document.getElementById('dt-trx').textContent = order.transactionId || 'N/A';
 
-      document.getElementById('dt-platform').textContent = destPlatform;
-      
-      document.getElementById('dt-uid').innerHTML = `${escapeHTML(destId)} ${destId !== '—' ? `<button class="btn-copy" onclick="window._copyTxt('${escapeHTML(destId)}')">Copy</button>` : ''}`;
-      document.getElementById('dt-trx').innerHTML = `${escapeHTML(trxId)} ${trxId !== '—' ? `<button class="btn-copy" onclick="window._copyTxt('${escapeHTML(trxId)}')">Copy</button>` : ''}`;
-
-      document.getElementById('display-date').textContent = formatDate(order.createdAt);
-
-      // 2. Admin Note Update
-      if (order.adminNote || order.adminNotes) {
-        document.getElementById('admin-note-text').textContent = order.adminNote || order.adminNotes;
+      if (order.customer) {
+        document.getElementById('dt-platform').textContent = order.customer.deliveryPlatform || 'Binance Pay';
+        document.getElementById('dt-uid').textContent = order.customer.destinationId || order.customer.binanceUid || '—';
+        document.getElementById('dt-receiver').textContent = order.customer.receiverName || order.customer.fullName || '—';
       }
 
-      // 3. Status Badge & Stepper Logic
+      if (order.createdAt) {
+        const dateStr = new Date(order.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        document.getElementById('display-date').textContent = `Submitted on ${dateStr}`;
+      }
+
+      if (order.adminNotes || order.adminNote) {
+        document.getElementById('admin-note-text').textContent = order.adminNotes || order.adminNote;
+      }
+
+      // Update Badges & Timeline Stepper
       const badgeContainer = document.getElementById('status-badge-container');
       const step2 = document.getElementById('step-2');
       const step3 = document.getElementById('step-3');
       const step3Label = document.getElementById('step-3-label');
 
-      const status = (order.status || 'submitted').toLowerCase();
+      const st = (order.status || 'under_review').toLowerCase();
 
-      if (status === 'submitted' || status === 'pending') {
-        badgeContainer.innerHTML = `<div class="status-badge badge-submitted">Order Received — Waiting Verification</div>`;
-        step2.className = 'step-item active';
-        step2.querySelector('.step-circle').textContent = '2';
+      if (st === 'submitted' || st === 'pending') {
+        badgeContainer.innerHTML = `<div class="status-badge badge-submitted">Order Received — Pending Review</div>`;
+        step2.className = 'step-item';
         step3.className = 'step-item';
-        step3Label.textContent = 'USD Delivered';
-      } else if (status === 'under_review') {
-        badgeContainer.innerHTML = `<div class="status-badge badge-under_review">Payment Under Admin Review</div>`;
+      } else if (st === 'under_review' || st === 'review') {
+        badgeContainer.innerHTML = `<div class="status-badge badge-under_review">Payment Under Admin Verification</div>`;
         step2.className = 'step-item active';
-        step2.querySelector('.step-circle').textContent = '2';
         step3.className = 'step-item';
-        step3Label.textContent = 'USD Delivered';
-      } else if (status === 'approved' || status === 'completed' || status === 'delivered') {
-        badgeContainer.innerHTML = `<div class="status-badge badge-approved">✓ Order Approved & USD Balance Delivered</div>`;
+      } else if (st === 'approved' || st === 'delivered' || st === 'completed') {
+        badgeContainer.innerHTML = `<div class="status-badge badge-approved">✓ USD Delivered & Completed</div>`;
         step2.className = 'step-item done';
-        step2.querySelector('.step-circle').textContent = '✓';
         step3.className = 'step-item done';
-        step3.querySelector('.step-circle').textContent = '✓';
-        step3Label.textContent = 'USD Delivered';
-      } else if (status === 'rejected' || status === 'cancelled') {
-        badgeContainer.innerHTML = `<div class="status-badge badge-rejected">✕ Payment Verification Rejected</div>`;
+        step3Label.textContent = 'Delivered';
+      } else if (st === 'rejected' || st === 'cancelled') {
+        badgeContainer.innerHTML = `<div class="status-badge badge-rejected">✕ Order Rejected</div>`;
         step2.className = 'step-item done';
-        step2.querySelector('.step-circle').textContent = '✓';
-        step3.className = 'step-item rejected';
-        step3.querySelector('.step-circle').textContent = '✕';
+        step3.className = 'step-item failed';
         step3Label.textContent = 'Rejected';
       }
+    }
+
+    // Render Multiple Orders List
+    function renderOrderList(orders) {
+      const container = document.getElementById('order-cards-container');
+      container.innerHTML = orders.map(o => `
+        <div class="order-list-card" onclick="window.location.href='order-status.html?orderId=${o.orderId || o.id}'">
+          <div class="order-list-info">
+            <h4>Order #${escapeHTML(o.orderId || o.id)}</h4>
+            <p>$${o.amountUSD || 50} USD Balance · ${o.paymentMethod || 'Direct'}</p>
+          </div>
+          <div>
+            <span class="status-badge ${getStatusBadgeClass(o.status)}" style="margin-bottom:0;">${formatStatusText(o.status)}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function getStatusBadgeClass(st) {
+      st = (st || '').toLowerCase();
+      if (st === 'approved' || st === 'delivered') return 'badge-approved';
+      if (st === 'rejected' || st === 'cancelled') return 'badge-rejected';
+      return 'badge-under_review';
+    }
+
+    function formatStatusText(st) {
+      st = (st || '').toLowerCase();
+      if (st === 'approved' || st === 'delivered') return '✓ Delivered';
+      if (st === 'rejected') return '✕ Rejected';
+      return 'Under Review';
     }
   </script>
 </body>
