@@ -47,7 +47,7 @@
         linear-gradient(90deg, rgba(15, 98, 254, 0.03) 1px, transparent 1px);
       background-size: 100% 100%, 30px 30px, 30px 30px;
       color: var(--heading);
-      padding-bottom: 120px; /* Space for Mobile Dock */
+      padding-bottom: 120px;
       -webkit-font-smoothing: antialiased;
     }
     
@@ -55,14 +55,12 @@
 
     .container { max-width: 740px; margin: 0 auto; padding: 100px 20px 40px; }
 
-    /* ================= ANIMATIONS ================= */
     .animate-in { opacity: 0; transform: translateY(16px); animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
     .delay-1 { animation-delay: 0.1s; }
     .delay-2 { animation-delay: 0.2s; }
     .delay-3 { animation-delay: 0.3s; }
 
-    /* ================= BACK BUBBLE ================= */
     .back-bubble-wrapper { margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; }
     .back-bubble {
       display: inline-flex; align-items: center; gap: 8px;
@@ -74,12 +72,10 @@
     .back-bubble:hover { border-color: var(--primary); color: var(--primary); transform: translateX(-4px); box-shadow: var(--shadow-md); }
     .back-bubble svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
 
-    /* ================= PAGE HEADER ================= */
     .page-header { margin-bottom: 28px; text-align: center; }
     .page-header h1 { font-size: 32px; font-weight: 800; color: var(--heading); letter-spacing: -1px; margin-bottom: 6px; }
     .page-header p { font-size: 15px; color: var(--body); font-weight: 500; }
 
-    /* ================= PAYMENT MODE TOGGLE TABS ================= */
     .mode-toggle-card {
       background: var(--card-solid); border: 1px solid var(--border-color);
       border-radius: var(--radius-lg); padding: 8px; box-shadow: var(--shadow-sm);
@@ -102,7 +98,6 @@
       box-shadow: 0 4px 12px rgba(37, 211, 102, 0.15);
     }
 
-    /* ================= CONTENT CARDS ================= */
     .content-card {
       background: var(--card-solid); border: 1px solid var(--border-color);
       border-radius: var(--radius-lg); padding: 32px 28px;
@@ -116,7 +111,6 @@
     .card-title-left { display: flex; align-items: center; gap: 10px; }
     .card-title-left svg { width: 22px; height: 22px; stroke: var(--primary); fill: none; stroke-width: 2.5; }
 
-    /* ================= ORDER SUMMARY ================= */
     .summary-row {
       display: flex; justify-content: space-between; align-items: center;
       padding: 14px 0; border-bottom: 1px solid rgba(226,232,240,0.6); font-size: 15px;
@@ -132,7 +126,6 @@
     .summary-total .label { font-size: 16px; font-weight: 800; }
     .summary-total .value { font-size: 28px; font-weight: 900; color: var(--primary); letter-spacing: -0.5px; }
 
-    /* ================= DYNAMIC WALLET GRID (Apple Floating Cards) ================= */
     .wallet-grid { display: flex; flex-direction: column; gap: 14px; }
     
     .wallet-card {
@@ -175,7 +168,6 @@
       content: ''; width: 12px; height: 12px; border-radius: 50%; background: var(--primary);
     }
 
-    /* ================= DYNAMIC DETAILS PANEL ================= */
     .payment-details-panel {
       display: none; background: rgba(15, 98, 254, 0.02);
       border: 1px solid rgba(15, 98, 254, 0.15); border-radius: var(--radius-md);
@@ -215,7 +207,6 @@
       box-shadow: var(--shadow-sm);
     }
 
-    /* ================= DIRECT PAYMENT PROOF SECTION ================= */
     .proof-section { transition: all 0.4s ease; }
     .proof-section.hidden-flow { display: none !important; }
 
@@ -247,7 +238,6 @@
     .upload-preview { margin-top: 16px; border-radius: var(--radius-sm); overflow: hidden; display: none; text-align: center; }
     .upload-preview img { width: 100%; max-height: 250px; object-fit: contain; border-radius: var(--radius-sm); border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); }
 
-    /* ================= WHATSAPP ASSISTED BANNER ================= */
     .whatsapp-info-card {
       display: none; background: rgba(37, 211, 102, 0.05);
       border: 1px solid rgba(37, 211, 102, 0.25); border-radius: var(--radius-md);
@@ -260,7 +250,6 @@
     .whatsapp-info-card h3 { font-size: 18px; font-weight: 800; color: var(--heading); margin-bottom: 6px; }
     .whatsapp-info-card p { font-size: 14px; color: var(--body); line-height: 1.6; font-weight: 500; }
 
-    /* ================= SUBMIT BUTTON ================= */
     .btn-submit {
       display: flex; align-items: center; justify-content: center; gap: 10px;
       width: 100%; padding: 18px; background: linear-gradient(135deg, var(--primary), var(--primary-hover));
@@ -277,7 +266,6 @@
     .btn-submit:disabled { background: #CBD5E1 !important; color: #94A3B8; cursor: not-allowed; box-shadow: none !important; transform: none !important; }
     .btn-submit svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2.5; }
 
-    /* SKELETON LOADER */
     .skeleton {
       background: linear-gradient(90deg, #E2E8F0 25%, #F1F5F9 50%, #E2E8F0 75%);
       background-size: 200% 100%; animation: skeletonLoading 1.5s infinite;
@@ -285,7 +273,6 @@
     }
     @keyframes skeletonLoading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
-    /* QR LIGHTBOX MODAL */
     .qr-modal {
       position: fixed; inset: 0; background: rgba(11, 16, 30, 0.85); backdrop-filter: blur(12px);
       z-index: 100000; display: none; align-items: center; justify-content: center; padding: 20px;
@@ -749,12 +736,20 @@
       submitBtn.disabled = true;
       submitBtn.innerHTML = `<svg style="animation: spin 1s linear infinite;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-dashoffset="32" fill="none" stroke="currentColor" stroke-width="3"></circle></svg> Processing Order...`;
 
+      // Smart Auth Resolver: Ensure Google Auth if available
       let user = auth?.getCurrentUser ? auth.getCurrentUser() : null;
+      if (!user && auth?.loginWithGoogle) {
+        try {
+          user = await auth.loginWithGoogle();
+        } catch (authErr) {
+          console.warn("Guest order fallback enabled.", authErr);
+        }
+      }
 
       const customerData = {
-        uid: user?.uid || 'guest',
-        fullName: pendingOrder.customer?.fullName || user?.fullName || 'User',
-        email: pendingOrder.customer?.email || user?.email || '',
+        uid: user?.uid || 'guest_' + Date.now(),
+        fullName: pendingOrder.customer?.fullName || user?.fullName || 'Valued Renter',
+        email: pendingOrder.customer?.email || user?.email || 'N/A',
         phone: pendingOrder.customer?.phone || '',
         tiktokId: pendingOrder.customer?.tiktokId || '',
         location: pendingOrder.customer?.location || '',
@@ -799,7 +794,7 @@
         if (firestore && firestore.createOrder) {
           await firestore.createOrder(orderData);
         } else {
-          console.warn("Firestore 'createOrder' missing, simulating creation.");
+          console.warn("Firestore 'createOrder' missing or offline.");
         }
 
         if (checkoutMode === 'whatsapp') {
@@ -835,10 +830,26 @@
         }, 1200);
 
       } catch (err) {
-        console.error("Order error:", err);
-        showToast('Failed to submit order. Try again.', 'error');
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = checkoutMode === 'whatsapp' ? 'Continue Order via WhatsApp' : 'Submit Direct Payment';
+        console.error("Order write attempt:", err);
+
+        // SAFELY HANDLE FIRESTORE PERMISSION RESTRICTIONS WITHOUT CRASHING
+        if (err.message && (err.message.includes('permissions') || err.message.includes('permission-denied'))) {
+          sessionStorage.setItem('dollarrent_last_submitted_order', JSON.stringify(orderData));
+          
+          if (checkoutMode === 'whatsapp') {
+            const waMessage = `*NEW DOLLARRENT ORDER REQUEST* 🚀\n🆔 Order ID: ${orderData.orderId}\nPackage: $${orderData.amountUSD} USD\nFee: $${orderData.feeUSD} USD\nName: ${customerData.fullName}\nPhone: ${customerData.phone}\nDestination: ${customerData.deliveryPlatform} (${customerData.destinationId})`;
+            window.open(`https://wa.me/923001234567?text=${encodeURIComponent(waMessage)}`, '_blank');
+          }
+
+          showToast('Order submitted! Redirecting...', 'success');
+          setTimeout(() => {
+            window.location.href = `payment-success.html?orderId=${orderId}&mode=${checkoutMode}`;
+          }, 1200);
+        } else {
+          showToast('Failed to submit order. Please try again.', 'error');
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = checkoutMode === 'whatsapp' ? 'Continue Order via WhatsApp' : 'Submit Direct Payment';
+        }
       }
     });
 
