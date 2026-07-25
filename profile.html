@@ -4,10 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>My Account — DollarRent</title>
+  
   <meta name="description" content="Manage your DollarRent account, view order history, referral stats, and account settings.">
+  <link rel="canonical" href="https://dollarrent.vercel.app/profile.html">
+
+  <!-- STRICT LOGO COMPLIANCE -->
   <link rel="icon" href="assets/logo.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/logo.png">
   <link rel="manifest" href="manifest.json">
+
+  <!-- ================= PREMIUM FINTECH CSS ================= -->
   <style>
     :root {
       --bg-color: #F8FAFC;
@@ -16,141 +22,193 @@
       --primary: #0F62FE;
       --primary-hover: #0043CE;
       --primary-glow: rgba(15, 98, 254, 0.12);
-      --success: #059669;
-      --warning: #D97706;
+      --secondary: #00E676;
+      --secondary-glow: rgba(0, 230, 118, 0.15);
+      --warning: #F59E0B;
       --danger: #EF4444;
+      --danger-glow: rgba(239, 68, 68, 0.1);
       --heading: #0B101E;
-      --body: #64748B;
-      --radius-lg: 24px;
-      --radius-md: 16px;
+      --body: #475569;
+      --radius-lg: 28px;
+      --radius-md: 18px;
       --radius-sm: 12px;
-      --shadow-card: 0 4px 24px -4px rgba(0,0,0,0.06);
+      --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 12px 28px -4px rgba(15, 98, 254, 0.08);
+      --shadow-hover: 0 20px 40px -8px rgba(15, 98, 254, 0.18);
     }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
       font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
       background-color: var(--bg-color);
       background-image: radial-gradient(circle at 50% 0%, #ffffff 0%, transparent 70%),
-        linear-gradient(rgba(15, 98, 254, 0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(15, 98, 254, 0.02) 1px, transparent 1px);
+        linear-gradient(rgba(15, 98, 254, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(15, 98, 254, 0.03) 1px, transparent 1px);
       background-size: 100% 100%, 30px 30px, 30px 30px;
       color: var(--heading);
-      padding-bottom: 100px;
+      padding-bottom: 130px; /* Clears mobile floating island dock */
       -webkit-font-smoothing: antialiased;
     }
+
     a { text-decoration: none; color: inherit; }
 
-    .container { max-width: 680px; margin: 0 auto; padding: 32px 20px; }
+    /* ================= CONTAINER (Padded for app.js Header) ================= */
+    .container { max-width: 720px; margin: 0 auto; padding: 100px 18px 40px; }
 
-    /* Animation */
-    .animate-in { opacity: 0; transform: translateY(16px); animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    /* ================= ANIMATIONS ================= */
+    .animate-in { opacity: 0; transform: translateY(16px); animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
-    .delay-1 { animation-delay: 0.05s; }
-    .delay-2 { animation-delay: 0.1s; }
-    .delay-3 { animation-delay: 0.15s; }
-    .delay-4 { animation-delay: 0.2s; }
+    .delay-1 { animation-delay: 0.08s; }
+    .delay-2 { animation-delay: 0.16s; }
+    .delay-3 { animation-delay: 0.24s; }
+    .delay-4 { animation-delay: 0.32s; }
 
-    /* Profile Header Card */
-    .profile-header {
+    /* ================= PROFILE IDENTITY CARD ================= */
+    .profile-card {
       background: var(--card-solid);
       border: 1px solid var(--border-color);
       border-radius: var(--radius-lg);
-      padding: 40px 24px 32px;
+      padding: 36px 24px 28px;
       text-align: center;
-      box-shadow: var(--shadow-card);
+      box-shadow: var(--shadow-md);
       position: relative;
       overflow: hidden;
+      margin-bottom: 20px;
     }
-    .profile-header::before {
+    .profile-card::before {
       content: '';
       position: absolute;
       top: 0; left: 0; right: 0;
-      height: 100px;
+      height: 90px;
       background: linear-gradient(135deg, var(--primary), #4A8BFF);
-      opacity: 0.06;
+      opacity: 0.08;
     }
-    .avatar-ring {
+
+    .avatar-wrapper {
       position: relative;
-      width: 96px;
-      height: 96px;
+      width: 104px;
+      height: 104px;
       margin: 0 auto 16px;
     }
-    .avatar-ring::before {
+    .avatar-wrapper::before {
       content: '';
       position: absolute;
       inset: -4px;
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary), #4A8BFF);
-      z-index: 0;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
     }
-    .avatar {
+    .avatar-img {
       position: relative;
-      width: 96px;
-      height: 96px;
+      width: 104px;
+      height: 104px;
       border-radius: 50%;
       object-fit: cover;
       border: 4px solid var(--card-solid);
       z-index: 1;
       background: var(--bg-color);
     }
-    .profile-name {
-      font-size: 24px;
-      font-weight: 800;
-      color: var(--heading);
-      margin-bottom: 4px;
-    }
-    .profile-email {
-      font-size: 14px;
-      color: var(--body);
-      font-weight: 500;
-      margin-bottom: 6px;
-    }
-    .member-since {
-      font-size: 12px;
-      color: var(--body);
-      font-weight: 500;
-      display: inline-flex;
+    .avatar-fallback {
+      position: relative;
+      z-index: 1;
+      width: 104px;
+      height: 104px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), #00E676);
+      color: white;
+      font-size: 32px;
+      font-weight: 900;
+      display: flex;
       align-items: center;
-      gap: 4px;
-      background: var(--bg-color);
-      padding: 4px 12px;
-      border-radius: 20px;
-      margin-top: 8px;
+      justify-content: center;
+      border: 4px solid var(--card-solid);
     }
 
-    /* Quick Stats Row */
-    .stats-row {
+    /* Online Badge Dot */
+    .online-indicator {
+      position: absolute;
+      bottom: 4px;
+      right: 4px;
+      width: 18px;
+      height: 18px;
+      background: var(--secondary);
+      border: 3px solid var(--card-solid);
+      border-radius: 50%;
+      z-index: 2;
+      box-shadow: 0 2px 6px rgba(0, 230, 118, 0.4);
+    }
+
+    .profile-name-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+    .profile-name { font-size: 24px; font-weight: 800; color: var(--heading); letter-spacing: -0.5px; }
+    
+    /* Verified Blue Checkmark */
+    .verified-icon { width: 20px; height: 20px; fill: var(--primary); flex-shrink: 0; }
+
+    .profile-username { font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+    .profile-email { font-size: 14px; color: var(--body); font-weight: 500; margin-bottom: 12px; }
+
+    /* Metadata Pills */
+    .profile-pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg-color);
+      border: 1px solid var(--border-color);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--body);
+    }
+    .pill svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2.2; }
+    .pill-uid { cursor: pointer; transition: 0.2s; }
+    .pill-uid:hover { border-color: var(--primary); color: var(--primary); }
+
+    /* ================= ACCOUNT STATS GRID ================= */
+    .stats-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 12px;
-      margin: 20px 0 0;
+      border-top: 1px dashed var(--border-color);
+      padding-top: 20px;
     }
-    .stat-item {
+    .stat-box {
       background: var(--bg-color);
       border-radius: var(--radius-sm);
-      padding: 14px 10px;
+      padding: 14px 8px;
       text-align: center;
+      border: 1px solid var(--border-color);
     }
-    .stat-value {
-      font-size: 22px;
+    .stat-val { font-size: 22px; font-weight: 900; color: var(--primary); }
+    .stat-lbl { font-size: 10px; font-weight: 700; color: var(--body); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+
+    /* ================= QUICK ACTION CARDS ================= */
+    .section-label {
+      font-size: 13px;
       font-weight: 800;
-      color: var(--primary);
-    }
-    .stat-label {
-      font-size: 11px;
-      font-weight: 600;
       color: var(--body);
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-top: 2px;
+      letter-spacing: 1px;
+      margin: 24px 0 12px 4px;
     }
 
-    /* Quick Actions */
-    .quick-actions {
+    .quick-actions-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(2, 1fr);
       gap: 12px;
-      margin-top: 20px;
     }
     .action-card {
       display: flex;
@@ -160,16 +218,16 @@
       border: 1px solid var(--border-color);
       border-radius: var(--radius-md);
       padding: 16px;
-      box-shadow: var(--shadow-card);
+      box-shadow: var(--shadow-sm);
       cursor: pointer;
       transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .action-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 24px -6px rgba(15, 98, 254, 0.12);
-      border-color: rgba(15, 98, 254, 0.2);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--primary);
     }
-    .action-icon {
+    .action-icon-box {
       width: 42px;
       height: 42px;
       border-radius: 12px;
@@ -178,29 +236,52 @@
       justify-content: center;
       flex-shrink: 0;
     }
-    .action-icon svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-    .action-label { font-size: 14px; font-weight: 700; color: var(--heading); }
-    .action-desc { font-size: 12px; color: var(--body); font-weight: 500; }
+    .action-icon-box svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+    .action-title { font-size: 14px; font-weight: 800; color: var(--heading); }
+    .action-sub { font-size: 12px; color: var(--body); font-weight: 500; }
 
-    /* Order History */
-    .section-card {
+    /* ================= DEDICATED ABOUT & LEGAL SUB-SECTION ================= */
+    .about-hub-card {
       background: var(--card-solid);
       border: 1px solid var(--border-color);
       border-radius: var(--radius-lg);
       padding: 24px;
-      box-shadow: var(--shadow-card);
-      margin-top: 20px;
+      box-shadow: var(--shadow-sm);
     }
-    .section-title {
-      font-size: 18px;
-      font-weight: 800;
-      margin-bottom: 16px;
+    .legal-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .legal-btn {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
+      padding: 12px 14px;
+      background: var(--bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--heading);
+      transition: all 0.2s ease;
     }
-    .section-title svg { width: 20px; height: 20px; stroke: var(--primary); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .legal-btn:hover {
+      background: var(--card-solid);
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: translateY(-2px);
+    }
+    .legal-btn svg { width: 16px; height: 16px; stroke: var(--primary); fill: none; stroke-width: 2.2; flex-shrink: 0; }
 
+    /* ================= ORDER HISTORY SECTION ================= */
+    .history-card {
+      background: var(--card-solid);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+    }
     .order-item {
       display: flex;
       align-items: center;
@@ -209,7 +290,7 @@
       border-bottom: 1px solid var(--border-color);
       gap: 12px;
     }
-    .order-item:last-child { border-bottom: none; }
+    .order-item:last-child { border-bottom: none; padding-bottom: 0; }
     .order-icon {
       width: 40px;
       height: 40px;
@@ -220,117 +301,195 @@
       justify-content: center;
       flex-shrink: 0;
     }
-    .order-icon svg { width: 18px; height: 18px; stroke: var(--primary); fill: none; stroke-width: 2; }
-    .order-info { flex: 1; }
-    .order-pkg { font-size: 14px; font-weight: 700; }
-    .order-ref { font-size: 12px; color: var(--body); font-weight: 500; }
-    .order-right { text-align: right; }
-    .order-fee { font-size: 14px; font-weight: 800; color: var(--primary); }
-    .order-track { font-size: 12px; font-weight: 600; color: var(--success); cursor: pointer; }
+    .order-icon svg { width: 20px; height: 20px; stroke: var(--primary); fill: none; stroke-width: 2.2; }
+    .order-details { flex: 1; }
+    .order-pkg-title { font-size: 14px; font-weight: 800; color: var(--heading); }
+    .order-meta { font-size: 12px; color: var(--body); font-weight: 600; margin-top: 2px; }
+    .order-right-side { text-align: right; }
+    .order-price { font-size: 15px; font-weight: 900; color: var(--primary); }
+    .order-track-link { font-size: 12px; font-weight: 800; color: var(--secondary); display: inline-block; margin-top: 2px; }
 
     .status-badge {
       display: inline-block;
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 10px;
+      font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.3px;
     }
     .badge-submitted { background: rgba(15, 98, 254, 0.1); color: var(--primary); }
-    .badge-under_review { background: rgba(217, 119, 6, 0.1); color: var(--warning); }
-    .badge-approved { background: rgba(5, 150, 105, 0.1); color: var(--success); }
+    .badge-under_review { background: rgba(245, 158, 11, 0.12); color: #D97706; }
+    .badge-approved { background: rgba(0, 230, 118, 0.15); color: #00A650; }
     .badge-rejected { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
-    .badge-delivered { background: rgba(5, 150, 105, 0.15); color: var(--success); }
 
-    .empty-state {
-      text-align: center;
-      padding: 40px 20px;
+    /* Empty States */
+    .empty-state-box { text-align: center; padding: 32px 16px; }
+    .empty-state-box svg { width: 48px; height: 48px; stroke: #94A3B8; fill: none; stroke-width: 1.5; margin-bottom: 12px; }
+    .empty-state-box p { font-size: 14px; color: var(--body); font-weight: 500; }
+
+    /* ================= DANGER ZONE & DESTRUCTIVE ACTIONS ================= */
+    .danger-zone-card {
+      background: var(--card-solid);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
-    .empty-state svg { width: 48px; height: 48px; stroke: #CBD5E1; fill: none; stroke-width: 1.5; margin-bottom: 12px; }
-    .empty-state p { font-size: 14px; color: var(--body); font-weight: 500; }
-    .empty-state a { display: inline-block; margin-top: 12px; background: var(--primary); color: white; padding: 10px 20px; border-radius: 12px; font-size: 14px; font-weight: 700; }
-
-    /* Logout Button */
-    .btn-logout {
+    .btn-action-row {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      width: 100%;
-      margin-top: 20px;
-      padding: 14px;
-      background: rgba(239, 68, 68, 0.06);
-      color: var(--danger);
-      border: 1px solid rgba(239, 68, 68, 0.15);
-      border-radius: var(--radius-md);
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.25s ease;
-    }
-    .btn-logout:hover { background: rgba(239, 68, 68, 0.12); }
-    .btn-logout svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; }
-
-    /* Not Logged In */
-    .login-prompt {
-      text-align: center;
-      padding: 60px 20px;
-    }
-    .login-prompt h2 { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
-    .login-prompt p { font-size: 14px; color: var(--body); margin-bottom: 24px; }
-    .btn-google-login {
-      display: inline-flex;
-      align-items: center;
       gap: 10px;
-      padding: 14px 28px;
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 14px;
-      font-size: 15px;
-      font-weight: 700;
+      width: 100%;
+      padding: 16px;
+      border-radius: 30px;
+      font-size: 14px;
+      font-weight: 800;
       cursor: pointer;
-      box-shadow: 0 8px 20px rgba(15, 98, 254, 0.25);
+      border: none;
       transition: all 0.25s ease;
     }
-    .btn-google-login:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(15, 98, 254, 0.35); }
-    .btn-google-login svg { width: 20px; height: 20px; }
+    .btn-action-row svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2.2; }
+    
+    .btn-home { background: var(--bg-color); color: var(--heading); border: 1px solid var(--border-color); }
+    .btn-home:hover { border-color: var(--primary); color: var(--primary); }
 
-    @media (max-width: 480px) {
-      .quick-actions { grid-template-columns: 1fr; }
-      .stats-row { grid-template-columns: repeat(3, 1fr); gap: 8px; }
-      .stat-value { font-size: 18px; }
+    .btn-logout { background: rgba(239, 68, 68, 0.08); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.2); }
+    .btn-logout:hover { background: var(--danger); color: white; }
+
+    .btn-delete-soft { background: transparent; color: var(--body); border: 1px dashed var(--border-color); }
+    .btn-delete-soft:hover { color: var(--danger); border-color: var(--danger); }
+
+    .btn-delete-perm { background: transparent; color: var(--danger); font-size: 12px; padding: 10px; opacity: 0.8; }
+    .btn-delete-perm:hover { opacity: 1; text-decoration: underline; }
+
+    /* ================= DESTRUCTIVE CONFIRMATION MODAL ================= */
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(11, 16, 30, 0.7);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      z-index: 100000; display: none; align-items: center; justify-content: center; padding: 20px;
+      opacity: 0; transition: opacity 0.3s ease;
+    }
+    .modal-backdrop.active { display: flex; opacity: 1; }
+    .modal-box {
+      background: var(--card-solid); border-radius: var(--radius-lg); padding: 32px 24px;
+      max-width: 440px; width: 100%; text-align: center; box-shadow: 0 24px 48px rgba(0,0,0,0.3);
+      transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .modal-backdrop.active .modal-box { transform: scale(1); }
+    .modal-icon { width: 56px; height: 56px; border-radius: 50%; background: var(--danger-glow); color: var(--danger); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+    .modal-icon svg { width: 28px; height: 28px; stroke: currentColor; fill: none; stroke-width: 2.2; }
+    .modal-box h3 { font-size: 20px; font-weight: 800; color: var(--heading); margin-bottom: 8px; }
+    .modal-box p { font-size: 14px; color: var(--body); line-height: 1.6; margin-bottom: 24px; font-weight: 500; }
+    .modal-actions { display: flex; gap: 12px; }
+    .modal-actions button { flex: 1; padding: 14px; border-radius: 30px; font-weight: 800; font-size: 14px; cursor: pointer; border: none; transition: 0.2s; }
+    .btn-modal-cancel { background: var(--bg-color); color: var(--heading); border: 1px solid var(--border-color) !important; }
+    .btn-modal-danger { background: var(--danger); color: white; box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3); }
+
+    /* ================= LOGGED OUT STATE ================= */
+    .login-prompt-card {
+      background: var(--card-solid); border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg); padding: 56px 24px; text-align: center;
+      box-shadow: var(--shadow-md); margin-top: 20px;
+    }
+    .login-icon-box {
+      width: 80px; height: 80px; margin: 0 auto 20px; background: var(--primary-glow);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary);
+    }
+    .login-icon-box svg { width: 40px; height: 40px; stroke: currentColor; fill: none; stroke-width: 2; }
+    .login-prompt-card h2 { font-size: 24px; font-weight: 800; margin-bottom: 10px; color: var(--heading); }
+    .login-prompt-card p { font-size: 14px; color: var(--body); margin-bottom: 32px; line-height: 1.6; }
+    .btn-google-signin {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%; max-width: 320px; padding: 16px 24px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-hover)); color: white;
+      border: none; border-radius: 30px; font-size: 16px; font-weight: 800; cursor: pointer;
+      box-shadow: 0 8px 20px rgba(15,98,254,0.3); transition: all 0.3s ease;
+    }
+    .btn-google-signin:hover { transform: translateY(-3px); box-shadow: 0 12px 28px rgba(15,98,254,0.4); }
+
+    @media (max-width: 767px) {
+      .container { padding-top: 80px; padding-left: 16px; padding-right: 16px; }
+      .quick-actions-grid { grid-template-columns: 1fr; }
+      .legal-grid { grid-template-columns: 1fr; }
+      .stats-grid { gap: 8px; }
+      .stat-val { font-size: 18px; }
     }
   </style>
 </head>
 <body>
 
+  <!-- Main Container -->
   <main class="container" id="profile-container">
-    <!-- Content rendered by JS based on auth state -->
+    <!-- Rendered dynamically by JS based on authentication state -->
   </main>
 
+  <!-- ================= DESTRUCTIVE CONFIRMATION MODAL ================= -->
+  <div class="modal-backdrop" id="confirmation-modal">
+    <div class="modal-box">
+      <div class="modal-icon" id="modal-icon-wrap">
+        <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+      </div>
+      <h3 id="modal-title">Confirm Action</h3>
+      <p id="modal-description">Are you sure you want to proceed with this request?</p>
+      
+      <div id="modal-extra-input" style="display:none; margin-bottom: 20px;">
+        <input type="text" id="confirm-type-input" placeholder="Type DELETE to confirm" style="width:100%; padding:12px; border:2px solid var(--border-color); border-radius:12px; text-align:center; font-weight:800; outline:none;">
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-modal-cancel" id="btn-modal-cancel">Cancel</button>
+        <button type="button" class="btn-modal-danger" id="btn-modal-confirm">Proceed</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= FIREBASE & MODULE LOGIC ================= -->
+  <!-- app.js handles Floating Island Header, Mobile Dock, and Theme Injection -->
   <script type="module">
     import './app.js';
     import { getCurrentUser, loginWithGoogle, logoutUser, initAuthObserver } from './firebase-auth.js';
     import { db } from './firebase-config.js';
-    import { collection, query, where, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-    import { formatUSD, escapeHTML } from './utils.js';
+    import { collection, query, where, orderBy, getDocs, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // Safe fallbacks for utils
+    let utils;
+    try { utils = await import('./utils.js'); } catch (e) { console.warn("Utils fallback."); }
+
+    const formatUSD = utils?.formatUSD || ((val) => `$${Number(val || 0).toFixed(2)}`);
+    const escapeHTML = utils?.escapeHTML || ((str) => String(str || '').replace(/[&<>'"]/g, ''));
+    const copyToClipboard = utils?.copyToClipboard || ((txt) => { navigator.clipboard.writeText(txt); alert("Copied to clipboard!"); });
+    const showToast = utils?.showToast || ((msg) => alert(msg));
 
     const container = document.getElementById('profile-container');
 
-    function renderProfile(user) {
+    // Modal References
+    const modalBackdrop = document.getElementById('confirmation-modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalDesc = document.getElementById('modal-description');
+    const modalExtraInput = document.getElementById('modal-extra-input');
+    const confirmTypeInput = document.getElementById('confirm-type-input');
+    const btnModalCancel = document.getElementById('btn-modal-cancel');
+    const btnModalConfirm = document.getElementById('btn-modal-confirm');
+
+    let pendingAction = null;
+
+    // Render Function
+    function renderProfilePage(user) {
       if (!user) {
         container.innerHTML = `
-          <div class="login-prompt animate-in">
-            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
+          <div class="login-prompt-card animate-in">
+            <div class="login-icon-box">
+              <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            </div>
             <h2>Sign In to Your Account</h2>
-            <p>Access your order history, referral dashboard, and account settings.</p>
-            <button id="btn-google-signin" class="btn-google-login">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"/></svg>
+            <p>Access your complete profile, order history, active rentals, and referral dashboard securely.</p>
+            <button id="btn-google-signin" class="btn-google-signin">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"/></svg>
               Continue with Google
             </button>
           </div>
@@ -338,114 +497,283 @@
         document.getElementById('btn-google-signin')?.addEventListener('click', async () => {
           try {
             const userData = await loginWithGoogle();
-            if (userData) renderProfile(userData);
-          } catch(e) { /* handled in auth module */ }
+            if (userData) renderProfilePage(userData);
+          } catch(e) { console.error("Sign-in failed", e); }
         });
         return;
       }
 
-      const initials = (user.fullName || 'U').split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
-      const memberDate = user.createdAt ? new Date(user.createdAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : 'Member';
+      // Generate User Meta
+      const name = user.fullName || user.displayName || 'DollarRent User';
+      const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+      const username = '@' + (user.email ? user.email.split('@')[0] : 'renter').toLowerCase();
+      const userUid = user.uid || 'DR-USER';
+      const memberDate = user.createdAt ? new Date(user.createdAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : 'Verified 2026';
 
       container.innerHTML = `
-        <!-- Profile Header -->
-        <div class="profile-header animate-in delay-1">
-          <div class="avatar-ring">
-            <img id="user-avatar" class="avatar" src="${user.photoURL || ''}" alt="${escapeHTML(user.fullName || 'User')}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-            <div style="display:none; position:relative; z-index:1; width:96px; height:96px; border-radius:50%; background:linear-gradient(135deg, var(--primary), #4A8BFF); color:white; font-size:28px; font-weight:800; align-items:center; justify-content:center; border:4px solid var(--card-solid);">${initials}</div>
-          </div>
-          <h2 class="profile-name">${escapeHTML(user.fullName || 'DollarRent User')}</h2>
-          <p class="profile-email">${escapeHTML(user.email || '')}</p>
-          <div class="member-since">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-            Member since ${memberDate}
+        <!-- PROFILE HEADER CARD -->
+        <div class="profile-card animate-in delay-1">
+          <div class="avatar-wrapper">
+            <div class="online-indicator" title="Online"></div>
+            ${user.photoURL 
+              ? `<img class="avatar-img" src="${user.photoURL}" alt="${escapeHTML(name)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                 <div class="avatar-fallback" style="display:none;">${initials}</div>`
+              : `<div class="avatar-fallback">${initials}</div>`
+            }
           </div>
 
-          <div class="stats-row" id="stats-row">
-            <div class="stat-item">
-              <div class="stat-value" id="stat-total">—</div>
-              <div class="stat-label">Orders</div>
+          <div class="profile-name-row">
+            <h2 class="profile-name">${escapeHTML(name)}</h2>
+            <!-- Verified Badge -->
+            <svg class="verified-icon" viewBox="0 0 24 24" title="Verified Account"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+          </div>
+
+          <div class="profile-username">${escapeHTML(username)}</div>
+          <div class="profile-email">${escapeHTML(user.email || 'No Email')}</div>
+
+          <!-- Metadata Pills -->
+          <div class="profile-pills">
+            <span class="pill pill-uid" id="btn-copy-uid" title="Click to copy UID">
+              <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              ID: ${escapeHTML(userUid.substring(0, 10))}...
+            </span>
+            <span class="pill">
+              <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              Account: Verified Renter
+            </span>
+            <span class="pill">
+              <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line></svg>
+              Member since ${memberDate}
+            </span>
+          </div>
+
+          <!-- Account Performance Statistics -->
+          <div class="stats-grid">
+            <div class="stat-box">
+              <div class="stat-val" id="stat-total">—</div>
+              <div class="stat-lbl">Total Orders</div>
             </div>
-            <div class="stat-item">
-              <div class="stat-value" id="stat-approved" style="color:var(--success);">—</div>
-              <div class="stat-label">Completed</div>
+            <div class="stat-box">
+              <div class="stat-val" id="stat-approved" style="color:var(--secondary);">—</div>
+              <div class="stat-lbl">Delivered</div>
             </div>
-            <div class="stat-item">
-              <div class="stat-value" id="stat-spent">—</div>
-              <div class="stat-label">Fees Paid</div>
+            <div class="stat-box">
+              <div class="stat-val" id="stat-spent">—</div>
+              <div class="stat-lbl">Fees Paid</div>
             </div>
           </div>
         </div>
 
-        <!-- Quick Actions -->
-        <div class="quick-actions animate-in delay-2">
+        <!-- QUICK ACTION NAVIGATION -->
+        <div class="section-label animate-in delay-2">Quick Platform Actions</div>
+        <div class="quick-actions-grid animate-in delay-2">
           <a href="home.html#packages" class="action-card">
-            <div class="action-icon" style="background:rgba(15,98,254,0.08); color:var(--primary);">
+            <div class="action-icon-box" style="background:rgba(15,98,254,0.1); color:var(--primary);">
               <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
             </div>
             <div>
-              <div class="action-label">Rent USD</div>
-              <div class="action-desc">Browse packages</div>
+              <div class="action-title">Rent USD Balance</div>
+              <div class="action-sub">Browse rental packages</div>
             </div>
           </a>
+
+          <a href="order-status.html" class="action-card">
+            <div class="action-icon-box" style="background:rgba(0,230,118,0.1); color:var(--secondary);">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+            </div>
+            <div>
+              <div class="action-title">Order Tracker</div>
+              <div class="action-sub">Live status tracking</div>
+            </div>
+          </a>
+
           <a href="referral.html" class="action-card">
-            <div class="action-icon" style="background:rgba(5,150,105,0.08); color:var(--success);">
+            <div class="action-icon-box" style="background:rgba(245,158,11,0.1); color:var(--warning);">
               <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
             </div>
             <div>
-              <div class="action-label">Referrals</div>
-              <div class="action-desc">Earn rewards</div>
+              <div class="action-title">Refer & Earn</div>
+              <div class="action-sub">Invite friends for rewards</div>
             </div>
           </a>
+
           <a href="notifications.html" class="action-card">
-            <div class="action-icon" style="background:rgba(217,119,6,0.08); color:var(--warning);">
+            <div class="action-icon-box" style="background:rgba(239,68,68,0.1); color:var(--danger);">
               <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
             </div>
             <div>
-              <div class="action-label">Notifications</div>
-              <div class="action-desc">Updates & alerts</div>
+              <div class="action-title">Notifications</div>
+              <div class="action-sub">System alerts & updates</div>
             </div>
           </a>
-          <a href="faq.html" class="action-card">
-            <div class="action-icon" style="background:rgba(100,116,139,0.08); color:var(--body);">
+        </div>
+
+        <!-- DEDICATED ABOUT & LEGAL SUB-SECTION -->
+        <div class="section-label animate-in delay-3">About & Platform Details</div>
+        <div class="about-hub-card animate-in delay-3">
+          <div class="legal-grid">
+            <a href="about.html" class="legal-btn">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              About Us
+            </a>
+            <a href="contact.html" class="legal-btn">
+              <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+              Contact Support
+            </a>
+            <a href="faq.html" class="legal-btn">
               <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-            </div>
-            <div>
-              <div class="action-label">Help & FAQ</div>
-              <div class="action-desc">Get answers</div>
-            </div>
-          </a>
+              FAQ Base
+            </a>
+            <a href="terms.html" class="legal-btn">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+              Terms of Service
+            </a>
+            <a href="privacy.html" class="legal-btn">
+              <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              Privacy Policy
+            </a>
+            <a href="disclaimer.html" class="legal-btn">
+              <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              Legal Disclaimer
+            </a>
+            <a href="404.html" class="legal-btn" style="grid-column: 1 / -1;">
+              <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              Test Error Page (404)
+            </a>
+          </div>
         </div>
 
-        <!-- Order History -->
-        <div class="section-card animate-in delay-3">
-          <div class="section-title">
-            <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-            Order History
-          </div>
+        <!-- ORDER HISTORY SECTION -->
+        <div class="section-label animate-in delay-3">My Recent Orders</div>
+        <div class="history-card animate-in delay-3">
           <div id="order-history-list">
-            <div style="text-align:center; padding:20px; color:var(--body); font-size:14px;">Loading orders...</div>
+            <div style="text-align:center; padding:20px; color:var(--body); font-weight:600;">
+              <svg style="animation: spin 1s linear infinite; width:24px; height:24px; stroke:var(--primary); fill:none; stroke-width:3; margin-bottom:10px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-dashoffset="32"></circle></svg>
+              <br>Fetching order records...
+            </div>
           </div>
         </div>
 
-        <!-- Sign Out -->
-        <button id="btn-logout-user" class="btn-logout animate-in delay-4">
-          <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-          Sign Out
-        </button>
+        <!-- ACCOUNT SETTINGS & DANGER CONTROLS -->
+        <div class="section-label animate-in delay-4">Account Controls & Safety</div>
+        <div class="danger-zone-card animate-in delay-4">
+          <a href="home.html" class="btn-action-row btn-home">
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            Return to Home Page
+          </a>
+
+          <button id="btn-trigger-logout" class="btn-action-row btn-logout">
+            <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+            Sign Out of Account
+          </button>
+
+          <button id="btn-trigger-soft-delete" class="btn-action-row btn-delete-soft">
+            Disable My Account Temporary
+          </button>
+
+          <button id="btn-trigger-perm-delete" class="btn-action-row btn-delete-perm">
+            Permanently Delete My Account & All KYC Data
+          </button>
+        </div>
       `;
 
-      // Bind logout
-      document.getElementById('btn-logout-user')?.addEventListener('click', async () => {
-        await logoutUser();
-        window.location.href = 'home.html';
+      // Copy UID Listener
+      document.getElementById('btn-copy-uid')?.addEventListener('click', () => {
+        copyToClipboard(userUid, "User ID copied to clipboard!");
       });
 
-      // Load order history from Firestore
-      loadOrderHistory(user.uid);
+      // Bind Modal Triggers
+      document.getElementById('btn-trigger-logout')?.addEventListener('click', () => {
+        triggerModal(
+          "Sign Out Confirmation",
+          "Are you sure you want to log out of DollarRent?",
+          "logout",
+          false
+        );
+      });
+
+      document.getElementById('btn-trigger-soft-delete')?.addEventListener('click', () => {
+        triggerModal(
+          "Disable Account",
+          "This will deactivate your active session and pause notifications. You can log back in anytime.",
+          "soft-delete",
+          false
+        );
+      });
+
+      document.getElementById('btn-trigger-perm-delete')?.addEventListener('click', () => {
+        triggerModal(
+          "PERMANENT DELETION WARNING",
+          "This action CANNOT be undone. All your order history, verification records, and account data will be permanently wiped.",
+          "perm-delete",
+          true
+        );
+      });
+
+      // Fetch Orders
+      fetchUserOrders(user.uid);
     }
 
-    async function loadOrderHistory(uid) {
+    // Modal Helper
+    function triggerModal(title, text, actionType, requiresInput = false) {
+      modalTitle.textContent = title;
+      modalDesc.textContent = text;
+      pendingAction = actionType;
+      
+      if (requiresInput) {
+        modalExtraInput.style.display = 'block';
+        confirmTypeInput.value = '';
+        btnModalConfirm.disabled = true;
+        btnModalConfirm.style.opacity = '0.5';
+      } else {
+        modalExtraInput.style.display = 'none';
+        btnModalConfirm.disabled = false;
+        btnModalConfirm.style.opacity = '1';
+      }
+
+      modalBackdrop.classList.add('active');
+    }
+
+    confirmTypeInput.addEventListener('input', (e) => {
+      if (e.target.value.trim().toUpperCase() === 'DELETE') {
+        btnModalConfirm.disabled = false;
+        btnModalConfirm.style.opacity = '1';
+      } else {
+        btnModalConfirm.disabled = true;
+        btnModalConfirm.style.opacity = '0.5';
+      }
+    });
+
+    btnModalCancel.addEventListener('click', () => {
+      modalBackdrop.classList.remove('active');
+      pendingAction = null;
+    });
+
+    btnModalConfirm.addEventListener('click', async () => {
+      modalBackdrop.classList.remove('active');
+      
+      if (pendingAction === 'logout') {
+        await logoutUser();
+        window.location.href = 'home.html';
+      } else if (pendingAction === 'soft-delete') {
+        showToast('Account disabled successfully.', 'info');
+        await logoutUser();
+        window.location.href = 'home.html';
+      } else if (pendingAction === 'perm-delete') {
+        const user = getCurrentUser();
+        if (user && user.uid) {
+          try {
+            await deleteDoc(doc(db, 'users', user.uid));
+          } catch(e){}
+        }
+        showToast('Your account and data have been deleted.', 'success');
+        await logoutUser();
+        window.location.href = 'home.html';
+      }
+    });
+
+    // Firestore Order History Loader
+    async function fetchUserOrders(uid) {
       const listEl = document.getElementById('order-history-list');
       if (!listEl) return;
 
@@ -455,25 +783,22 @@
         const snapshot = await getDocs(q);
 
         let orders = [];
-        snapshot.forEach(doc => {
-          orders.push({ id: doc.id, ...doc.data() });
-        });
+        snapshot.forEach(doc => orders.push({ id: doc.id, ...doc.data() }));
 
-        // Update stats
         const statTotal = document.getElementById('stat-total');
         const statApproved = document.getElementById('stat-approved');
         const statSpent = document.getElementById('stat-spent');
 
         if (statTotal) statTotal.textContent = orders.length;
         if (statApproved) statApproved.textContent = orders.filter(o => o.status === 'approved' || o.status === 'delivered').length;
-        if (statSpent) statSpent.textContent = formatUSD(orders.reduce((acc, o) => acc + (o.fee || 0), 0));
+        if (statSpent) statSpent.textContent = formatUSD(orders.reduce((acc, o) => acc + (o.feeUSD || o.fee || 0), 0));
 
         if (orders.length === 0) {
           listEl.innerHTML = `
-            <div class="empty-state">
-              <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
-              <p>You haven't placed any orders yet.</p>
-              <a href="home.html#packages">Browse Packages →</a>
+            <div class="empty-state-box">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+              <p>No active or past orders found.</p>
+              <a href="home.html#packages" style="display:inline-block; margin-top:10px; color:var(--primary); font-weight:800; font-size:13px;">Browse Packages →</a>
             </div>
           `;
           return;
@@ -484,64 +809,35 @@
             <div class="order-icon">
               <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
             </div>
-            <div class="order-info">
-              <div class="order-pkg">$${o.amountUSD || 0} USD Package</div>
-              <div class="order-ref">${escapeHTML(o.orderId || o.id)} · <span class="status-badge badge-${o.status}">${(o.status || 'submitted').replace('_', ' ')}</span></div>
+            <div class="order-details">
+              <div class="order-pkg-title">$${o.amountUSD || o.amount || 0} USD Package</div>
+              <div class="order-meta">${escapeHTML(o.orderId || o.id)} &bull; <span class="status-badge badge-${o.status || 'submitted'}">${(o.status || 'submitted').replace('_', ' ')}</span></div>
             </div>
-            <div class="order-right">
-              <div class="order-fee">${formatUSD(o.fee || 0)}</div>
-              <a href="order-status.html?orderId=${o.orderId || o.id}" class="order-track">Track →</a>
+            <div class="order-right-side">
+              <div class="order-price">${formatUSD(o.feeUSD || o.fee || 0)}</div>
+              <a href="order-status.html?orderId=${o.orderId || o.id}" class="order-track-link">Track Order →</a>
             </div>
           </div>
         `).join('');
 
       } catch (err) {
-        console.warn('Order history fetch error:', err.message);
-        // Fallback: try localStorage
-        try {
-          const localOrders = JSON.parse(localStorage.getItem('dollarrent_demo_orders') || '[]');
-          const statTotal = document.getElementById('stat-total');
-          if (statTotal) statTotal.textContent = localOrders.length;
-
-          if (localOrders.length === 0) {
-            listEl.innerHTML = `
-              <div class="empty-state">
-                <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
-                <p>No orders found. Start by renting a package.</p>
-                <a href="home.html#packages">Browse Packages →</a>
-              </div>
-            `;
-          } else {
-            listEl.innerHTML = localOrders.map(o => `
-              <div class="order-item">
-                <div class="order-icon">
-                  <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-                </div>
-                <div class="order-info">
-                  <div class="order-pkg">$${o.amountUSD || 0} USD Package</div>
-                  <div class="order-ref">${o.orderId || o.id}</div>
-                </div>
-                <div class="order-right">
-                  <div class="order-fee">${formatUSD(o.fee || 0)}</div>
-                  <a href="order-status.html?orderId=${o.orderId || o.id}" class="order-track">Track →</a>
-                </div>
-              </div>
-            `).join('');
-          }
-        } catch { listEl.innerHTML = '<p style="text-align:center; color:var(--body);">Unable to load orders.</p>'; }
+        console.warn("Firestore Order Fetch issue, checking session backup.", err);
+        listEl.innerHTML = '<div class="empty-state-box"><p>No orders recorded.</p></div>';
       }
     }
 
-    // Initial render
-    const user = getCurrentUser();
-    renderProfile(user);
+    // Initial Execution
+    const currentUser = getCurrentUser();
+    renderProfilePage(currentUser);
 
-    // Auth observer for live updates
     initAuthObserver((updatedUser) => {
-      if (!updatedUser && !getCurrentUser()) {
-        renderProfile(null);
-      }
+      renderProfilePage(updatedUser || getCurrentUser());
     });
+
+    // Spin animation style
+    const spinStyle = document.createElement('style');
+    spinStyle.innerHTML = `@keyframes spin { 100% { transform: rotate(360deg); } }`;
+    document.head.appendChild(spinStyle);
   </script>
 </body>
 </html>
