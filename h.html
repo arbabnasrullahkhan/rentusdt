@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Transaction Receipt Sandbox</title>
+    <title>Withdrawal Details - Transaction Receipt</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -18,380 +18,225 @@
                         binanceGold: '#C99400',
                         binanceGoldHover: '#9E7400',
                         binanceBg: '#F6F6F6',
-                        controlDarkBg: '#111827',
                     }
                 }
             }
         }
     </script>
-    <!-- Google Fonts: Inter & Roboto -->
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- html2canvas and jsPDF for visual output exports -->
+    <!-- html2canvas and jsPDF for output exports -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <style>
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #0F1217;
-            transition: background-color 0.3s ease;
+            background-color: #0B0E11;
         }
-        /* Mobile responsive card container matches native dimensions */
+        /* Mobile-first card container matches original pixel ratios */
         .binance-card {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: #FFFFFF;
             max-width: 415px;
             width: 100%;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.3);
             border-radius: 20px;
         }
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 36px;
-            height: 20px;
-        }
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #4B5563;
-            transition: .3s;
-            border-radius: 20px;
-        }
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 14px;
-            width: 14px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: .3s;
-            border-radius: 50%;
-        }
-        input:checked + .slider {
-            background-color: #F0B90B;
-        }
-        input:checked + .slider:before {
-            transform: translateX(16px);
-        }
-        /* Semi-transparent protective safety watermark overlay */
-        .demo-watermark {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(-30deg);
-            font-size: 2.8rem;
-            font-weight: 900;
-            color: rgba(220, 38, 38, 0.05);
-            pointer-events: none;
-            white-space: nowrap;
-            user-select: none;
-            z-index: 5;
-            letter-spacing: 0.15rem;
-            border: 5px solid rgba(220, 38, 38, 0.05);
-            padding: 4px 10px;
-            border-radius: 8px;
-            text-align: center;
-        }
-        /* Custom smooth scrollbar */
-        ::-webkit-scrollbar {
-            width: 5px;
-        }
-        ::-webkit-scrollbar-track {
-            background: rgba(0,0,0,0.1);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.1);
-            border-radius: 10px;
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            #receipt-canvas {
+                border: none !important;
+                box-shadow: none !important;
+                background: white !important;
+                color: black !important;
+                width: 100% !important;
+                max-width: 100% !important;
+            }
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between overflow-x-hidden">
+<body class="min-h-screen flex flex-col justify-between overflow-x-hidden text-gray-200">
 
-    <!-- Shell Layout -->
-    <div class="flex-grow flex flex-col lg:flex-row">
+    <!-- Top Navigation Workspace -->
+    <div class="flex-grow flex flex-col items-center p-4 sm:p-6">
         
-        <!-- Collapsible Controller Panel (Sleek Sidebar) -->
-        <aside id="controlsPanel" class="no-print w-full lg:w-[380px] shrink-0 bg-[#161A22] text-gray-200 border-r border-gray-800 flex flex-col z-20 transition-all duration-300">
-            <div class="px-5 py-4 border-b border-gray-800 flex items-center justify-between">
-                <span class="font-bold text-sm tracking-wide text-white flex items-center gap-2">
-                    <i class="fa-solid fa-receipt text-[#F0B90B]"></i> Configuration Suite
-                </span>
-                <!-- Mobile Hide Sidebar trigger -->
-                <button onclick="toggleMobileControls()" class="lg:hidden text-xs bg-gray-800 text-gray-300 px-3 py-1.5 rounded-lg border border-gray-700">
-                    <i class="fa-solid fa-eye-slash text-xs mr-1"></i> Hide Panel
-                </button>
-            </div>
-
-            <!-- Scrollable Settings list -->
-            <div class="p-5 space-y-4 overflow-y-auto max-h-[calc(100vh-140px)]">
-                
-                <!-- Centerpiece Core Trigger [1] -->
-                <div>
-                    <button id="btnGenerate" class="w-full py-3.5 bg-gradient-to-r from-yellow-500 to-[#F0B90B] hover:from-yellow-400 hover:to-[#E0A808] text-black font-extrabold rounded-xl text-xs transition-all tracking-wider uppercase shadow-lg shadow-yellow-500/10 flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i> Generate Demo Receipt
-                    </button>
-                </div>
-
-                <!-- Protective Watermark Toggle Switch [1] -->
-                <div class="bg-gray-800/40 p-3 rounded-xl border border-gray-700/40 flex items-center justify-between">
-                    <div>
-                        <span class="text-xs font-semibold block text-white">Safety Watermark Overlay</span>
-                        <span class="text-[9px] text-gray-400 block">Required disclaimer layers for demo validation</span>
-                    </div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="watermarkToggle" checked>
-                        <span class="slider"></span>
-                    </label>
-                </div>
-
-                <!-- Custom manual overrides of specific details [1] -->
-                <div class="pt-2 border-t border-gray-800 space-y-3">
-                    <span class="text-[10px] uppercase font-bold text-[#F0B90B] tracking-wider block">Manual Overrides</span>
-                    
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-[9px] uppercase tracking-wider text-gray-400 font-bold mb-1">Rental Cost ($)</label>
-                            <input type="number" id="inputAmount" value="250" class="w-full bg-gray-950 text-xs border border-gray-800 text-white rounded-lg px-2.5 py-2 focus:outline-none focus:border-yellow-500 font-mono">
-                        </div>
-                        <div>
-                            <label class="block text-[9px] uppercase tracking-wider text-gray-400 font-bold mb-1">Advance Fee ($)</label>
-                            <input type="number" id="inputFee" value="55" class="w-full bg-gray-950 text-xs border border-gray-800 text-white rounded-lg px-2.5 py-2 focus:outline-none focus:border-yellow-500 font-mono">
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-[9px] uppercase tracking-wider text-gray-400 font-bold mb-1">Duration Block</label>
-                            <input type="text" id="inputDuration" value="6 Hours" class="w-full bg-gray-950 text-xs border border-gray-800 text-white rounded-lg px-2.5 py-2 focus:outline-none focus:border-yellow-500">
-                        </div>
-                        <div>
-                            <label class="block text-[9px] uppercase tracking-wider text-gray-400 font-bold mb-1">Network Standard</label>
-                            <input type="text" id="inputNetwork" value="TRX" class="w-full bg-gray-950 text-xs border border-gray-800 text-white rounded-lg px-2.5 py-2 focus:outline-none focus:border-yellow-500">
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-[9px] uppercase tracking-wider text-gray-400 font-bold mb-1">Destination Crypto Address</label>
-                        <textarea id="inputAddress" rows="1" class="w-full bg-gray-950 text-xs border border-gray-800 text-white rounded-lg px-2.5 py-2 focus:outline-none focus:border-yellow-500 font-mono resize-none">TXGPsdSfx3j7WrJn6yTaeSYWSibdmhNRcV</textarea>
-                    </div>
-
-                    <div>
-                        <label class="block text-[9px] uppercase tracking-wider text-gray-400 font-bold mb-1">Transaction ID (TXID)</label>
-                        <textarea id="inputTxId" rows="1" class="w-full bg-gray-950 text-xs border border-gray-800 text-white rounded-lg px-2.5 py-2 focus:outline-none focus:border-yellow-500 font-mono resize-none">Internal transfer 134469932233</textarea>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-[9px] uppercase tracking-wider text-gray-400 font-bold mb-1">Network Gas Fee</label>
-                            <input type="text" id="inputNetworkFee" value="0 USDT" class="w-full bg-gray-950 text-xs border border-gray-800 text-white rounded-lg px-2.5 py-2 focus:outline-none focus:border-yellow-500">
-                        </div>
-                        <div>
-                            <label class="block text-[9px] uppercase tracking-wider text-gray-400 font-bold mb-1">Withdrawal Source</label>
-                            <input type="text" id="inputWallet" value="Spot Wallet" class="w-full bg-gray-950 text-xs border border-gray-800 text-white rounded-lg px-2.5 py-2 focus:outline-none focus:border-yellow-500">
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-[9px] uppercase tracking-wider text-gray-400 font-bold mb-1">Receipt Number</label>
-                        <input type="text" id="inputReceiptNum" value="REC-283409" class="w-full bg-gray-950 text-xs border border-gray-800 text-white rounded-lg px-2.5 py-2 focus:outline-none focus:border-yellow-500 font-mono">
-                    </div>
-
-                    <div>
-                        <label class="block text-[9px] uppercase tracking-wider text-gray-400 font-bold mb-1">Reference Number</label>
-                        <input type="text" id="inputRefNum" value="REF-98302482" class="w-full bg-gray-950 text-xs border border-gray-800 text-white rounded-lg px-2.5 py-2 focus:outline-none focus:border-yellow-500 font-mono">
-                    </div>
-
-                    <div>
-                        <label class="block text-[9px] uppercase tracking-wider text-gray-400 font-bold mb-1">Memo Note</label>
-                        <input type="text" id="inputNote" value="Rental transaction verification test block." class="w-full bg-gray-950 text-xs border border-gray-800 text-white rounded-lg px-2.5 py-2 focus:outline-none focus:border-yellow-500">
-                    </div>
-                </div>
-
-                <!-- Export Document Controls [1] -->
-                <div class="pt-3 border-t border-gray-800 grid grid-cols-2 gap-2 text-[10px] font-bold text-gray-300">
-                    <button onclick="downloadPNG()" class="py-2.5 px-3 bg-gray-800 hover:bg-gray-750 border border-gray-750 rounded-lg flex items-center justify-center gap-1.5 transition-colors">
-                        <i class="fa-solid fa-file-image text-blue-400"></i> Get PNG Image
-                    </button>
-                    <button onclick="downloadPDF()" class="py-2.5 px-3 bg-gray-800 hover:bg-gray-750 border border-gray-750 rounded-lg flex items-center justify-center gap-1.5 transition-colors">
-                        <i class="fa-solid fa-file-pdf text-red-400"></i> Get PDF Doc
-                    </button>
-                </div>
-
-            </div>
-        </aside>
-
-        <!-- Main Workspace (Center stage displaying receipt card) -->
-        <section class="flex-grow flex flex-col items-center justify-center p-4 sm:p-8 relative bg-[#090B0E]">
+        <!-- Interactive Trigger & Control Actions Area -->
+        <div class="no-print w-full max-w-[415px] mb-4 space-y-3">
             
-            <!-- Mobile Toggle Display Floating Action Button -->
-            <button onclick="toggleMobileControls()" id="floatingToggle" class="no-print lg:hidden fixed bottom-6 left-6 z-30 bg-yellow-500 text-black shadow-2xl px-5 py-3.5 rounded-full text-xs font-bold border border-yellow-400 flex items-center gap-2">
-                <i class="fa-solid fa-sliders"></i> Edit Configuration
+            <!-- Main Core Generator Button [1] -->
+            <button id="btnGenerate" class="w-full py-4 bg-gradient-to-r from-yellow-500 to-[#F0B90B] hover:from-yellow-400 hover:to-[#E0A808] text-black font-extrabold rounded-xl text-sm transition-all tracking-wider uppercase shadow-xl shadow-yellow-500/10 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-wand-magic-sparkles animate-pulse"></i> Generate Demo Receipt
             </button>
 
-            <!-- Card Shell matches dimensions of image -->
-            <div class="w-full max-w-[415px] flex flex-col items-center">
+            <!-- Export and Download Row [1] -->
+            <div class="grid grid-cols-3 gap-2 text-[10px] font-bold text-gray-300">
+                <button onclick="downloadPNG()" class="py-2 px-1 bg-gray-900 hover:bg-gray-800 border border-gray-800 rounded-lg flex items-center justify-center gap-1 transition-colors">
+                    <i class="fa-solid fa-file-image text-blue-400"></i> Save PNG
+                </button>
+                <button onclick="downloadPDF()" class="py-2 px-1 bg-gray-900 hover:bg-gray-800 border border-gray-800 rounded-lg flex items-center justify-center gap-1 transition-colors">
+                    <i class="fa-solid fa-file-pdf text-red-400"></i> Save PDF
+                </button>
+                <button onclick="window.print()" class="py-2 px-1 bg-gray-900 hover:bg-gray-800 border border-gray-800 rounded-lg flex items-center justify-center gap-1 transition-colors">
+                    <i class="fa-solid fa-print text-yellow-500"></i> Print Card
+                </button>
+            </div>
+            
+            <!-- Clean Non-Distracting Safety Label Bar (Outside Card) [1] -->
+            <div class="bg-red-500/10 text-red-400 border border-red-500/25 py-2 px-3 rounded-lg text-[9px] font-bold uppercase tracking-wider text-center flex flex-col justify-center gap-0.5">
+                <span class="flex items-center justify-center gap-1">
+                    <i class="fa-solid fa-circle-exclamation text-[10px]"></i> SAMPLE ONLY – NOT A REAL TRANSACTION
+                </span>
+                <span class="text-[8px] font-normal lowercase tracking-normal text-gray-400">This is a demonstration sandbox receipt.</span>
+            </div>
+        </div>
+
+        <!-- The Highly Realistic Card Render Container -->
+        <div id="receipt-canvas" class="binance-card p-6 relative overflow-hidden">
+            
+            <!-- Subtle Demo Marker Header -->
+            <div class="text-right -mt-2 -mr-2 select-none pointer-events-none">
+                <span class="text-[8px] font-semibold text-gray-300 uppercase bg-gray-100 py-0.5 px-2 rounded-md">Demo Receipt</span>
+            </div>
+
+            <!-- Top Centered Core Value Section -->
+            <div class="relative z-10 text-center mt-2">
+                <span class="text-binanceGray text-xs font-normal">Amount</span>
+                <div class="text-[28px] font-bold text-binanceBlack mt-0.5 tracking-tight font-sans leading-none" id="display-amount-row">43,860 USDT</div>
                 
-                <!-- The Visual Receipt Card Replica -->
-                <div id="receipt-canvas" class="binance-card p-6 relative overflow-hidden">
-                    
-                    <!-- Safety Watermark Overlays [1] -->
-                    <div id="demoWatermarkOverlay" class="demo-watermark">SAMPLE RECEIPT<br><span class="text-xs">DEMO ONLY</span></div>
-
-                    <!-- Safety Top Watermark Banner [1] -->
-                    <div id="demoSafetyBanner" class="relative z-10 bg-red-600/5 text-red-600 border border-red-600/15 py-2 px-3 rounded-lg text-[9px] font-bold uppercase tracking-wider text-center flex flex-col justify-center gap-0.5 mb-5">
-                        <span class="flex items-center justify-center gap-1">
-                            <i class="fa-solid fa-circle-exclamation text-xs"></i> SAMPLE RECEIPT – DEMO ONLY
-                        </span>
-                        <span class="text-[8px] font-normal lowercase tracking-normal">Not an actual payment confirmation</span>
-                    </div>
-
-                    <!-- Top Centered Header Details (Direct copy of screenshot) -->
-                    <div class="relative z-10 text-center mt-2">
-                        <span class="text-binanceGray text-xs font-normal">Amount</span>
-                        <div class="text-[28px] font-bold text-binanceBlack mt-0.5 tracking-tight font-sans leading-none" id="display-amount-row">43,860 USDT</div>
-                        
-                        <!-- Completed Green Status Badge -->
-                        <div class="flex items-center justify-center gap-1 mt-2">
-                            <span class="w-3.5 h-3.5 bg-binanceGreen text-white rounded-full flex items-center justify-center text-[9px] font-black">✓</span>
-                            <span class="text-binanceGreen font-semibold text-[13px] tracking-wide">Completed</span>
-                        </div>
-                        
-                        <!-- Native helper block context customized for system demo -->
-                        <p class="text-binanceGray text-[10px] mt-4 px-2 leading-relaxed font-normal">
-                            Crypto transferred out of Binance. Please contact the recipient platform for your transaction receipt.
-                        </p>
-                        <!-- Golden link matches exact styling -->
-                        <a href="#" class="text-binanceGold text-[10px] font-medium mt-1 inline-block hover:underline">Why hasn't my withdrawal arrived?</a>
-                    </div>
-                    
-                    <!-- Structural Divider -->
-                    <div class="border-t border-[#F5F5F5] my-5 relative z-10"></div>
-                    
-                    <!-- Structured Meta List Data [1] -->
-                    <div class="relative z-10 space-y-3.5 px-0.5 text-xs">
-                        
-                        <!-- Added specific required rental values -->
-                        <div class="flex justify-between items-start">
-                            <span class="text-binanceGray">Rental Amount</span>
-                            <span class="text-binanceBlack font-medium" id="display-rental-val">$0.00</span>
-                        </div>
-
-                        <div class="flex justify-between items-start">
-                            <span class="text-binanceGray">Advance Fee</span>
-                            <span class="text-binanceBlack font-medium" id="display-advance-val">$0.00</span>
-                        </div>
-
-                        <div class="flex justify-between items-start">
-                            <span class="text-binanceGray">Duration</span>
-                            <span class="text-binanceBlack font-medium" id="display-duration-val">-</span>
-                        </div>
-
-                        <div class="flex justify-between items-start">
-                            <span class="text-binanceGray">Withdrawal Wallet</span>
-                            <span class="text-binanceBlack font-medium" id="display-wallet">Spot Wallet</span>
-                        </div>
-                        
-                        <div class="flex justify-between items-start">
-                            <span class="text-binanceGray">Network</span>
-                            <span class="text-binanceBlack font-medium" id="display-network">TRX</span>
-                        </div>
-                        
-                        <!-- Destination address display wraps correctly -->
-                        <div class="flex justify-between items-start gap-4">
-                            <span class="text-binanceGray shrink-0">Address</span>
-                            <div class="text-right max-w-[70%]">
-                                <div class="flex items-start justify-end gap-1">
-                                    <span class="text-binanceBlack font-medium text-right leading-[1.3] inline-block font-sans break-all" id="display-address" style="word-break: break-all;">TXGPsdSfx3j7WrJn6yTaeSYWSibdmhNRcV</span>
-                                    <button onclick="copyToClipboard('inputAddress')" class="text-binanceGray hover:text-binanceBlack transition-colors shrink-0 p-0.5" title="Copy Address">
-                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path></svg>
-                                    </button>
-                                </div>
-                                <a href="#" class="text-binanceGold text-[10px] font-semibold mt-1 inline-block hover:underline">Save Address</a>
-                            </div>
-                        </div>
-                        
-                        <!-- Underlined transaction ID -->
-                        <div class="flex justify-between items-start gap-4">
-                            <span class="text-binanceGray shrink-0">Txid</span>
-                            <div class="flex items-start gap-1 max-w-[70%] justify-end">
-                                <span class="text-binanceBlack font-medium underline break-all text-right leading-[1.3]" id="display-txid" style="text-decoration-color: #848E9C; text-underline-offset: 2px; word-break: break-all;">Internal transfer 134469932233</span>
-                                <button onclick="copyToClipboard('inputTxId')" class="text-binanceGray hover:text-binanceBlack transition-colors shrink-0 p-0.5" title="Copy TXID">
-                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path></svg>
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div class="flex justify-between items-start">
-                            <span class="text-binanceGray">Network fee</span>
-                            <span class="text-binanceBlack font-medium" id="display-fee">0 USDT</span>
-                        </div>
-
-                        <div class="flex justify-between items-start">
-                            <span class="text-binanceGray">Receipt Ref</span>
-                            <span class="text-binanceBlack font-medium font-mono" id="display-receipt-num">-</span>
-                        </div>
-
-                        <div class="flex justify-between items-start">
-                            <span class="text-binanceGray">System Ref</span>
-                            <span class="text-binanceBlack font-medium font-mono" id="display-ref-num">-</span>
-                        </div>
-                        
-                        <div class="flex justify-between items-start">
-                            <span class="text-binanceGray">Date</span>
-                            <span class="text-binanceBlack font-medium font-sans" id="display-date">2023-05-30 16:09:09</span>
-                        </div>
-
-                        <div class="flex justify-between items-start">
-                            <span class="text-binanceGray">Notes</span>
-                            <span class="text-binanceBlack font-medium text-right italic" id="display-note">-</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Native Yellow Security Shield Banner Promo (Matches screenshot exactly) -->
-                    <div class="relative z-10 bg-[#F6F6F6] rounded-xl p-3.5 mt-6 flex items-center justify-between gap-3 border border-[#EAECEF]">
-                        <div class="flex items-start gap-2.5">
-                            <!-- Native Gold Shield Shape with Star Inside -->
-                            <div class="w-5 h-5 bg-[#F0B90B] rounded-[4px] flex items-center justify-center shrink-0 mt-0.5 shadow-sm" style="clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);">
-                                <span class="text-black text-[9px] font-bold">★</span>
-                            </div>
-                            <p class="text-[10px] text-binanceBlack font-medium leading-[1.3] pr-2">
-                                Enable one-step withdrawal to withdraw to whitelisted addresses easily.
-                            </p>
-                        </div>
-                        <span class="text-[#767F8D] text-xs font-bold leading-none shrink-0">➔</span>
-                    </div>
-                    
-                    <!-- Native Footer Link -->
-                    <div class="text-center mt-5">
-                        <a href="#" class="text-binanceGold text-xs font-semibold hover:underline">Need help? View FAQs</a>
-                    </div>
+                <!-- Status Row -->
+                <div class="flex items-center justify-center gap-1.5 mt-2">
+                    <span class="w-3.5 h-3.5 bg-binanceGreen text-white rounded-full flex items-center justify-center text-[9px] font-black">✓</span>
+                    <span class="text-binanceGreen font-semibold text-[13px] tracking-wide">Completed</span>
+                </div>
+                
+                <!-- Dynamic text matches original description -->
+                <p class="text-binanceGray text-[10px] mt-4 px-2 leading-relaxed font-normal">
+                    Crypto transferred out of Binance. Please contact the recipient platform for your transaction receipt.
+                </p>
+                <a href="#" class="text-binanceGold text-[10px] font-medium mt-1 inline-block hover:underline">Why hasn't my withdrawal arrived?</a>
+            </div>
+            
+            <!-- Main Divider -->
+            <div class="border-t border-[#F5F5F5] my-4 relative z-10"></div>
+            
+            <!-- Structural Meta Values -->
+            <div class="relative z-10 space-y-3 px-0.5 text-xs">
+                
+                <div class="flex justify-between items-start">
+                    <span class="text-binanceGray">Rental Amount</span>
+                    <span class="text-binanceBlack font-medium" id="display-rental-val">$0.00</span>
                 </div>
 
+                <div class="flex justify-between items-start">
+                    <span class="text-binanceGray">Advance Fee</span>
+                    <span class="text-binanceBlack font-medium" id="display-advance-val">$0.00</span>
+                </div>
+
+                <div class="flex justify-between items-start">
+                    <span class="text-binanceGray">Duration</span>
+                    <span class="text-binanceBlack font-medium" id="display-duration-val">-</span>
+                </div>
+
+                <div class="flex justify-between items-start">
+                    <span class="text-binanceGray">Withdrawal Wallet</span>
+                    <span class="text-binanceBlack font-medium">Spot Wallet</span>
+                </div>
+                
+                <div class="flex justify-between items-start">
+                    <span class="text-binanceGray">Network</span>
+                    <span class="text-binanceBlack font-medium">TRX</span>
+                </div>
+                
+                <!-- Destination Address Block -->
+                <div class="flex justify-between items-start gap-4">
+                    <span class="text-binanceGray shrink-0">Address</span>
+                    <div class="text-right max-w-[70%]">
+                        <div class="flex items-start justify-end gap-1">
+                            <span class="text-binanceBlack font-medium text-right leading-[1.3] inline-block font-sans break-all" id="display-address" style="word-break: break-all;">TXGPsdSfx3j7WrJn6yTaeSYWSibdmhNRcV</span>
+                            <!-- Working Copy Trigger Button -->
+                            <button id="btnCopyAddress" class="text-binanceGray hover:text-binanceBlack transition-colors shrink-0 p-0.5" title="Copy Address">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path></svg>
+                            </button>
+                        </div>
+                        <a href="#" class="text-binanceGold text-[10px] font-semibold mt-1 inline-block hover:underline">Save Address</a>
+                    </div>
+                </div>
+                
+                <!-- Underlined TXID block -->
+                <div class="flex justify-between items-start gap-4">
+                    <span class="text-binanceGray shrink-0">Txid</span>
+                    <div class="flex items-start gap-1 max-w-[70%] justify-end">
+                        <span class="text-binanceBlack font-medium underline break-all text-right leading-[1.3]" id="display-txid" style="text-decoration-color: #848E9C; text-underline-offset: 2px; word-break: break-all;">Internal transfer 134469932233</span>
+                        <!-- Working Copy Trigger Button -->
+                        <button id="btnCopyTxId" class="text-binanceGray hover:text-binanceBlack transition-colors shrink-0 p-0.5" title="Copy TXID">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path></svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between items-start">
+                    <span class="text-binanceGray">Network fee</span>
+                    <span class="text-binanceBlack font-medium" id="display-fee">0 USDT</span>
+                </div>
+
+                <div class="flex justify-between items-start">
+                    <span class="text-binanceGray">Receipt No.</span>
+                    <span class="text-binanceBlack font-medium font-mono" id="display-receipt-num">-</span>
+                </div>
+
+                <div class="flex justify-between items-start">
+                    <span class="text-binanceGray">Reference No.</span>
+                    <span class="text-binanceBlack font-medium font-mono" id="display-ref-num">-</span>
+                </div>
+                
+                <div class="flex justify-between items-start">
+                    <span class="text-binanceGray">Date</span>
+                    <span class="text-binanceBlack font-medium font-sans" id="display-date">2023-05-30 16:09:09</span>
+                </div>
+
+                <div class="flex justify-between items-start">
+                    <span class="text-binanceGray">Notes</span>
+                    <span class="text-binanceBlack font-medium text-right italic" id="display-note">-</span>
+                </div>
             </div>
-        </section>
+            
+            <!-- Yellow Whitelisted Promotion Banner -->
+            <div class="relative z-10 bg-[#F6F6F6] rounded-xl p-3.5 mt-5 flex items-center justify-between gap-3 border border-[#EAECEF]">
+                <div class="flex items-start gap-2.5">
+                    <div class="w-5 h-5 bg-[#F0B90B] rounded-[4px] flex items-center justify-center shrink-0 mt-0.5 shadow-sm" style="clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);">
+                        <span class="text-black text-[9px] font-bold">★</span>
+                    </div>
+                    <p class="text-[10px] text-binanceBlack font-medium leading-[1.3] pr-2">
+                        Enable one-step withdrawal to withdraw to whitelisted addresses easily.
+                    </p>
+                </div>
+                <span class="text-[#767F8D] text-xs font-bold leading-none shrink-0">➔</span>
+            </div>
+            
+            <!-- Bottom Help Center -->
+            <div class="text-center mt-4">
+                <a href="#" class="text-binanceGold text-xs font-semibold hover:underline">Need help? View FAQs</a>
+            </div>
+        </div>
+
     </div>
 
-    <!-- Page Footer Disclaimer (Strictly Outside Download Area) -->
-    <footer class="no-print w-full bg-[#0B0C0E] border-t border-gray-900 py-3 text-center z-10">
+    <!-- Persistent Bottom Disclaimer Section -->
+    <footer class="no-print w-full bg-[#090B0E] border-t border-gray-900 py-4 text-center z-10 mt-6">
         <p class="text-[10px] text-gray-500 font-medium px-4">
-            This is a Demonstration Tool for UI testing. Fictional sample values simulated.
+            This is a Demo Receipt generated for testing, UI preview, and educational purposes only. It does not represent a real blockchain transaction or actual payment.
         </p>
     </footer>
 
-    <!-- Toast Success alerts -->
+    <!-- Toast Success Popup Message -->
     <div id="toast" class="no-print fixed bottom-6 right-6 transform translate-y-20 opacity-0 bg-yellow-500 text-black font-semibold text-xs py-3 px-5 rounded-xl shadow-xl transition-all duration-300 flex items-center gap-2 z-50">
         <i class="fa-solid fa-circle-check"></i>
         <span id="toast-message">Copied Successfully!</span>
@@ -429,6 +274,10 @@
             "Fictional rental account confirmation."
         ];
 
+        // Global variables holding full, unshortened values for copy buttons [3]
+        let currentFullAddress = "TXGPsdSfx3j7WrJn6yTaeSYWSibdmhNRcV";
+        let currentFullTxid = "Internal transfer 134469932233";
+
         // Format raw amounts with standard commas
         function formatCommas(value) {
             return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -447,90 +296,48 @@
             return rentalPlans[0]; 
         }
 
-        // Live synchronizer mapping inputs to visible element containers
-        function syncReceiptPreview() {
-            const amountVal = parseFloat(document.getElementById('inputAmount').value) || 0;
-            const feeVal = parseFloat(document.getElementById('inputFee').value) || 0;
-            const gasFeeVal = parseFloat(document.getElementById('inputNetworkFee').value.replace(/[^0-9.]/g, '')) || 0;
-            
-            // Total display calculation
-            const totalUSD = amountVal + feeVal + gasFeeVal;
-
-            document.getElementById('display-amount-row').innerText = `${formatCommas(totalUSD.toFixed(0))} USDT`;
-            document.getElementById('display-rental-val').innerText = `$${formatCommas(amountVal)}`;
-            document.getElementById('display-advance-val').innerText = `$${formatCommas(feeVal)}`;
-            document.getElementById('display-duration-val').innerText = document.getElementById('inputDuration').value;
-            
-            document.getElementById('display-wallet').innerText = document.getElementById('inputWallet').value;
-            document.getElementById('display-network').innerText = document.getElementById('inputNetwork').value;
-            document.getElementById('display-fee').innerText = document.getElementById('inputNetworkFee').value;
-            document.getElementById('display-address').innerText = document.getElementById('inputAddress').value;
-            document.getElementById('display-txid').innerText = document.getElementById('inputTxId').value;
-            document.getElementById('display-date').innerText = document.getElementById('inputDate').value;
-            
-            document.getElementById('display-receipt-num').innerText = document.getElementById('inputReceiptNum').value;
-            document.getElementById('display-ref-num').innerText = document.getElementById('inputRefNum').value;
-            document.getElementById('display-note').innerText = document.getElementById('inputNote').value;
-
-            // Watermark overlay and safety display controllers [1]
-            const wmToggleChecked = document.getElementById('watermarkToggle').checked;
-            const banner = document.getElementById('demoSafetyBanner');
-            const overlay = document.getElementById('demoWatermarkOverlay');
-
-            if (wmToggleChecked) {
-                banner.classList.remove('hidden');
-                overlay.classList.remove('hidden');
-            } else {
-                banner.classList.add('hidden');
-                overlay.classList.add('hidden');
-            }
-        }
-
-        // Core Trigger execution function [1]
+        // Main core generator execution function [1]
         function generateDemoReceipt() {
             const selectedPlan = getWeightedPlan(); // Retrieve matching weighted plan [1]
 
-            // Timestamps synchronized to localized format [2]
+            // Dynamic localized real-time stamps [2]
             const now = new Date();
             const dateStr = now.toISOString().slice(0, 10);
             const timeStr = now.toTimeString().slice(0, 8);
 
-            // Populate manual form settings instantly
-            document.getElementById('inputAmount').value = selectedPlan.amount;
-            document.getElementById('inputFee').value = selectedPlan.fee;
-            document.getElementById('inputDuration').value = selectedPlan.duration;
-            document.getElementById('inputNetwork').value = "TRX";
-            document.getElementById('inputNetworkFee').value = "0 USDT";
-            document.getElementById('inputWallet').value = "Spot Wallet";
+            // Compute total price values
+            const rentalVal = selectedPlan.amount;
+            const feeVal = selectedPlan.fee;
+            const gasFeeVal = 0; // standard constant TRX fee
+            const totalUSD = rentalVal + feeVal + gasFeeVal;
 
-            document.getElementById('inputAddress').value = sampleAddresses[Math.floor(Math.random() * sampleAddresses.length)];
-            document.getElementById('inputTxId').value = "Internal transfer " + Math.floor(100000000000 + Math.random() * 900000000000);
-            document.getElementById('inputDate').value = `${dateStr} ${timeStr}`;
-            
-            document.getElementById('inputReceiptNum').value = "REC-" + Math.floor(100000 + Math.random() * 900000);
-            document.getElementById('inputRefNum').value = "REF-" + Math.floor(10000000 + Math.random() * 90000000);
-            document.getElementById('inputNote').value = sampleNotes[Math.floor(Math.random() * sampleNotes.length)];
+            // Generate address and txid strings
+            currentFullAddress = sampleAddresses[Math.floor(Math.random() * sampleAddresses.length)];
+            currentFullTxid = "Internal transfer " + Math.floor(100000000000 + Math.random() * 900000000000);
+            const refNum = "REF-" + Math.floor(10000000 + Math.random() * 90000000);
+            const receiptNum = "REC-" + Math.floor(100000 + Math.random() * 900000);
+            const randomNote = sampleNotes[Math.floor(Math.random() * sampleNotes.length)];
 
-            // Sync values onto visible design canvas elements
-            syncReceiptPreview();
+            // Push randomized updates to UI fields
+            document.getElementById('display-amount-row').innerText = `${formatCommas(totalUSD)} USDT`;
+            document.getElementById('display-rental-val').innerText = `$${formatCommas(rentalVal)}`;
+            document.getElementById('display-advance-val').innerText = `$${formatCommas(feeVal)}`;
+            document.getElementById('display-duration-val').innerText = selectedPlan.duration;
+            document.getElementById('display-fee').innerText = `${gasFeeVal} USDT`;
             
-            // Show alert feedback
-            showToastAlert("Generated Plan: $" + selectedPlan.amount);
+            document.getElementById('display-address').innerText = currentFullAddress;
+            document.getElementById('display-txid').innerText = currentFullTxid;
+            document.getElementById('display-date').innerText = `${dateStr} ${timeStr}`;
+            
+            document.getElementById('display-receipt-num').innerText = receiptNum;
+            document.getElementById('display-ref-num').innerText = refNum;
+            document.getElementById('display-note').innerText = randomNote;
+
+            // Trigger success alert [1]
+            showToastAlert(`Generated Plan: $${rentalVal}`);
         }
 
-        // Clipboard copy utility
-        function copyToClipboard(inputId) {
-            const textVal = document.getElementById(inputId).value;
-            if (textVal) {
-                navigator.clipboard.writeText(textVal).then(() => {
-                    showToastAlert("Copied to Clipboard!");
-                }).catch(() => {
-                    showToastAlert("Copy Failed");
-                });
-            }
-        }
-
-        // Show toast notifications
+        // Show toast notification messages
         function showToastAlert(msg) {
             const toast = document.getElementById('toast');
             document.getElementById('toast-message').innerText = msg;
@@ -542,25 +349,29 @@
             }, 2500);
         }
 
-        // Mobile collapsing panel controls
-        function toggleMobileControls() {
-            const panel = document.getElementById('controlsPanel');
-            const floatingBtn = document.getElementById('floatingToggle');
-            if (panel.classList.contains('hidden')) {
-                panel.classList.remove('hidden');
-                floatingBtn.classList.add('hidden');
-            } else {
-                panel.classList.add('hidden');
-                floatingBtn.classList.remove('hidden');
-            }
-        }
+        // Fully functional copy event listeners for dynamic variables [3]
+        document.getElementById('btnCopyAddress').addEventListener('click', () => {
+            navigator.clipboard.writeText(currentFullAddress).then(() => {
+                showToastAlert("Address Copied!");
+            }).catch(() => {
+                showToastAlert("Copy Failed");
+            });
+        });
 
-        // Output image files
+        document.getElementById('btnCopyTxId').addEventListener('click', () => {
+            navigator.clipboard.writeText(currentFullTxid).then(() => {
+                showToastAlert("Txid Copied!");
+            }).catch(() => {
+                showToastAlert("Copy Failed");
+            });
+        });
+
+        // Save layout canvas to PNG file
         async function downloadPNG() {
             const element = document.getElementById('receipt-canvas');
             try {
                 const canvas = await html2canvas(element, {
-                    scale: 3, // Premium rendering resolution capture [1]
+                    scale: 3, // High DPI capture for crisp print rendering [1]
                     useCORS: true,
                     backgroundColor: '#FFFFFF'
                 });
@@ -569,11 +380,11 @@
                 link.href = canvas.toDataURL('image/png');
                 link.click();
             } catch (err) {
-                alert("Image rendering failure: " + err);
+                alert("PNG compilation failed");
             }
         }
 
-        // Output document PDFs
+        // Save layout canvas to PDF file
         async function downloadPDF() {
             const { jsPDF } = window.jspdf;
             const element = document.getElementById('receipt-canvas');
@@ -586,36 +397,14 @@
                 pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
                 pdf.save(`Withdrawal_Receipt_${Date.now()}.pdf`);
             } catch (err) {
-                alert("PDF rendering failure: " + err);
+                alert("PDF compilation failed");
             }
         }
 
-        // Initialize event binding sequences on load
+        // Main lifecycle hook initialization
         window.addEventListener('DOMContentLoaded', () => {
-            const inputIds = [
-                'inputAmount', 'inputFee', 'inputDuration', 'inputNetwork', 
-                'inputNetworkFee', 'inputAddress', 'inputTxId', 'inputDate',
-                'inputReceiptNum', 'inputRefNum', 'inputNote', 'inputWallet'
-            ];
-            
-            inputIds.forEach(id => {
-                document.getElementById(id).addEventListener('input', syncReceiptPreview);
-            });
-
-            document.getElementById('watermarkToggle').addEventListener('change', syncReceiptPreview);
             document.getElementById('btnGenerate').addEventListener('click', generateDemoReceipt);
-
-            // Responsive Screen Adaptations: Collapse configuration drawers on mobile setups
-            if (window.innerWidth < 1024) {
-                document.getElementById('controlsPanel').classList.add('hidden');
-                document.getElementById('floatingToggle').classList.remove('hidden');
-            } else {
-                document.getElementById('controlsPanel').classList.remove('hidden');
-                document.getElementById('floatingToggle').classList.add('hidden');
-            }
-
-            // Generate first initial mock load data on boot
-            generateDemoReceipt();
+            generateDemoReceipt(); // Generate initial preview data
         });
     </script>
 </body>
