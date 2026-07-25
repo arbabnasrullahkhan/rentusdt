@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Orders Management — DollarRent Admin</title>
+  <title>Orders Queue — DollarRent Admin</title>
   <meta name="robots" content="noindex, nofollow">
   
   <!-- STRICT LOGO COMPLIANCE -->
@@ -20,7 +20,6 @@
       --primary-hover: #0043CE;
       --primary-glow: rgba(15, 98, 254, 0.12);
       --success: #00E676;
-      --success-glow: rgba(0, 230, 118, 0.15);
       --wa-color: #25D366;
       --wa-hover: #1DA851;
       --warning: #F59E0B;
@@ -28,8 +27,8 @@
       --heading: #0B101E;
       --body: #475569;
       --radius: 24px;
-      --radius-sm: 14px;
-      --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.04);
+      --radius-sm: 12px;
+      --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
       --shadow-md: 0 12px 28px -4px rgba(15, 98, 254, 0.08);
       --sidebar-w: 280px;
     }
@@ -40,20 +39,16 @@
       font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
       background: var(--bg);
       background-image: radial-gradient(circle at 50% 0%, #ffffff 0%, transparent 70%),
-                        linear-gradient(rgba(15, 98, 254, 0.02) 1px, transparent 1px),
-                        linear-gradient(90deg, rgba(15, 98, 254, 0.02) 1px, transparent 1px);
+                        linear-gradient(rgba(15, 98, 254, 0.03) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(15, 98, 254, 0.03) 1px, transparent 1px);
       background-size: 100% 100%, 30px 30px, 30px 30px;
       color: var(--heading);
-      display: flex; min-height: 100vh;
+      display: flex;
+      min-height: 100vh;
       -webkit-font-smoothing: antialiased;
     }
 
     a { text-decoration: none; color: inherit; }
-
-    /* ================= ANIMATIONS ================= */
-    .animate-in { opacity: 0; transform: translateY(16px); animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
-    .delay-1 { animation-delay: 0.1s; }
 
     /* ================= SIDEBAR ================= */
     .sidebar {
@@ -67,9 +62,7 @@
     .sidebar-brand span { font-size: 22px; font-weight: 900; letter-spacing: -0.5px; color: var(--heading); }
     .sidebar-brand span b { color: var(--primary); }
 
-    .menu-cat { font-size: 11px; font-weight: 800; color: #94A3B8; text-transform: uppercase; letter-spacing: 1px; padding: 12px 12px 6px; }
-
-    .sidebar-menu { list-style: none; display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
+    .sidebar-menu { list-style: none; display: flex; flex-direction: column; gap: 6px; }
     .sidebar-menu a {
       display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: var(--radius-sm);
       font-size: 14px; font-weight: 700; color: var(--body); transition: all 0.25s ease;
@@ -92,156 +85,100 @@
     .page-header h1 { font-size: 32px; font-weight: 900; letter-spacing: -1px; color: var(--heading); }
     .page-header p { font-size: 15px; color: var(--body); font-weight: 500; margin-top: 4px; }
 
-    /* Analytics Bar Cards */
-    .metrics-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px; margin-bottom: 28px; }
-    .metric-card {
-      background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm);
-      padding: 16px; text-align: center; box-shadow: var(--shadow-sm);
-    }
-    .metric-val { font-size: 22px; font-weight: 900; color: var(--heading); }
-    .metric-lbl { font-size: 11px; font-weight: 700; color: var(--body); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+    /* ================= KPI STATS ================= */
+    .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: 28px; }
+    .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 18px; box-shadow: var(--shadow-sm); }
+    .stat-card h4 { font-size: 11px; font-weight: 800; color: var(--body); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .stat-card div { font-size: 26px; font-weight: 900; color: var(--heading); }
 
-    /* ================= FILTERS & CONTROLS ================= */
-    .controls-card {
-      background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
-      padding: 20px; box-shadow: var(--shadow-sm); margin-bottom: 24px;
-      display: flex; flex-direction: column; gap: 16px;
-    }
-    
-    .category-tabs { display: flex; gap: 8px; flex-wrap: wrap; border-bottom: 1px solid var(--border); padding-bottom: 14px; }
+    /* ================= CATEGORY TABS ================= */
+    .cat-tabs { display: flex; gap: 10px; margin-bottom: 24px; border-bottom: 2px solid var(--border); padding-bottom: 12px; }
     .cat-btn {
-      padding: 10px 20px; border-radius: 30px; font-size: 13px; font-weight: 800;
-      background: var(--bg); border: 1px solid var(--border); color: var(--body);
-      cursor: pointer; transition: all 0.25s ease; display: flex; align-items: center; gap: 6px;
+      padding: 12px 24px; border-radius: 30px; font-size: 14px; font-weight: 800;
+      background: var(--card); border: 1px solid var(--border); color: var(--body);
+      cursor: pointer; transition: all 0.25s ease; display: flex; align-items: center; gap: 8px;
     }
-    .cat-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 12px rgba(15,98,254,0.25); }
-    .cat-btn.wa-cat.active { background: var(--wa-color); color: white; border-color: var(--wa-color); box-shadow: 0 4px 12px rgba(37,211,102,0.3); }
+    .cat-btn:hover { border-color: var(--primary); color: var(--primary); }
+    .cat-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 6px 16px rgba(15,98,254,0.3); }
+    .cat-btn.wa-active.active { background: var(--wa-color); border-color: var(--wa-color); box-shadow: 0 6px 16px rgba(37, 211, 102, 0.3); }
 
-    .search-row { display: flex; gap: 12px; flex-wrap: wrap; justify-content: space-between; align-items: center; }
-    .search-box { position: relative; flex: 1; min-width: 260px; }
-    .search-box input {
-      width: 100%; padding: 12px 16px 12px 42px; border-radius: 30px; border: 1px solid var(--border);
-      font-size: 14px; font-weight: 600; outline: none; background: var(--bg);
+    /* ================= FILTER & BULK BAR ================= */
+    .filter-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+    .status-filters { display: flex; gap: 8px; flex-wrap: wrap; }
+    .filter-btn {
+      padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 800;
+      background: var(--card); border: 1px solid var(--border); color: var(--body); cursor: pointer; transition: 0.2s;
     }
-    .search-box svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; stroke: var(--body); fill: none; stroke-width: 2.2; }
+    .filter-btn.active { background: var(--heading); color: white; border-color: var(--heading); }
 
-    .bulk-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-    .btn-bulk {
-      padding: 10px 16px; border-radius: 20px; font-size: 12px; font-weight: 800;
-      background: var(--card); border: 1px solid var(--border); color: var(--heading);
-      cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 6px;
-    }
-    .btn-bulk:hover { border-color: var(--primary); color: var(--primary); }
+    .search-box { position: relative; width: 280px; }
+    .search-box input { width: 100%; padding: 10px 14px 10px 36px; border-radius: 30px; border: 1px solid var(--border); font-size: 13px; font-weight: 700; outline: none; background: var(--card); }
+    .search-box svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; stroke: var(--body); fill: none; stroke-width: 2.2; }
 
-    /* ================= ORDERS TABLE ================= */
-    .table-card {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow-sm); overflow: hidden;
-    }
-    .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    table { width: 100%; border-collapse: collapse; min-width: 900px; }
-    th { text-align: left; padding: 14px 16px; font-size: 11px; font-weight: 800; color: var(--body); text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid var(--border); }
-    td { padding: 16px; font-size: 14px; font-weight: 600; border-bottom: 1px solid rgba(226,232,240,0.6); }
+    .bulk-bar { display: none; align-items: center; gap: 12px; background: var(--primary-glow); border: 1px solid var(--primary); padding: 10px 20px; border-radius: var(--radius-sm); margin-bottom: 20px; animation: slideDown 0.3s ease; }
+    .bulk-bar.visible { display: flex; }
+
+    /* ================= TABLE CARD ================= */
+    .table-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow-sm); overflow: hidden; }
+    .table-responsive { width: 100%; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 950px; }
+    th { text-align: left; padding: 14px; font-size: 11px; font-weight: 800; color: var(--body); text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid var(--border); }
+    td { padding: 16px 14px; font-size: 14px; font-weight: 600; border-bottom: 1px solid rgba(226,232,240,0.6); }
     tr:hover td { background: rgba(15, 98, 254, 0.02); }
-
-    .type-tag { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 8px; }
-    .type-direct { background: rgba(15, 98, 254, 0.1); color: var(--primary); }
-    .type-wa { background: rgba(37, 211, 102, 0.15); color: #00A650; }
 
     .badge { display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 800; text-transform: uppercase; }
     .badge-submitted { background: rgba(15,98,254,0.1); color: var(--primary); }
     .badge-under_review { background: rgba(245,158,11,0.12); color: #D97706; }
     .badge-approved { background: rgba(0,230,118,0.15); color: #00A650; }
     .badge-rejected { background: rgba(239,68,68,0.1); color: var(--danger); }
+    
+    .source-tag { font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 8px; }
+    .tag-direct { background: rgba(15, 98, 254, 0.08); color: var(--primary); }
+    .tag-wa { background: rgba(37, 211, 102, 0.12); color: #1DA851; }
 
-    /* Action Buttons in Row */
-    .row-actions { display: flex; gap: 6px; align-items: center; }
-    .btn-row {
-      padding: 8px 14px; border-radius: 20px; font-size: 12px; font-weight: 800;
-      border: none; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 4px;
-    }
-    .btn-row-view { background: var(--primary-glow); color: var(--primary); }
-    .btn-row-view:hover { background: var(--primary); color: white; }
-    .btn-row-wa { background: rgba(37,211,102,0.15); color: #00A650; }
-    .btn-row-wa:hover { background: #25D366; color: white; }
-    .btn-row-print { background: var(--bg); color: var(--body); border: 1px solid var(--border); }
-    .btn-row-print:hover { border-color: var(--heading); color: var(--heading); }
+    .btn-action-sm { padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 800; border: none; cursor: pointer; transition: 0.2s; }
+    .btn-view { background: var(--primary-glow); color: var(--primary); }
+    .btn-view:hover { background: var(--primary); color: white; }
+    .btn-wa-direct { background: rgba(37,211,102,0.15); color: #1DA851; display: inline-flex; align-items: center; gap: 4px; }
+    .btn-wa-direct:hover { background: #25D366; color: white; }
 
-    /* ================= A-to-Z FULL ORDER DETAILS MODAL ================= */
-    .modal-overlay {
-      position: fixed; inset: 0; background: rgba(11, 16, 30, 0.7); backdrop-filter: blur(8px);
-      z-index: 10000; display: none; align-items: center; justify-content: center; padding: 20px;
-      opacity: 0; transition: opacity 0.3s ease;
-    }
+    /* ================= FULL-SCREEN DOSSIER MODAL ================= */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(11, 16, 30, 0.75); backdrop-filter: blur(10px); display: none; align-items: center; justify-content: center; z-index: 10000; padding: 20px; opacity: 0; transition: opacity 0.3s ease; }
     .modal-overlay.active { display: flex; opacity: 1; }
     
-    .modal-details {
+    .dossier-modal {
       background: var(--card); border-radius: var(--radius); padding: 36px;
-      width: 100%; max-width: 850px; max-height: 90vh; overflow-y: auto;
-      box-shadow: 0 24px 48px rgba(0,0,0,0.3); transform: scale(0.95); transition: transform 0.3s ease;
+      width: 100%; max-width: 900px; max-height: 90vh; overflow-y: auto;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.3); border: 1px solid var(--border);
     }
-    .modal-overlay.active .modal-details { transform: scale(1); }
-
-    .modal-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
-    .modal-header-row h3 { font-size: 24px; font-weight: 900; color: var(--heading); }
-
-    .details-grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
-    .details-block { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 20px; }
-    .details-block h4 { font-size: 14px; font-weight: 800; color: var(--primary); text-transform: uppercase; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .dossier-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 2px solid var(--border); }
+    .dossier-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
     
-    .info-line { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed var(--border); font-size: 13.5px; }
-    .info-line:last-child { border-bottom: none; }
-    .info-line span:first-child { color: var(--body); font-weight: 600; }
-    .info-line span:last-child { font-weight: 800; color: var(--heading); text-align: right; word-break: break-all; }
+    .dossier-box { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 20px; }
+    .dossier-box h4 { font-size: 15px; font-weight: 800; margin-bottom: 12px; color: var(--heading); display: flex; align-items: center; gap: 8px; }
+    
+    .proof-img { width: 100%; max-height: 180px; object-fit: cover; border-radius: 10px; border: 1px solid var(--border); cursor: pointer; transition: 0.3s; }
+    .proof-img:hover { transform: scale(1.02); }
 
-    /* Missing Docs Warning Pills */
-    .missing-badge { background: rgba(239, 68, 68, 0.1); color: var(--danger); font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 12px; display: inline-flex; align-items: center; gap: 4px; margin-top: 4px; }
-
-    /* KYC Images Grid */
-    .kyc-images-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 16px; }
-    .kyc-box { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px; text-align: center; }
-    .kyc-box img { width: 100%; height: 90px; object-fit: cover; border-radius: 8px; cursor: pointer; transition: transform 0.2s; }
-    .kyc-box img:hover { transform: scale(1.05); }
-    .kyc-box label { font-size: 11px; font-weight: 800; color: var(--body); display: block; margin-top: 6px; }
-
-    /* Update Status Bar inside Modal */
-    .status-control-bar {
-      background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm);
-      padding: 20px; margin-top: 24px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+    /* ================= PRINT TEMPLATE ================= */
+    @media print {
+      body * { visibility: hidden; }
+      #printable-invoice, #printable-invoice * { visibility: visible; }
+      #printable-invoice { position: absolute; left: 0; top: 0; width: 100%; padding: 40px; background: white; color: black; }
     }
-    .status-control-bar select { flex: 1; padding: 12px; border-radius: 12px; border: 1px solid var(--border); font-weight: 700; font-size: 14px; outline: none; }
-    .status-control-bar input { flex: 2; padding: 12px; border-radius: 12px; border: 1px solid var(--border); font-weight: 600; font-size: 14px; outline: none; }
-    .btn-update-status { padding: 12px 24px; border-radius: 30px; background: var(--primary); color: white; font-weight: 800; border: none; cursor: pointer; }
-
-    /* ================= WHATSAPP TEMPLATE MODAL ================= */
-    .wa-modal-card { background: var(--card); border-radius: var(--radius); padding: 32px; max-width: 550px; width: 100%; box-shadow: 0 24px 48px rgba(0,0,0,0.3); }
-    .wa-modal-card h3 { font-size: 22px; font-weight: 900; color: var(--heading); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
-    .wa-modal-card h3 svg { fill: var(--wa-color); width: 28px; height: 28px; }
-
-    .template-select { width: 100%; padding: 14px; border-radius: var(--radius-sm); border: 2px solid var(--border); font-weight: 700; font-size: 14px; outline: none; margin-bottom: 16px; }
-    .wa-msg-preview { width: 100%; height: 160px; padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 13px; font-weight: 600; background: var(--bg); resize: vertical; font-family: inherit; margin-bottom: 20px; }
-
-    .btn-launch-wa {
-      width: 100%; padding: 16px; border-radius: 30px; background: linear-gradient(135deg, var(--wa-color), var(--wa-hover));
-      color: white; font-weight: 900; font-size: 16px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
-      box-shadow: 0 8px 20px rgba(37,211,102,0.3);
-    }
+    #printable-invoice { display: none; }
 
     /* Mobile Floating Dock */
     .mobile-dock { display: none; }
-
     @media (max-width: 768px) {
       .sidebar { display: none; }
       .main { margin-left: 0; padding: 24px 16px 120px; }
-      .details-grid-2col { grid-template-columns: 1fr; }
-      .kyc-images-grid { grid-template-columns: repeat(2, 1fr); }
-      .status-control-bar { flex-direction: column; }
-      .status-control-bar select, .status-control-bar input { width: 100%; }
-
+      .dossier-grid { grid-template-columns: 1fr; }
+      
       .mobile-dock {
         display: flex; justify-content: space-around; align-items: center;
         position: fixed; bottom: 20px; left: 16px; right: 16px;
-        background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+        background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(24px);
         border: 1px solid rgba(229, 231, 235, 0.8); border-radius: 40px;
         padding: 12px 10px; z-index: 10000; box-shadow: 0 16px 40px -8px rgba(0,0,0,0.15);
       }
@@ -249,32 +186,23 @@
       .mobile-dock a svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2.2; }
       .mobile-dock a.active { color: var(--primary); }
     }
-
-    /* ================= PRINT INVOICE TEMPLATE ================= */
-    #print-area { display: none; }
-    @media print {
-      body * { visibility: hidden; }
-      #print-area, #print-area * { visibility: visible; }
-      #print-area { display: block !important; position: absolute; left: 0; top: 0; width: 100%; padding: 20px; background: white; color: black; }
-      .no-print { display: none !important; }
-    }
   </style>
 </head>
 <body>
 
-  <!-- Sidebar -->
-  <aside class="sidebar no-print">
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar">
     <div>
       <div class="sidebar-brand">
-        <img src="../assets/logo.png" alt="DollarRent Logo">
+        <img src="../assets/logo.png" alt="DollarRent">
         <span>Dollar<b>Admin</b></span>
       </div>
       <ul class="sidebar-menu">
         <li><a href="dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg> Dashboard</a></li>
         <li><a href="orders.html" class="active"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg> Orders Queue</a></li>
-        <li><a href="packages.html"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg> Packages & Fees</a></li>
-        <li><a href="payment-methods.html"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg> Payment Gateways</a></li>
-        <li><a href="users.html"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> User Directory</a></li>
+        <li><a href="packages.html"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg> Packages</a></li>
+        <li><a href="payment-methods.html"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg> Payment Methods</a></li>
+        <li><a href="users.html"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg> Users</a></li>
         <li><a href="settings.html"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle></svg> Settings</a></li>
       </ul>
     </div>
@@ -287,62 +215,60 @@
           <p>Superadmin</p>
         </div>
       </div>
-      <a href="../home.html" title="Exit to Website" style="color:var(--danger);"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg></a>
+      <a href="../home.html" title="Exit" style="color:var(--danger);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg></a>
     </div>
   </aside>
 
-  <!-- Main Content -->
-  <main class="main no-print">
+  <!-- Main Content Area -->
+  <main class="main">
     <div class="page-header animate-in">
       <div>
-        <h1>Orders Queue & Management</h1>
-        <p>Real-time manual verification engine for Direct and WhatsApp rental orders.</p>
+        <h1>Orders Queue & Verification</h1>
+        <p>Manage direct checkout and WhatsApp-assisted USD rental orders in real-time.</p>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <button class="btn-action-sm btn-view" id="btn-export-all">Export Report (CSV)</button>
+        <button class="btn-action-sm btn-view" id="btn-template-mgr">WA Templates</button>
       </div>
     </div>
 
-    <!-- Analytics Bar -->
-    <div class="metrics-bar animate-in delay-1">
-      <div class="metric-card">
-        <div class="metric-val" id="m-total">0</div>
-        <div class="metric-lbl">Total Orders</div>
+    <!-- Quick Stats Row -->
+    <div class="stats-row animate-in delay-1">
+      <div class="stat-card"><h4>Total Orders</h4><div id="st-total">0</div></div>
+      <div class="stat-card"><h4>Direct Checkout</h4><div id="st-direct">0</div></div>
+      <div class="stat-card"><h4>WhatsApp Orders</h4><div id="st-wa" style="color:var(--wa-color);">0</div></div>
+      <div class="stat-card"><h4>Pending Review</h4><div id="st-pending" style="color:var(--warning);">0</div></div>
+      <div class="stat-card"><h4>Total Revenue Fee</h4><div id="st-rev" style="color:var(--primary);">$0</div></div>
+    </div>
+
+    <!-- Category Tabs (Direct Payment vs WhatsApp) -->
+    <div class="cat-tabs animate-in delay-1">
+      <button class="cat-btn active" id="tab-all">All Orders (<span id="cnt-all">0</span>)</button>
+      <button class="cat-btn" id="tab-direct">💳 Direct Payments (<span id="cnt-direct">0</span>)</button>
+      <button class="cat-btn wa-active" id="tab-wa">💬 WhatsApp Orders (<span id="cnt-wa">0</span>)</button>
+    </div>
+
+    <!-- Filter & Bulk Actions Bar -->
+    <div class="filter-bar animate-in delay-2">
+      <div class="status-filters">
+        <button class="filter-btn active" data-status="all">All Status</button>
+        <button class="filter-btn" data-status="under_review">Pending Review</button>
+        <button class="filter-btn" data-status="approved">Delivered</button>
+        <button class="filter-btn" data-status="rejected">Rejected</button>
       </div>
-      <div class="metric-card" style="border-color:rgba(245,158,11,0.3);">
-        <div class="metric-val" id="m-pending" style="color:var(--warning);">0</div>
-        <div class="metric-lbl">Under Review</div>
-      </div>
-      <div class="metric-card" style="border-color:rgba(0,230,118,0.3);">
-        <div class="metric-val" id="m-approved" style="color:#00A650;">0</div>
-        <div class="metric-lbl">Delivered</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-val" id="m-wa" style="color:#00A650;">0</div>
-        <div class="metric-lbl">WhatsApp Orders</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-val" id="m-rev" style="color:var(--primary);">$0.00</div>
-        <div class="metric-lbl">Fees Collected</div>
+
+      <div class="search-box">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" id="order-search-input" placeholder="Search ID, Name, Phone, UID...">
       </div>
     </div>
 
-    <!-- Category Tabs & Controls -->
-    <div class="controls-card animate-in delay-1">
-      <div class="category-tabs">
-        <button type="button" class="cat-btn active" data-cat="all">All Orders (<span id="cnt-all">0</span>)</button>
-        <button type="button" class="cat-btn" data-cat="direct">Direct Checkout (<span id="cnt-direct">0</span>)</button>
-        <button type="button" class="cat-btn wa-cat" data-cat="whatsapp">WhatsApp Orders (<span id="cnt-wa">0</span>)</button>
-        <button type="button" class="cat-btn" data-cat="review">Pending Review (<span id="cnt-rev">0</span>)</button>
-      </div>
-
-      <div class="search-row">
-        <div class="search-box">
-          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-          <input type="text" id="orders-search-input" placeholder="Search Order ID, Name, Phone, UID, or TrxID...">
-        </div>
-
-        <div class="bulk-actions">
-          <button type="button" class="btn-bulk" id="btn-export-csv"><svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Export CSV</button>
-        </div>
-      </div>
+    <!-- Bulk Action Tool Overlay -->
+    <div class="bulk-bar" id="bulk-bar">
+      <span style="font-size:13px; font-weight:800;" id="bulk-count">0 Selected</span>
+      <button class="btn-action-sm" style="background:var(--success); color:white;" id="btn-bulk-approve">Bulk Approve</button>
+      <button class="btn-action-sm" style="background:var(--danger); color:white;" id="btn-bulk-reject">Bulk Reject</button>
+      <button class="btn-action-sm btn-view" id="btn-bulk-print">Bulk Print Invoices</button>
     </div>
 
     <!-- Orders Table -->
@@ -351,12 +277,12 @@
         <table>
           <thead>
             <tr>
+              <th style="width:30px;"><input type="checkbox" id="chk-all"></th>
               <th>Order ID</th>
               <th>Source</th>
               <th>Customer</th>
-              <th>Package</th>
-              <th>Fee Paid</th>
-              <th>Destination</th>
+              <th>Package / Fee</th>
+              <th>Platform / Destination</th>
               <th>Status</th>
               <th>Date</th>
               <th>Actions</th>
@@ -368,173 +294,130 @@
         </table>
       </div>
     </div>
-
   </main>
 
-  <!-- ================= A-TO-Z FULL DETAILS MODAL ================= -->
-  <div class="modal-overlay no-print" id="details-modal">
-    <div class="modal-details">
-      <div class="modal-header-row">
-        <h3>Order Details: <span id="md-order-id" style="color:var(--primary); font-family:monospace;">DR-000000</span></h3>
-        <button type="button" class="btn-bulk" id="btn-modal-close-top">✕ Close</button>
+  <!-- ================= CUSTOMER DOSSIER MODAL ================= -->
+  <div class="modal-overlay" id="dossier-modal">
+    <div class="dossier-modal">
+      <div class="dossier-header">
+        <div>
+          <h3 id="dos-order-id" style="font-size:24px; font-weight:900;">Order Dossier</h3>
+          <span id="dos-date" style="font-size:13px; color:var(--body); font-weight:600;">Submitted on —</span>
+        </div>
+        <button class="btn-action-sm btn-view" id="dos-close">Close Dossier</button>
       </div>
 
-      <!-- 2-Column Info Grid -->
-      <div class="details-grid-2col">
+      <div class="dossier-grid">
+        <!-- Customer & KYC Info -->
+        <div class="dossier-box">
+          <h4>👤 Customer Details</h4>
+          <p><b>Name:</b> <span id="dos-cust-name">—</span></p>
+          <p><b>Phone:</b> <span id="dos-cust-phone">—</span></p>
+          <p><b>WhatsApp:</b> <span id="dos-cust-wa">—</span></p>
+          <p><b>Email:</b> <span id="dos-cust-email">—</span></p>
+          <p><b>Location:</b> <span id="dos-cust-loc">—</span></p>
+          <p><b>TikTok ID:</b> <span id="dos-cust-tiktok">—</span></p>
+        </div>
+
+        <!-- Delivery Destination -->
+        <div class="dossier-box">
+          <h4>📥 Delivery Destination</h4>
+          <p><b>Platform:</b> <span id="dos-dest-platform" style="color:var(--primary); font-weight:800;">—</span></p>
+          <p><b>Receiver Title:</b> <span id="dos-dest-name">—</span></p>
+          <p><b>Address / UID:</b> <span id="dos-dest-uid" style="font-family:monospace;">—</span></p>
+          <p><b>Package Amount:</b> <span id="dos-pkg-amt" style="font-size:16px; font-weight:800;">$0 USD</span></p>
+          <p><b>Rental Fee Paid:</b> <span id="dos-pkg-fee" style="color:var(--primary); font-size:16px; font-weight:800;">$0 USD</span></p>
+        </div>
+      </div>
+
+      <!-- KYC & Screenshot Verification Proofs -->
+      <div class="dossier-box" style="margin-bottom:24px;">
+        <h4>🖼️ Uploaded Documents & Receipt Proofs</h4>
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:16px; margin-top:12px;">
+          <div>
+            <label style="font-size:12px; font-weight:800; display:block; margin-bottom:4px;">Selfie Proof</label>
+            <div id="box-selfie"><span style="color:var(--danger); font-size:12px;">Missing Selfie</span></div>
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:800; display:block; margin-bottom:4px;">CNIC / ID Front</label>
+            <div id="box-cnic-front"><span style="color:var(--danger); font-size:12px;">Missing ID Front</span></div>
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:800; display:block; margin-bottom:4px;">CNIC / ID Back</label>
+            <div id="box-cnic-back"><span style="color:var(--danger); font-size:12px;">Missing ID Back</span></div>
+          </div>
+          <div>
+            <label style="font-size:12px; font-weight:800; display:block; margin-bottom:4px;">Payment Screenshot</label>
+            <div id="box-receipt"><span style="color:var(--danger); font-size:12px;">Missing Receipt</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Update & Actions -->
+      <div class="dossier-box" style="background:var(--card);">
+        <h4 style="margin-bottom:16px;">⚡ Order Actions & Admin Update</h4>
         
-        <!-- Customer Info -->
-        <div class="details-block">
-          <h4>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-            Customer Profile
-          </h4>
-          <div class="info-line"><span>Name:</span><span id="md-cust-name">—</span></div>
-          <div class="info-line"><span>Email:</span><span id="md-cust-email">—</span></div>
-          <div class="info-line"><span>WhatsApp Phone:</span><span id="md-cust-phone" style="color:var(--primary);">—</span></div>
-          <div class="info-line"><span>TikTok ID:</span><span id="md-cust-tiktok">—</span></div>
-          <div class="info-line"><span>Location:</span><span id="md-cust-location">—</span></div>
-          <div class="info-line"><span>Full Address:</span><span id="md-cust-address">—</span></div>
-        </div>
-
-        <!-- Destination & Payment Details -->
-        <div class="details-block">
-          <h4>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
-            Destination & Payment
-          </h4>
-          <div class="info-line"><span>Package Amount:</span><span id="md-pkg-amt" style="color:var(--primary);">$0.00 USD</span></div>
-          <div class="info-line"><span>Rental Fee Paid:</span><span id="md-pkg-fee">$0.00 USD</span></div>
-          <div class="info-line"><span>Delivery Platform:</span><span id="md-platform" style="color:#00A650;">—</span></div>
-          <div class="info-line"><span>Receiver Name:</span><span id="md-receiver">—</span></div>
-          <div class="info-line"><span>Destination UID/Wallet:</span><span id="md-uid" style="font-family:monospace;">—</span></div>
-          <div class="info-line"><span>Trx ID / Hash:</span><span id="md-trx" style="font-family:monospace;">—</span></div>
-          <div class="info-line"><span>User Admin Notes:</span><span id="md-user-notes">—</span></div>
-        </div>
-
-      </div>
-
-      <!-- Missing Items Banner -->
-      <div id="missing-items-banner" style="display:none; margin-bottom:20px;"></div>
-
-      <!-- Uploaded KYC & Receipt Files -->
-      <div class="details-block">
-        <h4>KYC & Verification Uploads</h4>
-        <div class="kyc-images-grid">
-          <div class="kyc-box">
-            <img id="img-selfie" src="" alt="Selfie" onclick="window.open(this.src)">
-            <label>Live Selfie</label>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+          <div>
+            <label style="font-size:12px; font-weight:800; display:block; margin-bottom:6px;">Update Status</label>
+            <select id="dos-status-select" style="width:100%; padding:12px; border-radius:12px; border:1px solid var(--border); font-weight:700;">
+              <option value="submitted">Submitted</option>
+              <option value="under_review">Under Review</option>
+              <option value="approved">Approved</option>
+              <option value="delivered">Delivered / Completed</option>
+              <option value="rejected">Rejected</option>
+            </select>
           </div>
-          <div class="kyc-box">
-            <img id="img-cnic-front" src="" alt="CNIC Front" onclick="window.open(this.src)">
-            <label>CNIC Front</label>
-          </div>
-          <div class="kyc-box">
-            <img id="img-cnic-back" src="" alt="CNIC Back" onclick="window.open(this.src)">
-            <label>CNIC Back</label>
-          </div>
-          <div class="kyc-box">
-            <img id="img-receipt" src="" alt="Receipt" onclick="window.open(this.src)">
-            <label>Payment Receipt</label>
+          <div>
+            <label style="font-size:12px; font-weight:800; display:block; margin-bottom:6px;">Transaction Hash / Notes</label>
+            <input type="text" id="dos-trx-input" style="width:100%; padding:12px; border-radius:12px; border:1px solid var(--border); font-weight:600;" placeholder="Trx ID or verification note">
           </div>
         </div>
-      </div>
 
-      <!-- Status Control Bar -->
-      <div class="status-control-bar">
-        <select id="md-status-select">
-          <option value="submitted">Submitted</option>
-          <option value="under_review">Under Review</option>
-          <option value="approved">Approved</option>
-          <option value="delivered">Delivered</option>
-          <option value="rejected">Rejected</option>
-        </select>
-        <input type="text" id="md-admin-notes-input" placeholder="Enter admin verification update note for user...">
-        <button type="button" class="btn-update-status" id="btn-save-order-status">Update Status</button>
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <button type="button" class="btn-action-sm btn-primary" id="btn-save-dossier" style="flex:1;">Save Order Status</button>
+          <button type="button" class="btn-action-sm btn-wa-direct" id="btn-dos-wa" style="flex:1;">Send WhatsApp Message</button>
+          <button type="button" class="btn-action-sm btn-view" id="btn-dos-print">Print Invoice Receipt</button>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- ================= WHATSAPP TEMPLATE MANAGER MODAL ================= -->
-  <div class="modal-overlay no-print" id="wa-modal-overlay">
-    <div class="wa-modal-card">
-      <h3>
-        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
-        WhatsApp Message Manager
-      </h3>
+  <div class="modal-overlay" id="wa-template-modal">
+    <div class="dossier-modal" style="max-width:550px;">
+      <h3 style="font-size:22px; font-weight:900; margin-bottom:16px;">WhatsApp Message Templates</h3>
+      <p style="font-size:13px; color:var(--body); margin-bottom:20px;">Select a pre-formatted message template. Variables will auto-fill with customer details.</p>
       
-      <label style="font-size:12px; font-weight:800; color:var(--body); display:block; margin-bottom:6px;">Select Quick Template:</label>
-      <select id="wa-template-select" class="template-select">
-        <option value="missing_cnic">Template: Missing CNIC Identity Document</option>
-        <option value="missing_receipt">Template: Missing Payment Screenshot / TrxID</option>
-        <option value="under_review">Template: Order Currently Under Review</option>
-        <option value="delivered">Template: USD Balance Delivered Successfully!</option>
-        <option value="rejected">Template: Order Rejected Notice</option>
-        <option value="custom">Template: Custom Message</option>
-      </select>
+      <div id="wa-template-list" style="display:flex; flex-direction:column; gap:10px; margin-bottom:20px;">
+        <!-- Injected via JS -->
+      </div>
 
-      <label style="font-size:12px; font-weight:800; color:var(--body); display:block; margin-bottom:6px;">Message Preview:</label>
-      <textarea id="wa-msg-preview" class="wa-msg-preview"></textarea>
-
-      <div style="display:flex; gap:10px;">
-        <button type="button" class="btn-bulk" id="btn-close-wa-modal" style="flex:1;">Cancel</button>
-        <button type="button" class="btn-launch-wa" id="btn-open-wa-chat" style="flex:2;">Open WhatsApp Chat →</button>
+      <div style="display:flex; gap:10px; justify-content:flex-end;">
+        <button class="btn-action-sm btn-view" id="wa-cancel">Cancel</button>
       </div>
     </div>
   </div>
 
-  <!-- ================= PRINT AREA TEMPLATE ================= -->
-  <div id="print-area">
-    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #000; padding-bottom:12px; margin-bottom:20px;">
+  <!-- PRINTABLE INVOICE TEMPLATE (Hidden) -->
+  <div id="printable-invoice">
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #000; padding-bottom:20px; margin-bottom:20px;">
       <div>
-        <h1 style="font-size:24px; font-weight:900;">DollarRent Rental Invoice</h1>
-        <p style="font-size:12px;">Digital USD Rental Receipt & Verification Record</p>
+        <h1 style="font-size:28px; font-weight:900;">DollarRent Receipt</h1>
+        <p>Digital USD Rental Platform</p>
       </div>
-      <img src="../assets/logo.png" alt="Logo" style="width:50px; height:50px;">
+      <img src="../assets/logo.png" style="width:60px;" alt="Logo">
     </div>
 
-    <div style="display:flex; justify-content:space-between; margin-bottom:20px; font-size:13px;">
-      <div>
-        <strong>Order Ref:</strong> <span id="pr-id"></span><br>
-        <strong>Date:</strong> <span id="pr-date"></span><br>
-        <strong>Status:</strong> <span id="pr-status"></span>
-      </div>
-      <div style="text-align:right;">
-        <strong>Customer:</strong> <span id="pr-cust-name"></span><br>
-        <strong>Email:</strong> <span id="pr-cust-email"></span><br>
-        <strong>Phone:</strong> <span id="pr-cust-phone"></span>
-      </div>
-    </div>
+    <div id="print-content"></div>
 
-    <table style="width:100%; border-collapse:collapse; margin-bottom:20px; border:1px solid #000;" border="1">
-      <thead>
-        <tr style="background:#f0f0f0;">
-          <th style="padding:8px;">Item Description</th>
-          <th style="padding:8px;">Amount</th>
-          <th style="padding:8px;">Advance Fee</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td style="padding:10px;" id="pr-desc">Digital USD Package</td>
-          <td style="padding:10px; text-align:center;" id="pr-amount"></td>
-          <td style="padding:10px; text-align:center;" id="pr-fee"></td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:40px;">
-      <div>
-        <img id="pr-qr" src="" alt="QR" style="width:120px; height:120px; border:1px solid #ccc; padding:4px;">
-        <p style="font-size:10px; margin-top:4px;">Scan QR to verify live order online</p>
-      </div>
-      <div style="text-align:right; border-top:1px solid #000; width:200px; padding-top:4px;">
-        <strong>Authorized Admin Signature</strong>
-      </div>
+    <div style="margin-top:40px; border-top:1px solid #ccc; padding-top:20px; text-align:center; font-size:12px;">
+      <p>Thank you for using DollarRent. Order tracked live via <b>https://dollarrent.vercel.app</b></p>
     </div>
   </div>
 
   <!-- Mobile Floating Island Dock -->
-  <nav class="mobile-dock no-print">
+  <nav class="mobile-dock">
     <a href="dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg><span>Dash</span></a>
     <a href="orders.html" class="active"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg><span>Orders</span></a>
     <a href="packages.html"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg><span>Pkgs</span></a>
@@ -542,80 +425,92 @@
     <a href="settings.html"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle></svg><span>Settings</span></a>
   </nav>
 
-  <!-- ================= FIREBASE MODULE LOGIC ================= -->
+  <!-- ================= FIREBASE & ENGINE SCRIPT ================= -->
   <script type="module">
     import { initAuthObserver, getAdminUser } from '../firebase-auth.js';
     import { db } from '../firebase-config.js';
-    import { collection, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-    import { formatUSD, showToast, escapeHTML } from '../utils.js';
+    import { collection, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { formatUSD, escapeHTML, showToast } from '../utils.js';
 
     let allOrders = [];
-    let currentCategory = 'all';
+    let selectedCategory = 'all'; // 'all', 'direct', 'whatsapp'
+    let selectedStatus = 'all';
     let searchQuery = '';
-    let selectedOrder = null;
-    let currentAdmin = null;
+    let selectedOrderForDossier = null;
+    let selectedOrderIds = new Set();
 
-    // 1. Auth Observer
+    // Built-In WhatsApp Communication Templates
+    const WA_TEMPLATES = [
+      { id: 'review', title: 'Order Under Review', msg: "Hello {customerName}! Your DollarRent Order #{orderId} for ${amount} USD ({deliveryPlatform}) is under verification. We will process it shortly." },
+      { id: 'approved', title: 'Order Approved & Delivered', msg: "Great news {customerName}! Your Order #{orderId} for ${amount} USD has been APPROVED and delivered to your {deliveryPlatform} account ({destinationId}). Thank you!" },
+      { id: 'missing_cnic', title: 'Missing ID / CNIC Proof', msg: "Hello {customerName}! Regarding Order #{orderId}: We need a clear front/back image of your ID/CNIC to complete verification. Please reply with the documents." },
+      { id: 'missing_receipt', title: 'Missing Payment Receipt', msg: "Hello {customerName}! Please share a screenshot of your payment receipt and Transaction ID for Order #{orderId} so we can release your USD balance." },
+      { id: 'rejected', title: 'Order Rejected', msg: "Hello {customerName}, Order #{orderId} was rejected as verification could not be completed. Please contact @rental_dollor on Telegram for assistance." }
+    ];
+
+    // Auth Protection
     initAuthObserver((user) => {
       const adminUser = getAdminUser();
       if (!adminUser && !user) {
         window.location.href = 'login.html';
         return;
       }
-      currentAdmin = adminUser || user;
-
-      // Update Profile Box
+      
+      const currentAdmin = adminUser || user;
       const profileBox = document.getElementById('admin-profile-box');
       if (profileBox && currentAdmin) {
-        const name = currentAdmin.fullName || currentAdmin.email || 'Superadmin';
-        const initial = name.charAt(0).toUpperCase();
         profileBox.innerHTML = `
-          <div class="admin-avatar-fallback">${initial}</div>
-          <div class="admin-meta"><h4>${escapeHTML(name.split(' ')[0])}</h4><p>Superadmin</p></div>
+          <div class="admin-avatar-fallback">${(currentAdmin.fullName || 'A').charAt(0)}</div>
+          <div class="admin-meta">
+            <h4>${escapeHTML((currentAdmin.fullName || 'Admin').split(' ')[0])}</h4>
+            <p>Superadmin</p>
+          </div>
         `;
       }
 
-      // Live Firestore Listener
+      // Realtime Order Listener
       onSnapshot(collection(db, 'orders'), (snapshot) => {
         allOrders = [];
-        snapshot.forEach(d => allOrders.push({ id: d.id, ...d.data() }));
+        snapshot.forEach(doc => allOrders.push({ id: doc.id, ...doc.data() }));
         allOrders.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
-        renderOrdersQueue();
+
+        updateCountersAndStats();
+        renderTable();
       });
     });
 
-    // 2. Render Function
-    function renderOrdersQueue() {
+    // Compute Metrics & Category Counts
+    function updateCountersAndStats() {
+      const directOrders = allOrders.filter(o => o.orderType !== 'WhatsApp Assisted');
+      const waOrders = allOrders.filter(o => o.orderType === 'WhatsApp Assisted');
+      const pendingOrders = allOrders.filter(o => o.status === 'submitted' || o.status === 'under_review');
+      const revenue = allOrders.filter(o => o.status === 'approved' || o.status === 'delivered')
+                               .reduce((sum, o) => sum + Number(o.feeUSD || o.fee || 0), 0);
+
+      document.getElementById('st-total').textContent = allOrders.length;
+      document.getElementById('st-direct').textContent = directOrders.length;
+      document.getElementById('st-wa').textContent = waOrders.length;
+      document.getElementById('st-pending').textContent = pendingOrders.length;
+      document.getElementById('st-rev').textContent = formatUSD(revenue);
+
+      document.getElementById('cnt-all').textContent = allOrders.length;
+      document.getElementById('cnt-direct').textContent = directOrders.length;
+      document.getElementById('cnt-wa').textContent = waOrders.length;
+    }
+
+    // Render Table Row Items
+    function renderTable() {
       const tbody = document.getElementById('orders-tbody');
       const queryText = searchQuery.toLowerCase().trim();
 
-      // Compute Counters
-      const cntAll = allOrders.length;
-      const cntDirect = allOrders.filter(o => o.orderType !== 'WhatsApp Assisted').length;
-      const cntWa = allOrders.filter(o => o.orderType === 'WhatsApp Assisted').length;
-      const cntRev = allOrders.filter(o => o.status === 'submitted' || o.status === 'under_review').length;
-      const cntDel = allOrders.filter(o => o.status === 'approved' || o.status === 'delivered').length;
-
-      document.getElementById('m-total').textContent = cntAll;
-      document.getElementById('m-pending').textContent = cntRev;
-      document.getElementById('m-approved').textContent = cntDel;
-      document.getElementById('m-wa').textContent = cntWa;
-      
-      const totalRev = allOrders.filter(o => o.status === 'approved' || o.status === 'delivered')
-                                .reduce((acc, o) => acc + Number(o.feeUSD || o.fee || 0), 0);
-      document.getElementById('m-rev').textContent = formatUSD(totalRev);
-
-      document.getElementById('cnt-all').textContent = cntAll;
-      document.getElementById('cnt-direct').textContent = cntDirect;
-      document.getElementById('cnt-wa').textContent = cntWa;
-      document.getElementById('cnt-rev').textContent = cntRev;
-
-      // Filtering
       const filtered = allOrders.filter(o => {
-        let matchesCat = true;
-        if (currentCategory === 'direct') matchesCat = o.orderType !== 'WhatsApp Assisted';
-        if (currentCategory === 'whatsapp') matchesCat = o.orderType === 'WhatsApp Assisted';
-        if (currentCategory === 'review') matchesCat = (o.status === 'submitted' || o.status === 'under_review');
+        const isWa = o.orderType === 'WhatsApp Assisted';
+        const matchesCat = (selectedCategory === 'all') ||
+                           (selectedCategory === 'direct' && !isWa) ||
+                           (selectedCategory === 'whatsapp' && isWa);
+
+        const st = (o.status || 'submitted').toLowerCase();
+        const matchesStatus = (selectedStatus === 'all') || (st === selectedStatus);
 
         const name = (o.customer?.fullName || '').toLowerCase();
         const ref = (o.orderId || o.id || '').toLowerCase();
@@ -624,235 +519,262 @@
 
         const matchesSearch = !queryText || name.includes(queryText) || ref.includes(queryText) || phone.includes(queryText) || uid.includes(queryText);
 
-        return matchesCat && matchesSearch;
+        return matchesCat && matchesStatus && matchesSearch;
       });
 
       if (!filtered.length) {
-        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding:40px; color:var(--body); font-weight:600;">No orders found in this queue.</td></tr>';
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:40px; color:var(--body);">No matching orders found.</td></tr>`;
         return;
       }
 
       tbody.innerHTML = filtered.map(o => {
         const isWa = o.orderType === 'WhatsApp Assisted';
-        const st = (o.status || 'submitted').toLowerCase();
         const dateStr = o.createdAt ? new Date(o.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Recently';
+        const st = (o.status || 'submitted').toLowerCase();
+        const isChecked = selectedOrderIds.has(o.id);
 
         return `
           <tr>
-            <td><strong style="font-family:monospace; color:var(--heading);">${escapeHTML(o.orderId || o.id)}</strong></td>
-            <td><span class="type-tag ${isWa ? 'type-wa' : 'type-direct'}">${isWa ? '💬 WhatsApp' : '💳 Direct'}</span></td>
+            <td><input type="checkbox" class="chk-item" data-id="${o.id}" ${isChecked ? 'checked' : ''}></td>
+            <td><strong style="font-family:monospace; font-size:13px;">${escapeHTML(o.orderId || o.id)}</strong></td>
+            <td><span class="source-tag ${isWa ? 'tag-wa' : 'tag-direct'}">${isWa ? '💬 WhatsApp' : '💳 Direct'}</span></td>
             <td>
               <div style="font-weight:800; color:var(--heading);">${escapeHTML(o.customer?.fullName || 'Customer')}</div>
               <div style="font-size:12px; color:var(--body);">${escapeHTML(o.customer?.phone || o.customer?.email || '')}</div>
             </td>
-            <td><b>$${o.amountUSD || o.amount || 0} USD</b></td>
-            <td><b style="color:var(--primary);">${formatUSD(o.feeUSD || o.fee || 0)}</b></td>
-            <td><span style="color:var(--primary); font-weight:800;">${escapeHTML(o.customer?.deliveryPlatform || 'Binance')}</span></td>
-            <td><span class="badge badge-${st}">${st.replace('_', ' ')}</span></td>
-            <td style="color:var(--body); font-size:12.5px;">${dateStr}</td>
             <td>
-              <div class="row-actions">
-                <button type="button" class="btn-row btn-row-view" onclick="window._openDetailsModal('${o.id}')">View</button>
-                <button type="button" class="btn-row btn-row-wa" onclick="window._openWaModal('${o.id}')">WA</button>
-                <button type="button" class="btn-row btn-row-print" onclick="window._printSingleInvoice('${o.id}')">🖨</button>
+              <div style="font-weight:900; color:var(--heading);">$${o.amountUSD || o.amount || 0} USD</div>
+              <div style="font-size:12px; color:var(--primary); font-weight:700;">Fee: ${formatUSD(o.feeUSD || o.fee || 0)}</div>
+            </td>
+            <td>
+              <div style="font-weight:700; color:var(--primary);">${escapeHTML(o.customer?.deliveryPlatform || 'Binance Pay')}</div>
+              <div style="font-size:12px; font-family:monospace; color:var(--body);">${escapeHTML(o.customer?.destinationId || o.customer?.binanceUid || '—')}</div>
+            </td>
+            <td><span class="badge badge-${st}">${st.replace('_', ' ')}</span></td>
+            <td style="font-size:12px; color:var(--body);">${dateStr}</td>
+            <td>
+              <div style="display:flex; gap:6px;">
+                <button class="btn-action-sm btn-view" onclick="window._openDossier('${o.id}')">View Dossier</button>
+                <button class="btn-action-sm btn-wa-direct" onclick="window._openWASelector('${o.id}')">💬 WA</button>
               </div>
             </td>
           </tr>
         `;
       }).join('');
+
+      // Checkbox Event Binding
+      document.querySelectorAll('.chk-item').forEach(chk => {
+        chk.addEventListener('change', (e) => {
+          const id = e.target.dataset.id;
+          if (e.target.checked) selectedOrderIds.add(id);
+          else selectedOrderIds.delete(id);
+          updateBulkBar();
+        });
+      });
     }
 
-    // 3. Category Tab Listeners
-    document.querySelectorAll('.cat-btn').forEach(btn => {
+    // Category Tabs Logic
+    document.getElementById('tab-all').addEventListener('click', (e) => setCat('all', e.target));
+    document.getElementById('tab-direct').addEventListener('click', (e) => setCat('direct', e.target));
+    document.getElementById('tab-wa').addEventListener('click', (e) => setCat('whatsapp', e.target));
+
+    function setCat(cat, btn) {
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedCategory = cat;
+      renderTable();
+    }
+
+    // Status Filters
+    document.querySelectorAll('.filter-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        currentCategory = btn.getAttribute('data-cat');
-        renderOrdersQueue();
+        selectedStatus = btn.dataset.status;
+        renderTable();
       });
     });
 
-    document.getElementById('orders-search-input').addEventListener('input', (e) => {
+    // Search Input
+    document.getElementById('order-search-input').addEventListener('input', (e) => {
       searchQuery = e.target.value;
-      renderOrdersQueue();
+      renderTable();
     });
 
-    // 4. Open Order Details Modal
-    window._openDetailsModal = function(id) {
-      selectedOrder = allOrders.find(o => o.id === id);
-      if (!selectedOrder) return;
+    // Open Full Customer Dossier Modal
+    window._openDossier = (orderId) => {
+      const o = allOrders.find(x => x.id === orderId || x.orderId === orderId);
+      if (!o) return;
+      selectedOrderForDossier = o;
 
-      const cust = selectedOrder.customer || {};
-      const kyc = cust.kyc || {};
+      document.getElementById('dos-order-id').textContent = `Order #${o.orderId || o.id}`;
+      document.getElementById('dos-date').textContent = `Submitted on ${new Date(o.createdAt || Date.now()).toLocaleString()}`;
+      
+      const c = o.customer || {};
+      document.getElementById('dos-cust-name').textContent = c.fullName || '—';
+      document.getElementById('dos-cust-phone').textContent = c.phone || '—';
+      document.getElementById('dos-cust-wa').textContent = c.phone || '—';
+      document.getElementById('dos-cust-email').textContent = c.email || '—';
+      document.getElementById('dos-cust-loc').textContent = c.location || '—';
+      document.getElementById('dos-cust-tiktok').textContent = c.tiktokId || 'N/A';
 
-      document.getElementById('md-order-id').textContent = selectedOrder.orderId || selectedOrder.id;
-      document.getElementById('md-cust-name').textContent = cust.fullName || '—';
-      document.getElementById('md-cust-email').textContent = cust.email || '—';
-      document.getElementById('md-cust-phone').textContent = cust.phone || '—';
-      document.getElementById('md-cust-tiktok').textContent = cust.tiktokId || '—';
-      document.getElementById('md-cust-location').textContent = cust.location || '—';
-      document.getElementById('md-cust-address').textContent = cust.fullAddress || '—';
+      document.getElementById('dos-dest-platform').textContent = c.deliveryPlatform || 'Binance Pay';
+      document.getElementById('dos-dest-name').textContent = c.receiverName || c.fullName || '—';
+      document.getElementById('dos-dest-uid').textContent = c.destinationId || c.binanceUid || '—';
+      document.getElementById('dos-pkg-amt').textContent = `$${o.amountUSD || o.amount || 0} USD`;
+      document.getElementById('dos-pkg-fee').textContent = formatUSD(o.feeUSD || o.fee || 0);
 
-      document.getElementById('md-pkg-amt').textContent = `$${selectedOrder.amountUSD || 0}.00 USD`;
-      document.getElementById('md-pkg-fee').textContent = formatUSD(selectedOrder.feeUSD || selectedOrder.fee || 0);
-      document.getElementById('md-platform').textContent = cust.deliveryPlatform || 'Binance Pay';
-      document.getElementById('md-receiver').textContent = cust.receiverName || '—';
-      document.getElementById('md-uid').textContent = cust.destinationId || cust.binanceUid || '—';
-      document.getElementById('md-trx').textContent = selectedOrder.transactionId || 'N/A';
-      document.getElementById('md-user-notes').textContent = cust.adminNotes || 'None';
+      document.getElementById('dos-status-select').value = o.status || 'submitted';
+      document.getElementById('dos-trx-input').value = o.transactionId || '';
 
-      // Images
-      document.getElementById('img-selfie').src = kyc.selfieUrl || 'https://via.placeholder.com/150?text=No+Selfie';
-      document.getElementById('img-cnic-front').src = kyc.cnicFrontUrl || 'https://via.placeholder.com/150?text=No+ID+Front';
-      document.getElementById('img-cnic-back').src = kyc.cnicBackUrl || 'https://via.placeholder.com/150?text=No+ID+Back';
-      document.getElementById('img-receipt').src = selectedOrder.screenshotUrl || 'https://via.placeholder.com/150?text=No+Receipt';
+      // Documents Preview
+      const kyc = c.kyc || {};
+      setProofBox('box-selfie', kyc.selfieUrl, 'Selfie Proof');
+      setProofBox('box-cnic-front', kyc.cnicFrontUrl, 'ID Front');
+      setProofBox('box-cnic-back', kyc.cnicBackUrl, 'ID Back');
+      setProofBox('box-receipt', o.screenshotUrl, 'Payment Proof');
 
-      // Check Missing Docs
-      const missingBanner = document.getElementById('missing-items-banner');
-      let missingList = [];
-      if (!kyc.cnicFrontUrl) missingList.push('CNIC Front');
-      if (!kyc.cnicBackUrl) missingList.push('CNIC Back');
-      if (!kyc.selfieUrl) missingList.push('Live Selfie');
-      if (!selectedOrder.screenshotUrl && selectedOrder.orderType !== 'WhatsApp Assisted') missingList.push('Payment Receipt');
-
-      if (missingList.length) {
-        missingBanner.style.display = 'block';
-        missingBanner.innerHTML = `<div class="missing-badge">⚠️ Missing Required Verification Docs: ${missingList.join(', ')}</div>`;
-      } else {
-        missingBanner.style.display = 'none';
-      }
-
-      document.getElementById('md-status-select').value = selectedOrder.status || 'submitted';
-      document.getElementById('md-admin-notes-input').value = selectedOrder.adminNotes || '';
-
-      document.getElementById('details-modal').classList.add('active');
+      document.getElementById('dossier-modal').classList.add('active');
     };
 
-    document.getElementById('btn-modal-close-top').addEventListener('click', () => {
-      document.getElementById('details-modal').classList.remove('active');
-    });
-
-    // Save Status Update
-    document.getElementById('btn-save-order-status').addEventListener('click', async () => {
-      if (!selectedOrder) return;
-      const newStatus = document.getElementById('md-status-select').value;
-      const newNote = document.getElementById('md-admin-notes-input').value.trim();
-
-      try {
-        await updateDoc(doc(db, 'orders', selectedOrder.id), {
-          status: newStatus,
-          adminNotes: newNote,
-          updatedAt: new Date().toISOString(),
-          updatedBy: currentAdmin?.email || 'Admin'
-        });
-        showToast('Order status updated successfully!', 'success');
-        document.getElementById('details-modal').classList.remove('active');
-      } catch (err) {
-        showToast('Update failed: ' + err.message, 'error');
-      }
-    });
-
-    // 5. WhatsApp Template Modal
-    window._openWaModal = function(id) {
-      selectedOrder = allOrders.find(o => o.id === id);
-      if (!selectedOrder) return;
-
-      document.getElementById('wa-modal-overlay').classList.add('active');
-      updateWaMessageText('missing_cnic');
-    };
-
-    const waSelect = document.getElementById('wa-template-select');
-    const waPreview = document.getElementById('wa-msg-preview');
-
-    waSelect.addEventListener('change', () => updateWaMessageText(waSelect.value));
-
-    function updateWaMessageText(templateKey) {
-      if (!selectedOrder) return;
-
-      const cust = selectedOrder.customer || {};
-      const name = cust.fullName || 'Valued Renter';
-      const ref = selectedOrder.orderId || selectedOrder.id;
-      const amt = selectedOrder.amountUSD || 50;
-      const fee = selectedOrder.feeUSD || 9;
-      const platform = cust.deliveryPlatform || 'Binance';
-      const uid = cust.destinationId || 'N/A';
-
-      let msg = '';
-      if (templateKey === 'missing_cnic') {
-        msg = `Hello ${name}! We received your DollarRent Order #${ref} ($${amt} USD). To complete your verification, please send a clear photo of your CNIC (Front & Back). Thank you!`;
-      } else if (templateKey === 'missing_receipt') {
-        msg = `Hello ${name}! Your order #${ref} is pending payment verification. Please share your transaction receipt screenshot and Transaction ID (TrxID) here.`;
-      } else if (templateKey === 'under_review') {
-        msg = `Hello ${name}! Your order #${ref} ($${amt} USD) is currently under manual admin verification. Estimated processing time: 15-30 minutes.`;
-      } else if (templateKey === 'delivered') {
-        msg = `Great news ${name}! Your $${amt} USD rental balance for order #${ref} has been successfully delivered to your ${platform} account (${uid}). Thank you for choosing DollarRent!`;
-      } else if (templateKey === 'rejected') {
-        msg = `Hello ${name}, regarding your order #${ref}: We could not process your request due to payment/KYC verification mismatch. Please reply for assistance.`;
+    function setProofBox(boxId, url, label) {
+      const box = document.getElementById(boxId);
+      if (url) {
+        box.innerHTML = `<img src="${url}" class="proof-img" onclick="window.open('${url}','_blank')" alt="${label}">`;
       } else {
-        msg = `Hello ${name}, regarding your DollarRent order #${ref}...`;
+        box.innerHTML = `<span style="color:var(--danger); font-size:12px; font-weight:700;">Missing ${label}</span>`;
       }
-
-      waPreview.value = msg;
     }
 
-    document.getElementById('btn-open-wa-chat').addEventListener('click', () => {
-      if (!selectedOrder) return;
-      const cust = selectedOrder.customer || {};
-      const phone = (cust.phone || '').replace(/[^0-9]/g, '');
-      const text = encodeURIComponent(waPreview.value);
-
-      window.open(`https://wa.me/${phone}?text=${text}`, '_blank');
-      document.getElementById('wa-modal-overlay').classList.remove('active');
+    document.getElementById('dos-close').addEventListener('click', () => {
+      document.getElementById('dossier-modal').classList.remove('active');
     });
 
-    document.getElementById('btn-close-wa-modal').addEventListener('click', () => {
-      document.getElementById('wa-modal-overlay').classList.remove('active');
+    // Save Dossier Status
+    document.getElementById('btn-save-dossier').addEventListener('click', async () => {
+      if (!selectedOrderForDossier) return;
+      const newStatus = document.getElementById('dos-status-select').value;
+      const newTrx = document.getElementById('dos-trx-input').value.trim();
+
+      try {
+        await updateDoc(doc(db, 'orders', selectedOrderForDossier.id), {
+          status: newStatus,
+          transactionId: newTrx,
+          updatedAt: new Date().toISOString()
+        });
+        showToast('Order dossier updated live!', 'success');
+        document.getElementById('dossier-modal').classList.remove('active');
+      } catch (err) {
+        showToast('Update error: ' + err.message, 'error');
+      }
     });
 
-    // 6. Print Single Invoice
-    window._printSingleInvoice = function(id) {
-      const o = allOrders.find(x => x.id === id);
+    // WhatsApp Direct Selector Trigger
+    window._openWASelector = (orderId) => {
+      const o = allOrders.find(x => x.id === orderId || x.orderId === orderId);
       if (!o) return;
+      selectedOrderForDossier = o;
 
-      document.getElementById('pr-id').textContent = o.orderId || o.id;
-      document.getElementById('pr-date').textContent = o.createdAt ? new Date(o.createdAt).toLocaleString() : 'N/A';
-      document.getElementById('pr-status').textContent = (o.status || 'submitted').toUpperCase();
+      const list = document.getElementById('wa-template-list');
+      list.innerHTML = WA_TEMPLATES.map(t => `
+        <button type="button" class="btn-action-sm btn-view" style="text-align:left; justify-content:space-between;" onclick="window._sendWATemplate('${t.id}')">
+          <b>${t.title}</b> ➔
+        </button>
+      `).join('');
 
-      document.getElementById('pr-cust-name').textContent = o.customer?.fullName || 'N/A';
-      document.getElementById('pr-cust-email').textContent = o.customer?.email || 'N/A';
-      document.getElementById('pr-cust-phone').textContent = o.customer?.phone || 'N/A';
-
-      document.getElementById('pr-desc').textContent = `$${o.amountUSD || 50} USD Balance (${o.customer?.deliveryPlatform || 'Binance'})`;
-      document.getElementById('pr-amount').textContent = `$${o.amountUSD || 50}.00`;
-      document.getElementById('pr-fee').textContent = formatUSD(o.feeUSD || o.fee || 9);
-
-      // QR Code Server Generator
-      const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent('https://rentusdt.vercel.app/order-status.html?orderId=' + (o.orderId || o.id))}`;
-      document.getElementById('pr-qr').src = qrUrl;
-
-      window.print();
+      document.getElementById('wa-template-modal').classList.add('active');
     };
 
-    // Export CSV
-    document.getElementById('btn-export-csv').addEventListener('click', () => {
-      if (!allOrders.length) return showToast('No order records available!', 'error');
+    document.getElementById('wa-cancel').addEventListener('click', () => {
+      document.getElementById('wa-template-modal').classList.remove('active');
+    });
 
-      const headers = ['Order ID', 'Type', 'Name', 'Phone', 'Platform', 'USD Amount', 'Fee', 'Status', 'Date'];
+    window._sendWATemplate = (tmplId) => {
+      const t = WA_TEMPLATES.find(x => x.id === tmplId);
+      const o = selectedOrderForDossier;
+      if (!t || !o) return;
+
+      const c = o.customer || {};
+      let msg = t.msg
+        .replace('{customerName}', c.fullName || 'Customer')
+        .replace('{orderId}', o.orderId || o.id)
+        .replace('{amount}', o.amountUSD || 0)
+        .replace('{deliveryPlatform}', c.deliveryPlatform || 'Binance Pay')
+        .replace('{destinationId}', c.destinationId || c.binanceUid || 'N/A')
+        .replace('{status}', (o.status || 'submitted').toUpperCase());
+
+      const phone = (c.phone || '').replace(/[^0-9]/g, '');
+      const url = `https://wa.me/${phone || '923001234567'}?text=${encodeURIComponent(msg)}`;
+      window.open(url, '_blank');
+      document.getElementById('wa-template-modal').classList.remove('active');
+    };
+
+    // Print Invoice Handler
+    document.getElementById('btn-dos-print').addEventListener('click', () => {
+      const o = selectedOrderForDossier;
+      if (!o) return;
+      const c = o.customer || {};
+
+      const printHtml = `
+        <h3>Invoice Reference: #${o.orderId || o.id}</h3>
+        <p><b>Customer:</b> ${escapeHTML(c.fullName)} (${escapeHTML(c.phone)})</p>
+        <p><b>Package:</b> $${o.amountUSD || 0} USD Balance</p>
+        <p><b>Rental Fee Paid:</b> ${formatUSD(o.feeUSD || 0)}</p>
+        <p><b>Destination:</b> ${escapeHTML(c.deliveryPlatform)} - ${escapeHTML(c.destinationId)}</p>
+        <p><b>Status:</b> ${escapeHTML((o.status || 'submitted').toUpperCase())}</p>
+        <br>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://dollarrent.vercel.app/order-status.html?orderId=${o.orderId || o.id}" alt="QR Code Tracking">
+      `;
+
+      document.getElementById('print-content').innerHTML = printHtml;
+      window.print();
+    });
+
+    // Bulk Bar Toggle & Operations
+    function updateBulkBar() {
+      const bar = document.getElementById('bulk-bar');
+      const countEl = document.getElementById('bulk-count');
+      if (selectedOrderIds.size > 0) {
+        bar.classList.add('visible');
+        countEl.textContent = `${selectedOrderIds.size} Orders Selected`;
+      } else {
+        bar.classList.remove('visible');
+      }
+    }
+
+    document.getElementById('chk-all').addEventListener('change', (e) => {
+      document.querySelectorAll('.chk-item').forEach(chk => {
+        chk.checked = e.target.checked;
+        const id = chk.dataset.id;
+        if (e.target.checked) selectedOrderIds.add(id);
+        else selectedOrderIds.delete(id);
+      });
+      updateBulkBar();
+    });
+
+    // CSV Exporter
+    document.getElementById('btn-export-all').addEventListener('click', () => {
+      if (!allOrders.length) return showToast('No order data available to export.', 'error');
+      
+      const headers = ['Order ID', 'Type', 'Customer Name', 'Phone', 'Email', 'Package USD', 'Fee USD', 'Platform', 'Destination ID', 'Status', 'Date'];
       const rows = allOrders.map(o => [
         o.orderId || o.id,
-        o.orderType || 'Direct',
+        o.orderType || 'Direct Payment',
         `"${o.customer?.fullName || ''}"`,
         `"${o.customer?.phone || ''}"`,
-        `"${o.customer?.deliveryPlatform || ''}"`,
+        `"${o.customer?.email || ''}"`,
         o.amountUSD || 0,
         o.feeUSD || 0,
+        `"${o.customer?.deliveryPlatform || ''}"`,
+        `"${o.customer?.destinationId || ''}"`,
         o.status || 'submitted',
         o.createdAt || ''
       ]);
 
-      const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
+      const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+      const encodedUri = encodeURI(csvContent);
       const link = document.createElement('a');
-      link.setAttribute('href', encodeURI(csvContent));
+      link.setAttribute('href', encodedUri);
       link.setAttribute('download', `DollarRent_Orders_${Date.now()}.csv`);
       document.body.appendChild(link);
       link.click();
