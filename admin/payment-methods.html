@@ -6,6 +6,7 @@
   <title>Payment Methods — DollarRent Admin</title>
   <meta name="robots" content="noindex, nofollow">
   
+  <!-- STRICT LOGO COMPLIANCE -->
   <link rel="icon" href="../assets/logo.png" type="image/png">
   <link rel="apple-touch-icon" href="../assets/logo.png">
 
@@ -50,7 +51,6 @@
     .animate-in { opacity: 0; transform: translateY(20px); animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) forwards; }
     @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
     .delay-1 { animation-delay: 0.1s; }
-    .delay-2 { animation-delay: 0.2s; }
 
     /* ================= DESKTOP SIDEBAR ================= */
     .sidebar { 
@@ -72,7 +72,7 @@
     .sidebar-menu a.active { background: var(--primary); color: white; box-shadow: 0 8px 16px rgba(15,98,254,0.25); }
     .sidebar-menu svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
     
-    /* Admin Profile Avatar Section */
+    /* Admin Profile Display */
     .sidebar-footer { padding: 20px 12px; border-top: 1px solid var(--border); margin-top: 20px; display: flex; align-items: center; justify-content: space-between;}
     .admin-profile { display: flex; align-items: center; gap: 10px; }
     .admin-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-glow); }
@@ -108,62 +108,73 @@
     }
     .method-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); border-color: var(--primary); }
     
-    .method-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid rgba(226,232,240,0.6); padding-bottom: 16px;}
-    .method-title-wrap { display: flex; align-items: center; gap: 10px; }
-    .method-icon { width: 36px; height: 36px; border-radius: 10px; background: var(--primary-glow); display: flex; align-items: center; justify-content: center; color: var(--primary); }
-    .method-icon svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2.5; }
-    .method-name { font-size: 18px; font-weight: 800; color: var(--heading);}
+    .method-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid rgba(226,232,240,0.6); padding-bottom: 16px;}
+    .method-title-wrap { display: flex; align-items: center; gap: 12px; }
+    .method-icon-box { width: 42px; height: 42px; border-radius: 12px; background: var(--bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 6px; }
+    .method-icon-box img { width: 100%; height: 100%; object-fit: contain; }
+    .method-name { font-size: 18px; font-weight: 800; color: var(--heading); display: flex; align-items: center; gap: 6px;}
     
-    .method-badge { padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 800; text-transform: uppercase; }
+    .method-badge { padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 800; text-transform: uppercase; }
     .method-badge.active { background: rgba(0,230,118,0.15); color: #00A650; }
     .method-badge.inactive { background: rgba(239,68,68,0.1); color: var(--danger); }
     
-    .method-row { display: flex; justify-content: space-between; padding: 12px 0; font-size: 14px; border-bottom: 1px dashed var(--border); }
+    .method-meta-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+    .meta-pill { font-size: 11px; font-weight: 700; background: var(--bg); border: 1px solid var(--border); padding: 4px 10px; border-radius: 12px; color: var(--body); }
+
+    .method-row { display: flex; justify-content: space-between; padding: 10px 0; font-size: 13.5px; border-bottom: 1px dashed var(--border); }
     .method-row:last-child { border-bottom: none; }
     .method-row .label { color: var(--body); font-weight: 600; }
-    .method-row .value { font-weight: 800; font-size: 14px; word-break: break-all; max-width: 60%; text-align: right; color: var(--heading); }
+    .method-row .value { font-weight: 800; font-size: 13.5px; word-break: break-all; max-width: 65%; text-align: right; color: var(--heading); }
     
     .method-actions { display: flex; gap: 12px; margin-top: 20px; }
     .btn-edit { flex: 1; padding: 12px; background: var(--primary-glow); color: var(--primary); border: none; border-radius: var(--radius-sm); font-size: 14px; font-weight: 800; cursor: pointer; transition: 0.3s; }
     .btn-edit:hover { background: var(--primary); color: white; }
-    
     .btn-toggle { flex: 1; padding: 12px; border: none; border-radius: var(--radius-sm); font-size: 14px; font-weight: 800; cursor: pointer; transition: 0.3s; }
 
-    /* ================= GLASSMORPHIC MODAL ================= */
-    .modal-overlay { position: fixed; inset: 0; background: rgba(11, 16, 30, 0.6); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 1000; opacity: 0; transition: opacity 0.3s ease; }
+    /* ================= FULLY DYNAMIC EDIT MODAL ================= */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(11, 16, 30, 0.6); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 1000; opacity: 0; transition: opacity 0.3s ease; padding: 20px; }
     .modal-overlay.active { display: flex; opacity: 1; }
     
     .modal { 
-      background: var(--card); border-radius: var(--radius); padding: 40px; 
-      width: 90%; max-width: 500px; box-shadow: 0 24px 48px -12px rgba(0,0,0,0.3); 
+      background: var(--card); border-radius: var(--radius); padding: 36px; 
+      width: 100%; max-width: 650px; box-shadow: 0 24px 48px -12px rgba(0,0,0,0.3); 
       transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      max-height: 90vh; overflow-y: auto;
     }
     .modal-overlay.active .modal { transform: scale(1); }
+    .modal h3 { font-size: 24px; font-weight: 800; margin-bottom: 20px; color: var(--heading); }
     
-    .modal h3 { font-size: 24px; font-weight: 800; margin-bottom: 24px; color: var(--heading); }
-    
-    .form-group { margin-bottom: 20px; }
-    .form-group label { display: block; font-size: 14px; font-weight: 800; margin-bottom: 8px; color: var(--heading); }
+    .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { margin-bottom: 0; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-group label { display: block; font-size: 13px; font-weight: 800; margin-bottom: 6px; color: var(--heading); }
     .form-group input, .form-group textarea { 
-      width: 100%; padding: 14px 16px; border: 2px solid var(--border); border-radius: var(--radius-sm); 
-      font-size: 15px; font-weight: 600; outline: none; font-family: inherit; transition: 0.3s; background: var(--bg);
+      width: 100%; padding: 12px 14px; border: 2px solid var(--border); border-radius: var(--radius-sm); 
+      font-size: 14px; font-weight: 600; outline: none; font-family: inherit; transition: 0.3s; background: var(--bg);
     }
     .form-group input:focus, .form-group textarea:focus { border-color: var(--primary); background: var(--card); box-shadow: 0 0 0 4px var(--primary-glow); }
-    .form-group textarea { resize: vertical; min-height: 100px; }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+
+    .checkbox-group { grid-column: 1 / -1; display: flex; align-items: center; gap: 10px; margin-top: 6px; background: var(--bg); padding: 12px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border); }
+    .checkbox-group input { width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer; }
+    .checkbox-group label { margin: 0; cursor: pointer; font-size: 14px; font-weight: 700; color: var(--heading); }
     
-    .modal-btns { display: flex; gap: 12px; margin-top: 28px; }
-    .modal-btns button { flex: 1; padding: 16px; border: none; border-radius: 30px; font-size: 15px; font-weight: 800; cursor: pointer; transition: 0.3s; }
+    .modal-btns { display: flex; gap: 12px; margin-top: 24px; }
+    .modal-btns button { flex: 1; padding: 14px; border: none; border-radius: 30px; font-size: 14px; font-weight: 800; cursor: pointer; transition: 0.3s; }
     .btn-save { background: linear-gradient(135deg, var(--primary), var(--primary-hover)); color: white; box-shadow: 0 8px 20px rgba(15,98,254,0.3); }
     .btn-save:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(15,98,254,0.4); }
     .btn-cancel { background: var(--border); color: var(--heading); }
     .btn-cancel:hover { background: #CBD5E1; }
+    .btn-delete { background: rgba(239,68,68,0.1); color: var(--danger); border: 1px solid rgba(239,68,68,0.2) !important; }
+    .btn-delete:hover { background: var(--danger); color: white; }
 
-    /* ================= MOBILE FLOATING ISLAND DOCK ================= */
+    /* ================= MOBILE FLOATING DOCK ================= */
     .mobile-dock { display: none; }
     @media (max-width: 768px) { 
       .sidebar { display: none; } 
-      .main { margin-left: 0; padding: 30px 20px 120px; } /* Bottom padding for dock */
+      .main { margin-left: 0; padding: 30px 20px 120px; }
       .page-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+      .modal-grid { grid-template-columns: 1fr; }
       
       .mobile-dock {
         display: flex; justify-content: space-around; align-items: center;
@@ -171,15 +182,12 @@
         background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
         border: 1px solid rgba(229, 231, 235, 0.8); border-radius: 40px;
         padding: 12px 10px; z-index: 10000; box-shadow: 0 16px 40px -8px rgba(0,0,0,0.15);
-        animation: slideUpDock 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
       }
-      @keyframes slideUpDock { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
       .mobile-dock a {
         display: flex; flex-direction: column; align-items: center; justify-content: center;
         color: var(--body); font-size: 10px; font-weight: 700; gap: 5px; flex: 1; transition: all 0.2s ease;
       }
-      .mobile-dock a svg { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; transition: all 0.3s; }
+      .mobile-dock a svg { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
       .mobile-dock a.active { color: var(--primary); }
       .mobile-dock a.active svg { stroke-width: 2.5; fill: var(--primary-glow); transform: scale(1.1); }
     }
@@ -187,7 +195,7 @@
 </head>
 <body>
 
-  <!-- Desktop Sidebar -->
+  <!-- Sidebar -->
   <aside class="sidebar">
     <div>
       <div class="sidebar-brand">
@@ -204,7 +212,7 @@
       </ul>
     </div>
     
-    <!-- Admin Profile Display -->
+    <!-- Admin Avatar Display -->
     <div class="sidebar-footer">
       <div class="admin-profile" id="desktop-admin-profile">
         <div class="admin-avatar-fallback">A</div>
@@ -219,19 +227,19 @@
     </div>
   </aside>
 
+  <!-- Main Content -->
   <main class="main">
     <div class="page-header animate-in">
       <div>
         <h1>Payment Methods</h1>
-        <p>Manage secure payment gateways available to customers at checkout.</p>
+        <p>Manage dynamic crypto wallets, bank accounts, and payment gateways available at checkout.</p>
       </div>
       <button class="btn-add" id="btn-add-method">
         <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> 
-        Add New Method
+        Add New Wallet
       </button>
     </div>
     
-    <!-- Render Grid -->
     <div class="grid animate-in delay-1" id="methods-grid">
       <div style="text-align:center; padding:40px; color:var(--body); grid-column:1/-1; font-weight:600;">
         <svg style="animation: spin 1s linear infinite; width:24px; height:24px; stroke:var(--primary); fill:none; stroke-width:3; margin-bottom:10px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-dashoffset="32"></circle></svg>
@@ -240,62 +248,79 @@
     </div>
   </main>
 
-  <!-- Glassmorphic Edit Modal -->
+  <!-- Fully Dynamic Admin Configuration Modal -->
   <div class="modal-overlay" id="method-modal">
     <div class="modal">
-      <h3 id="modal-title">Edit Payment Method</h3>
-      <div class="form-group"><label>Method Name (Label)</label><input type="text" id="m-label" placeholder="e.g. Easypaisa / Binance Pay"></div>
-      <div class="form-group"><label>Account Holder Name</label><input type="text" id="m-name" placeholder="e.g. DollarRent Official"></div>
-      <div class="form-group"><label>Account Number / Wallet ID</label><input type="text" id="m-number" placeholder="e.g. 0300-1234567 or 0x..."></div>
-      <div class="form-group"><label>Customer Instructions</label><textarea id="m-instructions" placeholder="Enter step-by-step payment instructions for the user..."></textarea></div>
-      <div class="modal-btns">
-        <button class="btn-cancel" id="modal-cancel">Cancel</button>
-        <button class="btn-save" id="modal-save">Save Method</button>
-      </div>
+      <h3 id="modal-title">Configure Payment Wallet</h3>
+      <form id="method-form" onsubmit="return false;">
+        <div class="modal-grid">
+          <div class="form-group full"><label>Wallet / Method Label *</label><input type="text" id="m-label" placeholder="e.g. Binance Pay (USD) or USDT TRC20" required></div>
+          <div class="form-group"><label>Wallet Type / Category</label><input type="text" id="m-type" placeholder="e.g. Crypto Wallet / Bank Account"></div>
+          <div class="form-group"><label>Featured Badge</label><input type="text" id="m-badge" placeholder="e.g. POPULAR, INSTANT, NO FEE"></div>
+          <div class="form-group"><label>Account Holder Name</label><input type="text" id="m-name" placeholder="e.g. DollarRent Official"></div>
+          <div class="form-group"><label>Account # / Wallet Address</label><input type="text" id="m-number" placeholder="e.g. 0x... or 03001234567"></div>
+          <div class="form-group"><label>Wallet ID / Binance UID</label><input type="text" id="m-id" placeholder="e.g. UID: 284910293"></div>
+          <div class="form-group"><label>Network</label><input type="text" id="m-network" placeholder="e.g. TRC20, BEP20, ERC20"></div>
+          <div class="form-group"><label>Coin Name</label><input type="text" id="m-coin" placeholder="e.g. USDT, BTC, ETH"></div>
+          <div class="form-group"><label>Supported Currency</label><input type="text" id="m-currency" placeholder="e.g. USD, PKR, EUR"></div>
+          <div class="form-group"><label>Bank Name</label><input type="text" id="m-bank" placeholder="e.g. Meezan Bank"></div>
+          <div class="form-group"><label>Branch Name / Code</label><input type="text" id="m-branch" placeholder="e.g. Main Branch Lahore"></div>
+          <div class="form-group full"><label>IBAN Number</label><input type="text" id="m-iban" placeholder="e.g. PK36MEEZ000123456789"></div>
+          <div class="form-group full"><label>QR Code Image URL</label><input type="text" id="m-qr" placeholder="https://... or Data URL"></div>
+          <div class="form-group full"><label>Custom Icon Image URL</label><input type="text" id="m-icon" placeholder="https://... (Leave empty for auto logo)"></div>
+          
+          <div class="checkbox-group">
+            <input type="checkbox" id="m-copy-enabled" checked>
+            <label for="m-copy-enabled">Enable Copy Buttons on Checkout</label>
+          </div>
+
+          <div class="form-group full"><label>Customer Instructions</label><textarea id="m-instructions" placeholder="Enter clear, step-by-step payment instructions for the user..."></textarea></div>
+        </div>
+
+        <div class="modal-btns">
+          <button type="button" class="btn-delete" id="modal-delete" style="display:none;">Delete</button>
+          <button type="button" class="btn-cancel" id="modal-cancel">Cancel</button>
+          <button type="submit" class="btn-save" id="modal-save">Save Wallet</button>
+        </div>
+      </form>
     </div>
   </div>
 
   <!-- Mobile Floating Island Dock -->
   <nav class="mobile-dock">
-    <a href="dashboard.html">
-      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-      <span>Dash</span>
-    </a>
-    <a href="orders.html">
-      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg>
-      <span>Orders</span>
-    </a>
-    <a href="packages.html">
-      <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-      <span>Pkgs</span>
-    </a>
-    <a href="payment-methods.html" class="active">
-      <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
-      <span>Pay</span>
-    </a>
-    <a href="settings.html">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle></svg>
-      <span>Settings</span>
-    </a>
+    <a href="dashboard.html"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg><span>Dash</span></a>
+    <a href="orders.html"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg><span>Orders</span></a>
+    <a href="packages.html"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg><span>Pkgs</span></a>
+    <a href="payment-methods.html" class="active"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg><span>Pay</span></a>
+    <a href="settings.html"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle></svg><span>Settings</span></a>
   </nav>
 
   <!-- ================= FIREBASE & APP LOGIC ================= -->
   <script type="module">
     import { initAuthObserver, getAdminUser } from '../firebase-auth.js';
     import { db } from '../firebase-config.js';
-    import { collection, onSnapshot, doc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { collection, onSnapshot, doc, setDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
     import { showToast, escapeHTML } from '../utils.js';
-
-    // Animation for Loading Spinner
-    const style = document.createElement('style');
-    style.innerHTML = `@keyframes spin { 100% { transform: rotate(360deg); } }`;
-    document.head.appendChild(style);
 
     let methods = [];
     let editingId = null;
     let methodsUnsubscribe = null;
 
-    // Load Admin Profile
+    // Automatic Icon Resolver
+    function getWalletIconUrl(m) {
+      if (m.iconUrl || m.icon) return m.iconUrl || m.icon;
+      const label = (m.label || m.walletName || '').toLowerCase();
+      if (label.includes('binance')) return 'https://www.google.com/s2/favicons?domain=binance.com&sz=128';
+      if (label.includes('bitget')) return 'https://www.google.com/s2/favicons?domain=bitget.com&sz=128';
+      if (label.includes('bybit')) return 'https://www.google.com/s2/favicons?domain=bybit.com&sz=128';
+      if (label.includes('okx')) return 'https://www.google.com/s2/favicons?domain=okx.com&sz=128';
+      if (label.includes('usdt') || label.includes('tether')) return 'https://www.google.com/s2/favicons?domain=tether.to&sz=128';
+      if (label.includes('easypaisa')) return 'https://img.icons8.com/color/96/000000/easypaisa.png';
+      if (label.includes('jazzcash')) return 'https://img.icons8.com/color/96/000000/jazzcash.png';
+      return 'https://img.icons8.com/fluency/96/000000/bank-building.png';
+    }
+
+    // Load Admin Profile & Firestore Data
     initAuthObserver((user) => {
       const adminUser = getAdminUser();
       if (!adminUser && !user) {
@@ -305,7 +330,7 @@
       
       const currentAdmin = adminUser || user;
       
-      // Update Sidebar Profile UI Dynamically
+      // Update Sidebar Profile UI
       const profileContainer = document.getElementById('desktop-admin-profile');
       if (profileContainer && currentAdmin) {
         const name = currentAdmin.fullName || currentAdmin.email || 'Admin';
@@ -326,53 +351,61 @@
         `;
       }
 
-      // Fetch Payment Methods
+      // Fetch Realtime Payment Methods
       if (!methodsUnsubscribe) {
         methodsUnsubscribe = onSnapshot(collection(db, 'paymentMethods'), (snapshot) => {
-          if (!snapshot.empty) {
-            methods = [];
-            snapshot.forEach(d => methods.push({ id: d.id, ...d.data() }));
-          } else {
-            methods = [
-              { id: 'binance_pay', label: 'Binance Pay', accountName: 'DollarRent Official', accountNumber: 'UID: 123456789', active: true }
-            ];
-          }
+          methods = [];
+          snapshot.forEach(d => methods.push({ id: d.id, ...d.data() }));
           renderMethods();
         }, (err) => {
           console.warn("Error fetching methods:", err);
-          document.getElementById('methods-grid').innerHTML = '<div style="text-align:center; padding:40px; color:var(--danger); grid-column:1/-1; font-weight:800;">Unable to load payment methods. Check internet connection.</div>';
+          document.getElementById('methods-grid').innerHTML = '<div style="text-align:center; padding:40px; color:var(--danger); grid-column:1/-1; font-weight:800;">Unable to load payment methods. Check Firestore rules.</div>';
         });
       }
     });
 
     function renderMethods() {
       const grid = document.getElementById('methods-grid');
+      if (!methods.length) {
+        grid.innerHTML = '<div style="text-align:center; padding:40px; color:var(--body); grid-column:1/-1;">No payment wallets configured yet. Click "Add New Wallet" above to create one.</div>';
+        return;
+      }
+
       grid.innerHTML = methods.map(m => {
-        const isActive = m.active !== false;
-        
-        // Dynamically assign an icon based on bank/crypto
-        let iconSvg = '<svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>';
-        if (m.label.toLowerCase().includes('binance') || m.label.toLowerCase().includes('usdt')) {
-          iconSvg = '<svg viewBox="0 0 24 24"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"></polygon></svg>';
-        }
+        const isActive = m.active !== false && m.status !== 'hide';
 
         return `
         <div class="method-card">
           <div class="method-header">
             <div class="method-title-wrap">
-              <div class="method-icon">${iconSvg}</div>
-              <div class="method-name">${escapeHTML(m.label)}</div>
+              <div class="method-icon-box">
+                <img src="${getWalletIconUrl(m)}" alt="Icon" onerror="this.src='../assets/logo.png'">
+              </div>
+              <div class="method-name">
+                ${escapeHTML(m.label || m.walletName)}
+              </div>
             </div>
             <span class="method-badge ${isActive ? 'active' : 'inactive'}">${isActive ? 'Active' : 'Disabled'}</span>
           </div>
-          <div class="method-row"><span class="label">Holder Name</span><span class="value">${escapeHTML(m.accountName)}</span></div>
-          <div class="method-row"><span class="label">Account No.</span><span class="value">${escapeHTML(m.accountNumber)}</span></div>
+
+          <div class="method-meta-pills">
+            ${m.featuredBadge ? `<span class="meta-pill" style="color:var(--primary); font-weight:800;">★ ${escapeHTML(m.featuredBadge)}</span>` : ''}
+            ${m.network ? `<span class="meta-pill">Net: ${escapeHTML(m.network)}</span>` : ''}
+            ${m.coinName ? `<span class="meta-pill">Coin: ${escapeHTML(m.coinName)}</span>` : ''}
+            ${m.qrCodeUrl ? `<span class="meta-pill" style="color:var(--success);">QR Code Attached</span>` : ''}
+          </div>
+
+          ${m.accountName ? `<div class="method-row"><span class="label">Holder Title</span><span class="value">${escapeHTML(m.accountName)}</span></div>` : ''}
+          ${m.accountNumber ? `<div class="method-row"><span class="label">Account # / Address</span><span class="value">${escapeHTML(m.accountNumber)}</span></div>` : ''}
+          ${m.bankName ? `<div class="method-row"><span class="label">Bank Name</span><span class="value">${escapeHTML(m.bankName)}</span></div>` : ''}
+          ${m.iban ? `<div class="method-row"><span class="label">IBAN</span><span class="value">${escapeHTML(m.iban)}</span></div>` : ''}
+
           <div class="method-actions">
-            <button class="btn-edit" onclick="window._editMethod('${m.id}')">Edit Setup</button>
-            <button class="btn-toggle" style="background:${isActive ? 'rgba(239,68,68,0.1)' : 'rgba(0,230,118,0.1)'}; color:${isActive ? 'var(--danger)' : 'var(--success)'};" onclick="window._toggleMethod('${m.id}', ${isActive})">${isActive ? 'Disable' : 'Enable'}</button>
+            <button class="btn-edit" onclick="window._editMethod('${m.id}')">Configure</button>
+            <button class="btn-toggle" style="background:${isActive ? 'rgba(239,68,68,0.1)' : 'rgba(0,230,118,0.15)'}; color:${isActive ? 'var(--danger)' : '#00A650'};" onclick="window._toggleMethod('${m.id}', ${isActive})">${isActive ? 'Disable' : 'Enable'}</button>
           </div>
         </div>
-        `
+        `;
       }).join('');
     }
 
@@ -381,43 +414,98 @@
       const m = methods.find(x => x.id === id);
       if (!m) return;
       editingId = id;
-      document.getElementById('modal-title').textContent = `Edit: ${m.label}`;
-      document.getElementById('m-label').value = m.label || '';
-      document.getElementById('m-name').value = m.accountName || '';
-      document.getElementById('m-number').value = m.accountNumber || '';
-      document.getElementById('m-instructions').value = m.instructions || '';
+      document.getElementById('modal-title').textContent = `Edit: ${m.label || m.walletName}`;
+      document.getElementById('m-label').value = m.label || m.walletName || '';
+      document.getElementById('m-type').value = m.walletType || '';
+      document.getElementById('m-badge').value = m.featuredBadge || '';
+      document.getElementById('m-name').value = m.accountName || m.holderName || '';
+      document.getElementById('m-number').value = m.accountNumber || m.walletAddress || '';
+      document.getElementById('m-id').value = m.walletId || m.binanceUid || '';
+      document.getElementById('m-network').value = m.network || '';
+      document.getElementById('m-coin').value = m.coinName || '';
+      document.getElementById('m-currency').value = m.supportedCurrency || '';
+      document.getElementById('m-bank').value = m.bankName || '';
+      document.getElementById('m-branch').value = m.branchName || '';
+      document.getElementById('m-iban').value = m.iban || '';
+      document.getElementById('m-qr').value = m.qrCodeUrl || m.qrCode || '';
+      document.getElementById('m-icon').value = m.iconUrl || m.icon || '';
+      document.getElementById('m-copy-enabled').checked = m.copyEnabled !== false;
+      document.getElementById('m-instructions').value = m.instructions || m.fullInstructions || '';
+      
+      document.getElementById('modal-delete').style.display = 'block';
       document.getElementById('method-modal').classList.add('active');
     };
 
     window._toggleMethod = async function(id, active) {
       try {
-        await updateDoc(doc(db, 'paymentMethods', id), { active: !active });
-        showToast(`Payment method successfully ${active ? 'disabled' : 'enabled'}!`, 'success');
-      } catch (err) { showToast('Failed: ' + err.message, 'error'); }
+        await updateDoc(doc(db, 'paymentMethods', id), { active: !active, status: !active ? 'show' : 'hide' });
+        showToast(`Wallet ${active ? 'disabled' : 'enabled'}!`, 'success');
+      } catch (err) { showToast('Failed to toggle: ' + err.message, 'error'); }
     };
 
     document.getElementById('btn-add-method').addEventListener('click', () => {
       editingId = null;
-      document.getElementById('modal-title').textContent = 'Add Payment Method';
+      document.getElementById('modal-title').textContent = 'Add Payment Wallet';
       document.getElementById('m-label').value = '';
+      document.getElementById('m-type').value = '';
+      document.getElementById('m-badge').value = '';
       document.getElementById('m-name').value = '';
       document.getElementById('m-number').value = '';
+      document.getElementById('m-id').value = '';
+      document.getElementById('m-network').value = '';
+      document.getElementById('m-coin').value = '';
+      document.getElementById('m-currency').value = '';
+      document.getElementById('m-bank').value = '';
+      document.getElementById('m-branch').value = '';
+      document.getElementById('m-iban').value = '';
+      document.getElementById('m-qr').value = '';
+      document.getElementById('m-icon').value = '';
+      document.getElementById('m-copy-enabled').checked = true;
       document.getElementById('m-instructions').value = '';
+      
+      document.getElementById('modal-delete').style.display = 'none';
       document.getElementById('method-modal').classList.add('active');
+    });
+
+    // Delete Logic
+    document.getElementById('modal-delete').addEventListener('click', async () => {
+      if (!editingId) return;
+      if (confirm('Are you sure you want to permanently delete this payment method?')) {
+        try {
+          await deleteDoc(doc(db, 'paymentMethods', editingId));
+          showToast('Payment wallet deleted permanently!', 'success');
+          document.getElementById('method-modal').classList.remove('active');
+        } catch (err) {
+          showToast('Delete failed: ' + err.message, 'error');
+        }
+      }
     });
 
     // Save Logic
     document.getElementById('modal-save').addEventListener('click', async () => {
       const data = {
-        label: document.getElementById('m-label').value,
-        accountName: document.getElementById('m-name').value,
-        accountNumber: document.getElementById('m-number').value,
-        instructions: document.getElementById('m-instructions').value,
-        active: true
+        label: document.getElementById('m-label').value.trim(),
+        walletType: document.getElementById('m-type').value.trim(),
+        featuredBadge: document.getElementById('m-badge').value.trim(),
+        accountName: document.getElementById('m-name').value.trim(),
+        accountNumber: document.getElementById('m-number').value.trim(),
+        walletId: document.getElementById('m-id').value.trim(),
+        network: document.getElementById('m-network').value.trim(),
+        coinName: document.getElementById('m-coin').value.trim(),
+        supportedCurrency: document.getElementById('m-currency').value.trim(),
+        bankName: document.getElementById('m-bank').value.trim(),
+        branchName: document.getElementById('m-branch').value.trim(),
+        iban: document.getElementById('m-iban').value.trim(),
+        qrCodeUrl: document.getElementById('m-qr').value.trim(),
+        iconUrl: document.getElementById('m-icon').value.trim(),
+        copyEnabled: document.getElementById('m-copy-enabled').checked,
+        instructions: document.getElementById('m-instructions').value.trim(),
+        active: true,
+        status: 'show'
       };
-      
-      if (!data.label || !data.accountNumber) {
-        showToast('Label and Account Number are required!', 'error');
+
+      if (!data.label) {
+        showToast('Wallet Name / Label is required!', 'error');
         return;
       }
 
@@ -434,10 +522,10 @@
         }
         showToast('Payment method saved!', 'success');
         document.getElementById('method-modal').classList.remove('active');
-      } catch (err) { 
-        showToast('Save failed: ' + err.message, 'error'); 
+      } catch (err) {
+        showToast('Save failed: ' + err.message, 'error');
       } finally {
-        btn.textContent = 'Save Method';
+        btn.textContent = 'Save Wallet';
         btn.disabled = false;
       }
     });
