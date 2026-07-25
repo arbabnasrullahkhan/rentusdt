@@ -83,30 +83,11 @@
                 <i class="fa-solid fa-wand-magic-sparkles"></i> Generate Demo Receipt
             </button>
 
-            <!-- Export and Download Row [1] -->
-            <div class="grid grid-cols-3 gap-2 text-[10px] font-bold text-gray-300">
-                <button onclick="downloadPNG()" class="py-2.5 px-1 bg-gray-900 hover:bg-gray-800 border border-gray-800 rounded-lg flex items-center justify-center gap-1 transition-colors">
-                    <i class="fa-solid fa-file-image text-blue-400"></i> Save PNG
-                </button>
-                <button onclick="downloadPDF()" class="py-2.5 px-1 bg-gray-900 hover:bg-gray-800 border border-gray-800 rounded-lg flex items-center justify-center gap-1 transition-colors">
-                    <i class="fa-solid fa-file-pdf text-red-400"></i> Save PDF
-                </button>
-                <button onclick="window.print()" class="py-2.5 px-1 bg-gray-900 hover:bg-gray-800 border border-gray-800 rounded-lg flex items-center justify-center gap-1 transition-colors">
-                    <i class="fa-solid fa-print text-yellow-500"></i> Print Card
-                </button>
-            </div>
-        </div>
+        
 
         <!-- The Highly Realistic Card Render Container -->
         <div id="receipt-canvas" class="binance-card p-6 relative overflow-hidden">
-            
-            <!-- Red Warning Safety Watermark Bar [1] -->
-            <div id="demoSafetyBanner" class="relative z-10 bg-red-600/5 text-red-600 border border-red-600/15 py-2 px-3 rounded-lg text-[9px] font-bold uppercase tracking-wider text-center flex flex-col justify-center gap-0.5 mb-5 select-none">
-                <span class="flex items-center justify-center gap-1">
-                    <i class="fa-solid fa-circle-exclamation text-[10px]"></i> SAMPLE ONLY – NOT A REAL TRANSACTION
-                </span>
-            </div>
-
+  
             <!-- Top Centered Core Value Section -->
             <div class="relative z-10 text-center mt-1">
                 <span class="text-binanceGray text-xs font-normal">Amount</span>
