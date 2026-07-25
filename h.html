@@ -39,7 +39,7 @@
             background-color: #FFFFFF;
             max-width: 415px;
             width: 100%;
-            box-shadow: 0 16px 64px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 16px 64px rgba(0, 0, 0, 0.45);
             border-radius: 20px;
             transition: opacity 0.3s ease, transform 0.3s ease;
         }
@@ -50,6 +50,20 @@
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(4px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+        /* Continuous organic breathing pulse to establish absolute system status trust [1] */
+        @keyframes softBreathingPulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(14, 203, 129, 0.4);
+            }
+            50% {
+                transform: scale(1.08);
+                box-shadow: 0 0 14px 4px rgba(14, 203, 129, 0.25);
+            }
+        }
+        .success-indicator-pulse {
+            animation: softBreathingPulse 2s infinite ease-in-out;
         }
         @media print {
             body {
@@ -75,28 +89,29 @@
     <!-- Top Navigation Workspace -->
     <div class="flex-grow flex flex-col items-center p-4 sm:p-6">
         
-        <!-- Interactive Trigger & Control Actions Area -->
-        <div class="no-print w-full max-w-[415px] mb-4 space-y-3">
+        <!-- Interactive Trigger & Control Actions Area (no-print) -->
+        <!-- Added a generous margin bottom (mb-16) to provide a deep scroll gap [1] -->
+        <div class="no-print w-full max-w-[415px] mb-16 space-y-3">
             
             <!-- Main Core Generator Button [1] -->
             <button id="btnGenerate" class="w-full py-4 bg-gradient-to-r from-yellow-500 to-[#F0B90B] hover:from-yellow-400 hover:to-[#E0A808] text-black font-extrabold rounded-xl text-sm tracking-wider uppercase shadow-xl shadow-yellow-500/25 flex items-center justify-center gap-2 transform active:scale-95 transition-all">
                 <i class="fa-solid fa-wand-magic-sparkles"></i> Generate Demo Receipt
             </button>
 
-        
-
         <!-- The Highly Realistic Card Render Container -->
         <div id="receipt-canvas" class="binance-card p-6 relative overflow-hidden">
-  
+            
+        
+
             <!-- Top Centered Core Value Section -->
             <div class="relative z-10 text-center mt-1">
                 <span class="text-binanceGray text-xs font-normal">Amount</span>
                 <div class="text-[28px] font-bold text-binanceBlack mt-0.5 tracking-tight font-sans leading-none" id="display-amount-row">0.00 USDT</div>
                 
-                <!-- Status Row containing interactive dynamic Checkmark Spinner -->
+                <!-- Status Row containing interactive breathing checkmark status indicator [1] -->
                 <div class="flex items-center justify-center gap-1.5 mt-2">
                     <div id="statusIndicator" class="flex items-center justify-center">
-                        <span class="w-3.5 h-3.5 bg-binanceGreen text-white rounded-full flex items-center justify-center text-[9px] font-black">✓</span>
+                        <span class="w-3.5 h-3.5 bg-binanceGreen text-white rounded-full flex items-center justify-center text-[9px] font-black success-indicator-pulse">✓</span>
                     </div>
                     <span class="text-binanceGreen font-semibold text-[13px] tracking-wide">Completed</span>
                 </div>
@@ -126,7 +141,7 @@
 
                 <div class="flex justify-between items-start">
                     <span class="text-binanceGray">Withdrawal Wallet</span>
-                    <span class="text-binanceBlack font-medium" id="display-wallet">Spot Wallet</span>
+                    <span class="text-binanceBlack font-medium" id="display-wallet">-</span>
                 </div>
                 
                 <div class="flex justify-between items-start">
@@ -208,22 +223,9 @@
 
     </div>
 
-    <!-- Persistent Bottom Disclaimer Section -->
-    <footer class="no-print w-full bg-[#05070A] border-t border-gray-900 py-4 text-center z-10">
-        <p class="text-[10px] text-gray-500 font-medium px-4 leading-normal">
-            This is a Demo Receipt generated for testing, UI preview, and educational purposes only. It does not represent a real blockchain transaction or actual payment.
-        </p>
-    </footer>
-
-    <!-- Toast Success Popup Message -->
-    <div id="toast" class="no-print fixed bottom-6 right-6 transform translate-y-20 opacity-0 bg-yellow-500 text-black font-semibold text-xs py-3 px-5 rounded-xl shadow-xl transition-all duration-300 flex items-center gap-2 z-50">
-        <i class="fa-solid fa-circle-check"></i>
-        <span id="toast-message">Copied Successfully!</span>
-    </div>
-
+    
     <script>
-        // Rental Plan configuration weights:
-        // $50 (60%), $100 (10%), $200 (10%), $250 (5%), and others sharing the remaining 15% equally (1.875% each)
+        // Rental Plan configuration weights: [1]
         const rentalPlans = [
             { amount: 50, fee: 9, duration: "4 Hours", weight: 0.60 },
             { amount: 100, fee: 20, duration: "4 Hours", weight: 0.10 },
@@ -239,18 +241,23 @@
             { amount: 50000, fee: 4500, duration: "10 Days", weight: 0.01875 }
         ];
 
-        // Trending popular worldwide digital wallets, crypto networks, and exchanges
+        // Trending popular worldwide trading platforms list with specific relative weights [1]
         const trendingWallets = [
-            "Spot Wallet (Binance)",
-            "Funding Account (Binance)",
-            "Funding Wallet (OKX)",
-            "Spot Wallet (Bybit)",
-            "Quotex Main Balance",
-            "Bitget Spot Wallet",
-            "Trust Wallet (Multi-Coin)",
-            "MetaMask (ERC-20 Ledger)",
-            "Phantom Wallet (Solana Main)",
-            "KuCoin Main Account"
+            { name: "Quotex", weight: 80 },
+            { name: "Binance", weight: 60 },
+            { name: "Pocket Option", weight: 10 },
+            { name: "Bybit", weight: 8 },
+            { name: "Exness", weight: 7 },
+            { name: "OKX", weight: 5 },
+            { name: "Bitget", weight: 4 },
+            { name: "MEXC", weight: 3 },
+            { name: "IQ Option", weight: 3 },
+            { name: "Olymp Trade", weight: 2 },
+            { name: "Binomo", weight: 2 },
+            { name: "XM", weight: 2 },
+            { name: "FBS", weight: 2 },
+            { name: "IC Markets", weight: 1 },
+            { name: "Pepperstone", weight: 1 }
         ];
 
         const sampleAddresses = [
@@ -283,6 +290,19 @@
             return rentalPlans[0]; 
         }
 
+        // Weighted selector for specific trading platforms [1]
+        function getWeightedPlatform() {
+            const totalWeight = trendingWallets.reduce((sum, p) => sum + p.weight, 0);
+            let random = Math.random() * totalWeight;
+            for (const p of trendingWallets) {
+                random -= p.weight;
+                if (random <= 0) {
+                    return p.name;
+                }
+            }
+            return trendingWallets[0].name; 
+        }
+
         // Generate Demo Receipt and trigger transition animation [1]
         function generateDemoReceipt() {
             const btn = document.getElementById('btnGenerate');
@@ -301,7 +321,7 @@
             setTimeout(() => {
                 const selectedPlan = getWeightedPlan(); // Retrieve matching weighted plan [1]
 
-                // Dynamic localized real-world stamps
+                // Dynamic localized real-world stamps [2]
                 const now = new Date();
                 const dateStr = now.toISOString().slice(0, 10);
                 const timeStr = now.toTimeString().slice(0, 8);
@@ -310,8 +330,9 @@
                 const rentalVal = selectedPlan.amount;
                 const feeVal = selectedPlan.fee;
                 
-                // Platforms & network options randomization
-                const randomPlatform = trendingWallets[Math.floor(Math.random() * trendingWallets.length)];
+                // Select platform using weighted selection array [1]
+                const chosenPlatform = getWeightedPlatform();
+                const randomWalletString = `${chosenPlatform} Wallet`;
                 const randomNetwork = sampleNetworks[Math.floor(Math.random() * sampleNetworks.length)];
                 
                 currentFullAddress = sampleAddresses[Math.floor(Math.random() * sampleAddresses.length)];
@@ -320,13 +341,13 @@
                 const receiptNum = "REC-" + Math.floor(100000 + Math.random() * 900000);
                 
                 // Clean context notes
-                const cleanNote = `Transfer verified through standard contract on ${randomPlatform.split(" ")[0]} platform API.`;
+                const cleanNote = `Transfer verified through standard contract on ${chosenPlatform} platform API.`;
 
                 // Update UI nodes - Amount is STRICTLY the rental cost (no extra mathematically added values) [1]
                 document.getElementById('display-amount-row').innerText = `${formatCommas(rentalVal)} USDT`;
                 document.getElementById('display-rental-val').innerText = `$${formatCommas(rentalVal)}`;
                 document.getElementById('display-duration-val').innerText = selectedPlan.duration;
-                document.getElementById('display-wallet').innerText = randomPlatform;
+                document.getElementById('display-wallet').innerText = randomWalletString;
                 document.getElementById('display-network').innerText = randomNetwork;
                 
                 // Network fee displays plan fee value exactly [1]
@@ -340,9 +361,9 @@
                 document.getElementById('display-ref-num').innerText = refNum;
                 document.getElementById('display-note').innerText = cleanNote;
 
-                // Stop loading animations smoothly
+                // Stop loading animations smoothly and return organic breathing pulse [1]
                 statusBox.innerHTML = `
-                    <span class="w-3.5 h-3.5 bg-binanceGreen text-white rounded-full flex items-center justify-center text-[9px] font-black">✓</span>
+                    <span class="w-3.5 h-3.5 bg-binanceGreen text-white rounded-full flex items-center justify-center text-[9px] font-black success-indicator-pulse">✓</span>
                 `;
                 body.classList.add('fade-in-data');
                 btn.disabled = false;
