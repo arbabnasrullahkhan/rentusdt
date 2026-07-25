@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Contact Us & Support Hub — DollarRent</title>
+  <title>Contact & Support Hub — DollarRent</title>
   
-  <meta name="description" content="Get 24/7 support for digital USD rentals via Telegram, WhatsApp, Email, or submit an official support ticket.">
+  <meta name="description" content="Get 24/7 support for digital USD rentals via Telegram (@rental_dollor) or submit an official support ticket directly to our admin team.">
   <link rel="canonical" href="https://rentusdt.vercel.app/contact.html">
 
   <!-- STRICT SINGLE LOGO COMPLIANCE -->
@@ -23,7 +23,6 @@
       --primary-hover: #0043CE;
       --primary-glow: rgba(15, 98, 254, 0.12);
       --secondary: #00E676;
-      --wa-color: #25D366;
       --tg-color: #0088cc;
       --danger: #EF4444;
       --warning: #F59E0B;
@@ -65,7 +64,6 @@
     @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
     .delay-1 { animation-delay: 0.1s; }
     .delay-2 { animation-delay: 0.2s; }
-    .delay-3 { animation-delay: 0.3s; }
 
     /* Back Navigation Bubble */
     .back-bubble-wrapper { margin-bottom: 24px; display: flex; align-items: center; }
@@ -84,30 +82,29 @@
     .page-header h1 { font-size: 34px; font-weight: 800; letter-spacing: -1px; margin-bottom: 8px; color: var(--heading); }
     .page-header p { font-size: 16px; color: var(--body); font-weight: 500; }
 
-    /* ================= MULTI-CHANNEL SUPPORT GRID ================= */
+    /* ================= DIRECT CHANNELS GRID ================= */
     .channels-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 16px;
       margin-bottom: 32px;
     }
     .channel-card {
       background: var(--card-solid); border: 1px solid var(--border-color);
-      border-radius: var(--radius-md); padding: 22px 16px; text-align: center;
+      border-radius: var(--radius-md); padding: 24px 20px; text-align: center;
       box-shadow: var(--shadow-sm); transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
-      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
     }
     .channel-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--primary); }
-    .channel-card svg { width: 34px; height: 34px; transition: transform 0.3s; }
+    .channel-card svg { width: 36px; height: 36px; transition: transform 0.3s; }
     .channel-card:hover svg { transform: scale(1.1); }
 
     .channel-card.tg svg { fill: var(--tg-color); }
-    .channel-card.wa svg { fill: var(--wa-color); }
-    .channel-card.email svg { stroke: var(--primary); fill: none; stroke-width: 2; }
     .channel-card.tt svg { fill: var(--heading); }
+    .channel-card.web svg { fill: var(--primary); }
 
-    .channel-card h3 { font-size: 15px; font-weight: 800; color: var(--heading); }
-    .channel-card span { font-size: 12px; font-weight: 700; color: var(--body); }
+    .channel-card h3 { font-size: 16px; font-weight: 800; color: var(--heading); }
+    .channel-card span { font-size: 13px; font-weight: 700; color: var(--primary); background: var(--primary-glow); padding: 4px 12px; border-radius: 20px; }
 
     /* ================= FORM CARD ================= */
     .form-card {
@@ -123,7 +120,7 @@
     .form-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px dashed var(--border-color); }
     .form-header h2 { font-size: 20px; font-weight: 800; color: var(--heading); display: flex; align-items: center; gap: 10px; }
     .form-header h2 svg { width: 22px; height: 22px; stroke: var(--primary); fill: none; stroke-width: 2.5; }
-    .ticket-badge { background: var(--primary-glow); color: var(--primary); font-size: 11px; font-weight: 800; padding: 4px 12px; border-radius: 20px; }
+    .ticket-badge { background: var(--primary-glow); color: var(--primary); font-size: 11px; font-weight: 800; padding: 6px 14px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
 
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     .form-group { display: flex; flex-direction: column; gap: 8px; }
@@ -141,14 +138,14 @@
     .form-input:focus, .form-select:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-glow); background: var(--card-solid); }
     textarea.form-input { resize: vertical; min-height: 120px; }
 
-    /* Priority Pills */
+    /* Priority Selector Pills */
     .priority-pills { display: flex; gap: 10px; }
     .priority-pill {
-      flex: 1; padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);
-      background: var(--bg-color); text-align: center; font-size: 12px; font-weight: 800;
+      flex: 1; padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);
+      background: var(--bg-color); text-align: center; font-size: 13px; font-weight: 800;
       color: var(--body); cursor: pointer; transition: 0.2s;
     }
-    .priority-pill.active { background: var(--primary); color: white; border-color: var(--primary); }
+    .priority-pill.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 12px rgba(15,98,254,0.25); }
 
     /* Submit Button */
     .btn-submit {
@@ -166,7 +163,7 @@
       .container { padding-top: 80px; padding-left: 16px; padding-right: 16px; }
       .form-grid { grid-template-columns: 1fr; }
       .form-card { padding: 28px 20px; }
-      .channels-grid { grid-template-columns: repeat(2, 1fr); }
+      .channels-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -185,83 +182,76 @@
     <!-- Page Header -->
     <div class="page-header animate-in delay-1">
       <h1>Contact & Support Hub</h1>
-      <p>We operate 24/7 to assist you with order verification, rentals, and inquiries.</p>
+      <p>Reach out to our 24/7 Telegram team or submit an in-app ticket directly to our administrators.</p>
     </div>
 
-    <!-- 4 Direct Multi-Channel Cards -->
+    <!-- Direct Official Support Cards -->
     <div class="channels-grid animate-in delay-1">
       
-      <!-- Telegram -->
+      <!-- Telegram Live Operator -->
       <a href="https://t.me/rental_dollor" target="_blank" class="channel-card tg">
         <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
-        <h3>Telegram</h3>
+        <h3>Telegram Support</h3>
         <span>@rental_dollor (24/7)</span>
       </a>
 
-      <!-- WhatsApp -->
-      <a href="https://wa.me/923001234567" target="_blank" class="channel-card wa">
-        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
-        <h3>WhatsApp</h3>
-        <span>Instant Operator</span>
-      </a>
-
-      <!-- Email -->
-      <a href="mailto:support@dollarrent.com" class="channel-card email">
-        <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-        <h3>Email Support</h3>
-        <span>support@dollarrent.com</span>
-      </a>
-
-      <!-- TikTok -->
+      <!-- TikTok Channel -->
       <a href="https://tiktok.com/@rental_dollor" target="_blank" class="channel-card tt">
         <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 15.68a6.34 6.34 0 0 0 6.26 6.32 6.32 6.32 0 0 0 6.22-6.32V10.1a8.22 8.22 0 0 0 4.7 1.48v-3.4a4.8 4.8 0 0 1-2.59-.49z"/></svg>
-        <h3>TikTok</h3>
+        <h3>TikTok Channel</h3>
         <span>@rental_dollor</span>
+      </a>
+
+      <!-- Web Portal -->
+      <a href="https://rentusdt.vercel.app/" target="_blank" class="channel-card web">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+        <h3>Web Portal</h3>
+        <span>rentusdt.vercel.app</span>
       </a>
 
     </div>
 
-    <!-- Official Support Ticket Form -->
+    <!-- Official In-App Support Ticket Form -->
     <div class="form-card animate-in delay-2">
       <div class="form-header">
         <h2>
           <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-          Submit a Support Ticket
+          In-App Support Ticket
         </h2>
-        <span class="ticket-badge" id="ticket-ref-display">TKT-GENERATING...</span>
+        <span class="ticket-badge" id="ticket-id-badge">TKT-GENERATING...</span>
       </div>
 
       <form id="support-ticket-form">
         <div class="form-grid">
           
           <div class="form-group">
-            <label for="contact-name">Your Full Name <span>*</span></label>
-            <input type="text" id="contact-name" class="form-input" placeholder="e.g. Ahmed Raza" required>
+            <label for="ticket-name">Full Name <span>*</span></label>
+            <input type="text" id="ticket-name" class="form-input" placeholder="e.g. Ahmed Raza" required>
           </div>
 
           <div class="form-group">
-            <label for="contact-email">Email Address <span>*</span></label>
-            <input type="email" id="contact-email" class="form-input" placeholder="ahmed@example.com" required>
+            <label for="ticket-email">User Email <span>*</span></label>
+            <input type="email" id="ticket-email" class="form-input" placeholder="ahmed@example.com" required>
           </div>
 
           <div class="form-group">
-            <label for="contact-phone">WhatsApp Number <span>*</span></label>
-            <input type="tel" id="contact-phone" class="form-input" placeholder="+92 300 0000000" required>
+            <label for="ticket-telegram">Telegram Handle <span>Optional</span></label>
+            <input type="text" id="ticket-telegram" class="form-input" placeholder="@username">
           </div>
 
           <div class="form-group">
-            <label for="contact-category">Issue Category <span>*</span></label>
-            <select id="contact-category" class="form-select" required>
+            <label for="ticket-category">Issue Category <span>*</span></label>
+            <select id="ticket-category" class="form-select" required>
               <option value="Rental Order Verification" selected>Rental Order Verification</option>
-              <option value="Deposit / Payment Issue">Deposit / Payment Issue</option>
+              <option value="Deposit / Payment Query">Deposit / Payment Query</option>
               <option value="KYC Verification Help">KYC Verification Help</option>
-              <option value="Referral Program Query">Referral Program Query</option>
-              <option value="Other Technical Query">Other Technical Query</option>
+              <option value="Referral Rewards Query">Referral Rewards Query</option>
+              <option value="Other Assistance">Other Technical Assistance</option>
             </select>
           </div>
 
           <div class="form-group full">
-            <label>Priority Level</label>
+            <label>Urgency Priority</label>
             <div class="priority-pills">
               <div class="priority-pill active" data-pri="Normal">Normal</div>
               <div class="priority-pill" data-pri="High">High</div>
@@ -270,19 +260,19 @@
           </div>
 
           <div class="form-group full">
-            <label for="contact-subject">Subject <span>*</span></label>
-            <input type="text" id="contact-subject" class="form-input" placeholder="Brief description of your issue" required>
+            <label for="ticket-subject">Subject <span>*</span></label>
+            <input type="text" id="ticket-subject" class="form-input" placeholder="Brief summary of your issue" required>
           </div>
 
           <div class="form-group full">
-            <label for="contact-message">Detailed Message <span>*</span></label>
-            <textarea id="contact-message" class="form-input" placeholder="Provide full details, order numbers, or questions so our admin team can assist you immediately..." required></textarea>
+            <label for="ticket-message">Detailed Message / Order ID <span>*</span></label>
+            <textarea id="ticket-message" class="form-input" placeholder="Describe your question or include your Order Reference ID so our team can review it..." required></textarea>
           </div>
 
         </div>
 
         <button type="submit" class="btn-submit" id="btn-submit-ticket">
-          Create Support Ticket
+          Submit Ticket to Admin
           <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
         </button>
       </form>
@@ -290,26 +280,26 @@
 
   </main>
 
-  <!-- ================= FIREBASE & MODULE LOGIC ================= -->
+  <!-- ================= FIREBASE MODULE & LOGIC ================= -->
   <!-- app.js handles Floating Island Header and Mobile Dock -->
   <script type="module">
     import './app.js';
     import { db } from './firebase-config.js';
     import { collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // Safe fallbacks
+    // Safe Fallbacks
     let utils, auth;
     try {
       utils = await import('./utils.js');
       auth = await import('./firebase-auth.js');
-    } catch(e){ console.warn("Fallback mode."); }
+    } catch(e) { console.warn("Module fallback mode."); }
 
     const showToast = utils?.showToast || ((msg) => alert(msg));
     const getCurrentUser = auth?.getCurrentUser || (() => null);
 
-    // Generate Ticket Reference ID
-    const ticketRefId = 'TKT-' + Math.random().toString(36).substr(2, 6).toUpperCase();
-    document.getElementById('ticket-ref-display').textContent = ticketRefId;
+    // Generate Dynamic Ticket Reference ID
+    const ticketId = 'TKT-' + Math.random().toString(36).substr(2, 6).toUpperCase();
+    document.getElementById('ticket-id-badge').textContent = ticketId;
 
     // Priority Pills Selection
     let selectedPriority = 'Normal';
@@ -322,52 +312,45 @@
       });
     });
 
-    // Auto-fill logged-in user data
+    // Auto-fill logged-in user details
     const user = getCurrentUser();
     if (user) {
-      const nameInput = document.getElementById('contact-name');
-      const emailInput = document.getElementById('contact-email');
-      if (nameInput && user.fullName) nameInput.value = user.fullName;
-      if (emailInput && user.email) emailInput.value = user.email;
+      if (user.fullName) document.getElementById('ticket-name').value = user.fullName;
+      if (user.email) document.getElementById('ticket-email').value = user.email;
     }
 
-    // Submit Ticket Handler
+    // Submit Ticket Handler to Firestore 'tickets' Collection
     document.getElementById('support-ticket-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       
       const submitBtn = document.getElementById('btn-submit-ticket');
       submitBtn.disabled = true;
-      submitBtn.innerHTML = `Creating Ticket...`;
+      submitBtn.innerHTML = `Submitting Ticket...`;
 
-      const ticketData = {
-        ticketId: ticketRefId,
-        name: document.getElementById('contact-name').value.trim(),
-        email: document.getElementById('contact-email').value.trim(),
-        phone: document.getElementById('contact-phone').value.trim(),
-        category: document.getElementById('contact-category').value,
+      const ticketPayload = {
+        ticketId: ticketId,
+        name: document.getElementById('ticket-name').value.trim(),
+        email: document.getElementById('ticket-email').value.trim(),
+        telegramHandle: document.getElementById('ticket-telegram').value.trim() || 'N/A',
+        category: document.getElementById('ticket-category').value,
         priority: selectedPriority,
-        subject: document.getElementById('contact-subject').value.trim(),
-        message: document.getElementById('contact-message').value.trim(),
+        subject: document.getElementById('ticket-subject').value.trim(),
+        message: document.getElementById('ticket-message').value.trim(),
         status: 'open',
         createdAt: new Date().toISOString(),
         userId: user?.uid || 'guest'
       };
 
       try {
-        await addDoc(collection(db, 'tickets'), ticketData);
-        showToast(`Support Ticket #${ticketRefId} created successfully!`, 'success');
-        
-        // Open WhatsApp backup optionally
-        const waMsg = `*DOLLARRENT SUPPORT TICKET #${ticketRefId}*\n*Name:* ${ticketData.name}\n*Category:* ${ticketData.category}\n*Priority:* ${ticketData.priority}\n*Message:* ${ticketData.message}`;
-        window.open(`https://wa.me/923001234567?text=${encodeURIComponent(waMsg)}`, '_blank');
-
+        await addDoc(collection(db, 'tickets'), ticketPayload);
+        showToast(`Support Ticket #${ticketId} created successfully! Our admin will review it.`, 'success');
         e.target.reset();
       } catch (err) {
-        console.warn("Saved locally or offline mode.", err);
-        showToast(`Ticket #${ticketRefId} recorded! Contact us on Telegram for instant response.`, 'info');
+        console.warn("Firestore error, fallback handling:", err);
+        showToast(`Ticket #${ticketId} submitted! For instant response, contact @rental_dollor on Telegram.`, 'info');
       } finally {
         submitBtn.disabled = false;
-        submitBtn.innerHTML = `Create Support Ticket <svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2.5;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>`;
+        submitBtn.innerHTML = `Submit Ticket to Admin <svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2.5;"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>`;
       }
     });
   </script>
