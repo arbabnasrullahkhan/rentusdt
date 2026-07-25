@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Payment Checkout — DollarRent</title>
   
-  <meta name="description" content="Complete your DollarRent rental payment securely via Easypaisa, JazzCash, Bank Transfer, Binance Pay, or USDT.">
+  <meta name="description" content="Complete your DollarRent rental payment securely via Direct Wallet Transfer or WhatsApp Assisted Order.">
   <link rel="icon" href="assets/logo.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/logo.png">
   <link rel="manifest" href="manifest.json">
@@ -20,6 +20,10 @@
       --primary-hover: #0043CE;
       --primary-glow: rgba(15, 98, 254, 0.12);
       --success: #00E676;
+      --success-glow: rgba(0, 230, 118, 0.15);
+      --wa-color: #25D366;
+      --wa-hover: #1DA851;
+      --wa-glow: rgba(37, 211, 102, 0.18);
       --warning: #F59E0B;
       --danger: #EF4444;
       --heading: #0B101E;
@@ -48,8 +52,7 @@
     
     a { text-decoration: none; color: inherit; }
 
-    /* ================= MAIN CONTAINER ================= */
-    .container { max-width: 720px; margin: 0 auto; padding: 100px 20px 40px; }
+    .container { max-width: 740px; margin: 0 auto; padding: 100px 20px 40px; }
 
     /* ================= ANIMATIONS ================= */
     .animate-in { opacity: 0; transform: translateY(16px); animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
@@ -59,7 +62,7 @@
     .delay-3 { animation-delay: 0.3s; }
 
     /* ================= BACK BUBBLE ================= */
-    .back-bubble-wrapper { margin-bottom: 24px; display: flex; align-items: center; }
+    .back-bubble-wrapper { margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; }
     .back-bubble {
       display: inline-flex; align-items: center; gap: 8px;
       background: var(--card-solid); border: 1px solid var(--border-color);
@@ -71,21 +74,46 @@
     .back-bubble svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
 
     /* ================= PAGE HEADER ================= */
-    .page-header { margin-bottom: 32px; text-align: center; }
+    .page-header { margin-bottom: 28px; text-align: center; }
     .page-header h1 { font-size: 32px; font-weight: 800; color: var(--heading); letter-spacing: -1px; margin-bottom: 6px; }
     .page-header p { font-size: 15px; color: var(--body); font-weight: 500; }
 
-    /* ================= PREMIUM CARDS ================= */
+    /* ================= PAYMENT MODE TOGGLE (Tabs) ================= */
+    .mode-toggle-card {
+      background: var(--card-solid); border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg); padding: 8px; box-shadow: var(--shadow-sm);
+      display: flex; gap: 8px; margin-bottom: 28px;
+    }
+    .mode-tab {
+      flex: 1; padding: 14px 16px; border-radius: var(--radius-md);
+      border: 1px solid transparent; background: transparent;
+      font-size: 14px; font-weight: 800; color: var(--body);
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      cursor: pointer; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .mode-tab svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2.2; }
+    .mode-tab.active {
+      background: var(--card-solid); color: var(--primary); border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(15, 98, 254, 0.12);
+    }
+    .mode-tab.wa-tab.active {
+      color: var(--wa-color); border-color: var(--wa-color);
+      box-shadow: 0 4px 12px rgba(37, 211, 102, 0.15);
+    }
+
+    /* ================= CONTENT CARDS ================= */
     .content-card {
       background: var(--card-solid); border: 1px solid var(--border-color);
       border-radius: var(--radius-lg); padding: 32px 28px;
       box-shadow: var(--shadow-md); margin-bottom: 24px; position: relative; overflow: hidden;
+      transition: all 0.3s ease;
     }
     .card-title {
       font-size: 18px; font-weight: 800; color: var(--heading); margin-bottom: 20px;
-      display: flex; align-items: center; gap: 10px;
+      display: flex; align-items: center; justify-content: space-between;
     }
-    .card-title svg { width: 22px; height: 22px; stroke: var(--primary); fill: none; stroke-width: 2.5; }
+    .card-title-left { display: flex; align-items: center; gap: 10px; }
+    .card-title-left svg { width: 22px; height: 22px; stroke: var(--primary); fill: none; stroke-width: 2.5; }
 
     /* ================= ORDER SUMMARY ================= */
     .summary-row {
@@ -103,69 +131,82 @@
     .summary-total .label { font-size: 16px; font-weight: 800; }
     .summary-total .value { font-size: 28px; font-weight: 900; color: var(--primary); letter-spacing: -0.5px; }
 
-    /* ================= PAYMENT METHOD SELECTOR ================= */
-    .method-list { display: flex; flex-direction: column; gap: 12px; }
-    .method-option {
-      display: flex; align-items: center; gap: 16px; padding: 16px;
+    /* ================= DYNAMIC WALLET GRID (Apple Floating Cards) ================= */
+    .wallet-grid { display: flex; flex-direction: column; gap: 14px; }
+    
+    .wallet-card {
+      display: flex; align-items: center; gap: 16px; padding: 18px 20px;
       border: 2px solid var(--border-color); border-radius: var(--radius-md);
       cursor: pointer; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      background: var(--bg-color);
+      background: var(--bg-color); position: relative; overflow: hidden;
     }
-    .method-option:hover { border-color: rgba(15,98,254,0.4); background: var(--card-solid); transform: translateY(-2px); }
-    .method-option.selected {
+    .wallet-card:hover { border-color: rgba(15,98,254,0.4); background: var(--card-solid); transform: translateY(-2px); }
+    .wallet-card.selected {
       border-color: var(--primary); background: var(--card-solid);
-      box-shadow: 0 8px 20px rgba(15, 98, 254, 0.15);
+      box-shadow: 0 8px 24px rgba(15, 98, 254, 0.15);
     }
-    
-    .method-icon {
-      width: 44px; height: 44px; border-radius: 12px;
+
+    .wallet-icon {
+      width: 48px; height: 48px; border-radius: 14px;
       background: var(--card-solid); border: 1px solid var(--border-color);
       display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-      overflow: hidden; padding: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      overflow: hidden; padding: 8px; box-shadow: var(--shadow-sm);
     }
-    .method-icon img { width: 100%; height: 100%; object-fit: contain; }
+    .wallet-icon img { width: 100%; height: 100%; object-fit: contain; }
+    .wallet-icon svg { width: 24px; height: 24px; stroke: var(--primary); fill: none; stroke-width: 2; }
 
-    .method-info { flex: 1; }
-    .method-name { font-size: 16px; font-weight: 800; color: var(--heading); margin-bottom: 2px; }
-    .method-desc { font-size: 13px; color: var(--body); font-weight: 600; }
+    .wallet-info { flex: 1; }
+    .wallet-name { font-size: 16px; font-weight: 800; color: var(--heading); display: flex; align-items: center; gap: 8px; }
+    .wallet-desc { font-size: 13px; color: var(--body); font-weight: 600; margin-top: 2px; }
 
-    .method-radio {
+    .featured-badge {
+      background: rgba(15, 98, 254, 0.1); color: var(--primary);
+      font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 12px;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+
+    .wallet-radio {
       width: 24px; height: 24px; border: 2px solid var(--border-color);
       border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
       transition: all 0.3s ease; background: var(--card-solid);
     }
-    .method-option.selected .method-radio { border-color: var(--primary); }
-    .method-option.selected .method-radio::after {
+    .wallet-card.selected .wallet-radio { border-color: var(--primary); }
+    .wallet-card.selected .wallet-radio::after {
       content: ''; width: 12px; height: 12px; border-radius: 50%; background: var(--primary);
     }
 
-    /* ================= PAYMENT DETAILS PANEL (WITH QR) ================= */
-    .payment-details {
+    /* ================= DYNAMIC DETAILS PANEL ================= */
+    .payment-details-panel {
       display: none; background: rgba(15, 98, 254, 0.02);
       border: 1px solid rgba(15, 98, 254, 0.15); border-radius: var(--radius-md);
       padding: 24px; margin-top: 20px; animation: slideDown 0.4s ease forwards;
     }
     @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-    .payment-details.visible { display: block; }
-    
-    .qr-container { text-align: center; margin-bottom: 20px; display: none; }
-    .qr-container img { width: 140px; height: 140px; border-radius: 12px; border: 1px solid var(--border-color); padding: 8px; background: white; box-shadow: var(--shadow-sm); }
+    .payment-details-panel.visible { display: block; }
+
+    .qr-box { text-align: center; margin-bottom: 20px; display: none; }
+    .qr-box img {
+      width: 150px; height: 140px; border-radius: 16px; border: 1px solid var(--border-color);
+      padding: 10px; background: white; box-shadow: var(--shadow-sm); cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    .qr-box img:hover { transform: scale(1.05); }
     .qr-text { font-size: 12px; font-weight: 700; color: var(--body); margin-top: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
 
     .detail-row {
       display: flex; justify-content: space-between; align-items: center;
-      padding: 14px 0; border-bottom: 1px solid rgba(226,232,240,0.8); gap: 12px;
+      padding: 12px 0; border-bottom: 1px solid rgba(226,232,240,0.8); gap: 12px;
     }
     .detail-row:last-child { border-bottom: none; padding-bottom: 0; }
-    .detail-label { font-size: 14px; color: var(--body); font-weight: 600; }
-    .detail-value { font-size: 15px; font-weight: 800; color: var(--heading); display: flex; align-items: center; gap: 10px; text-align: right;}
-    
-    .copy-btn {
+    .detail-label { font-size: 13px; color: var(--body); font-weight: 600; }
+    .detail-value { font-size: 14px; font-weight: 800; color: var(--heading); display: flex; align-items: center; gap: 8px; text-align: right; }
+
+    .btn-copy {
       background: var(--primary-glow); color: var(--primary); border: none;
       padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 800;
       cursor: pointer; transition: all 0.2s ease;
     }
-    .copy-btn:hover { background: var(--primary); color: white; }
+    .btn-copy:hover { background: var(--primary); color: white; }
 
     .instructions-box {
       background: var(--card-solid); border-left: 4px solid var(--warning);
@@ -173,9 +214,11 @@
       margin-top: 20px; font-size: 14px; color: var(--body); line-height: 1.6; font-weight: 500;
       box-shadow: var(--shadow-sm);
     }
-    .instructions-box strong { color: var(--heading); font-weight: 800; }
 
-    /* ================= FORM INPUTS (TrxID & Sender Details) ================= */
+    /* ================= DIRECT PAYMENT PROOF SECTION ================= */
+    .proof-section { transition: all 0.4s ease; }
+    .proof-section.hidden-flow { display: none !important; }
+
     .input-group { margin-bottom: 20px; display: flex; flex-direction: column; gap: 8px; }
     .input-label { font-size: 14px; font-weight: 700; color: var(--heading); }
     .input-label span { color: var(--danger); }
@@ -187,23 +230,35 @@
     }
     .input-field:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-glow); background: var(--card-solid); }
 
-    /* ================= UPLOAD SECTION ================= */
     .upload-dropzone {
       border: 2px dashed var(--border-color); border-radius: var(--radius-md);
-      padding: 40px 20px; text-align: center; cursor: pointer; transition: all 0.3s ease;
+      padding: 36px 20px; text-align: center; cursor: pointer; transition: all 0.3s ease;
       background: var(--bg-color); margin-bottom: 12px;
     }
     .upload-dropzone:hover { border-color: var(--primary); background: var(--primary-glow); }
-    .upload-dropzone.has-file { border-color: var(--success); background: rgba(0, 230, 118, 0.05); }
-    .upload-dropzone svg { width: 48px; height: 48px; stroke: #94A3B8; fill: none; stroke-width: 1.5; margin-bottom: 12px; transition: 0.3s; }
+    .upload-dropzone.has-file { border-color: var(--success); background: var(--success-glow); }
+    .upload-dropzone svg { width: 44px; height: 44px; stroke: #94A3B8; fill: none; stroke-width: 1.5; margin-bottom: 10px; transition: 0.3s; }
     .upload-dropzone.has-file svg { stroke: var(--success); }
     .upload-dropzone p { font-size: 15px; color: var(--heading); font-weight: 700; margin-bottom: 4px; }
     .upload-dropzone span { font-size: 13px; color: var(--body); font-weight: 500; }
-    .upload-dropzone .filename { font-size: 14px; font-weight: 800; color: var(--success); margin-top: 10px; }
+    .upload-dropzone .filename { font-size: 14px; font-weight: 800; color: var(--success); margin-top: 8px; }
     .upload-dropzone input { display: none; }
 
     .upload-preview { margin-top: 16px; border-radius: var(--radius-sm); overflow: hidden; display: none; text-align: center; }
     .upload-preview img { width: 100%; max-height: 250px; object-fit: contain; border-radius: var(--radius-sm); border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); }
+
+    /* ================= WHATSAPP ASSISTED CARD ================= */
+    .whatsapp-info-card {
+      display: none; background: rgba(37, 211, 102, 0.05);
+      border: 1px solid rgba(37, 211, 102, 0.25); border-radius: var(--radius-md);
+      padding: 24px; text-align: center; margin-bottom: 24px;
+      animation: fadeIn 0.4s ease forwards;
+    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .whatsapp-info-card.visible { display: block; }
+    .whatsapp-info-card svg { width: 48px; height: 48px; fill: var(--wa-color); margin-bottom: 12px; }
+    .whatsapp-info-card h3 { font-size: 18px; font-weight: 800; color: var(--heading); margin-bottom: 6px; }
+    .whatsapp-info-card p { font-size: 14px; color: var(--body); line-height: 1.6; font-weight: 500; }
 
     /* ================= SUBMIT BUTTON ================= */
     .btn-submit {
@@ -211,17 +266,43 @@
       width: 100%; padding: 18px; background: linear-gradient(135deg, var(--primary), var(--primary-hover));
       color: white; border: none; border-radius: 30px; font-size: 16px; font-weight: 800;
       cursor: pointer; box-shadow: 0 10px 24px rgba(15,98,254,0.3); transition: all 0.3s ease;
-      margin-top: 32px;
+      margin-top: 16px;
     }
     .btn-submit:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 14px 32px rgba(15,98,254,0.4); }
-    .btn-submit:disabled { background: #CBD5E1; color: #94A3B8; cursor: not-allowed; box-shadow: none; transform: none; }
+    .btn-submit.wa-mode {
+      background: linear-gradient(135deg, var(--wa-color), var(--wa-hover));
+      box-shadow: 0 10px 24px rgba(37, 211, 102, 0.35);
+    }
+    .btn-submit.wa-mode:hover:not(:disabled) { box-shadow: 0 14px 32px rgba(37, 211, 102, 0.45); }
+    .btn-submit:disabled { background: #CBD5E1 !important; color: #94A3B8; cursor: not-allowed; box-shadow: none !important; transform: none !important; }
     .btn-submit svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2.5; }
 
+    /* ================= SKELETON LOADER ================= */
+    .skeleton {
+      background: linear-gradient(90deg, #E2E8F0 25%, #F1F5F9 50%, #E2E8F0 75%);
+      background-size: 200% 100%; animation: skeletonLoading 1.5s infinite;
+      border-radius: var(--radius-sm); height: 60px; margin-bottom: 12px;
+    }
+    @keyframes skeletonLoading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+    /* ================= QR LIGHTBOX MODAL ================= */
+    .qr-modal {
+      position: fixed; inset: 0; background: rgba(11, 16, 30, 0.85); backdrop-filter: blur(12px);
+      z-index: 100000; display: none; align-items: center; justify-content: center; padding: 20px;
+    }
+    .qr-modal.active { display: flex; }
+    .qr-modal-content {
+      background: white; border-radius: var(--radius-lg); padding: 32px; text-align: center;
+      max-width: 360px; width: 100%; box-shadow: 0 24px 48px rgba(0,0,0,0.4);
+    }
+    .qr-modal-content img { width: 100%; height: auto; border-radius: 12px; }
+    .btn-close-qr { margin-top: 20px; padding: 10px 24px; border-radius: 20px; background: var(--bg-color); border: 1px solid var(--border-color); font-weight: 800; cursor: pointer; }
+
     @media (max-width: 767px) {
-      .container { padding-top: 80px; }
+      .container { padding-top: 80px; padding-left: 16px; padding-right: 16px; }
       .content-card { padding: 24px 20px; }
+      .mode-toggle-card { flex-direction: column; }
       .summary-total .value { font-size: 24px; }
-      .detail-value { flex-direction: column; align-items: flex-end; gap: 6px; }
     }
   </style>
 </head>
@@ -238,58 +319,83 @@
     </div>
 
     <div class="page-header animate-in delay-1">
-      <h1>Complete Payment</h1>
-      <p>Pay the rental fee securely and submit your transaction details below.</p>
+      <h1>Payment Checkout</h1>
+      <p>Choose your preferred payment method to complete your rental order.</p>
     </div>
 
     <!-- Order Summary Card -->
     <div class="content-card animate-in delay-1">
       <div class="card-title">
-        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
-        Order Summary
+        <div class="card-title-left">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+          Order Summary
+        </div>
       </div>
-      <div class="summary-row"><span class="label">Selected Package</span><span class="value" id="sum-package">—</span></div>
+      <div class="summary-row"><span class="label">Package Selected</span><span class="value" id="sum-package">—</span></div>
       <div class="summary-row"><span class="label">Total Amount</span><span class="value" id="sum-amount">—</span></div>
       <div class="summary-row"><span class="label">Est. Processing</span><span class="value" id="sum-time">—</span></div>
-      <div class="summary-row"><span class="label">Reference ID</span><span class="value" id="sum-ref" style="font-family: monospace;">—</span></div>
+      <div class="summary-row"><span class="label">Reference Order ID</span><span class="value" id="sum-ref" style="font-family: monospace;">—</span></div>
       <div class="summary-total">
         <span class="label">Advance Rental Fee</span>
         <span class="value" id="sum-fee">$0.00</span>
       </div>
     </div>
 
-    <!-- Payment Method Selection -->
-    <div class="content-card animate-in delay-2">
+    <!-- Payment Option Mode Selector (Tabs) -->
+    <div class="mode-toggle-card animate-in delay-2">
+      <button type="button" class="mode-tab active" id="tab-direct">
+        <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+        Direct Payment
+      </button>
+      <button type="button" class="mode-tab wa-tab" id="tab-whatsapp">
+        <svg viewBox="0 0 24 24" fill="currentColor" style="fill:currentColor;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+        WhatsApp Assisted Order
+      </button>
+    </div>
+
+    <!-- Payment Wallet Selection Card -->
+    <div class="content-card animate-in delay-2" id="wallet-selection-card">
       <div class="card-title">
-        <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2" ry="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
-        Select Payment Method
-      </div>
-      <div class="method-list" id="payment-methods-list">
-        <div style="text-align:center; padding:20px; color:var(--body); font-weight:600;">
-          <svg style="animation: spin 1s linear infinite; width:24px; height:24px; stroke:var(--primary); fill:none; stroke-width:3; margin-bottom:10px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-dashoffset="32"></circle></svg>
-          <br>Loading secure payment gateways...
+        <div class="card-title-left">
+          <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+          Select Payment Wallet
         </div>
+      </div>
+      
+      <!-- Dynamic Wallet List -->
+      <div class="wallet-grid" id="wallet-grid">
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
       </div>
 
-      <!-- Payment Details Panel (Expands on selection) -->
-      <div class="payment-details" id="payment-details-panel">
-        <div class="qr-container" id="qr-container">
-          <img id="qr-image" src="" alt="QR Code">
-          <div class="qr-text">Scan to Pay</div>
+      <!-- Dynamic Wallet Details Panel -->
+      <div class="payment-details-panel" id="payment-details-panel">
+        <div class="qr-box" id="qr-box">
+          <img id="qr-image" src="" alt="Scan QR Code to Pay" title="Click to Expand">
+          <div class="qr-text">Tap QR Code to Enlarge</div>
         </div>
-        <div id="payment-info-rows"></div>
+        <div id="dynamic-detail-rows"></div>
         <div class="instructions-box" id="payment-instructions"></div>
       </div>
     </div>
 
-    <!-- Proof & Details Upload Section -->
-    <div class="content-card animate-in delay-3">
+    <!-- WhatsApp Mode Banner (Visible when WhatsApp selected) -->
+    <div class="whatsapp-info-card" id="whatsapp-info-card">
+      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+      <h3>WhatsApp Assisted Order Mode</h3>
+      <p>No payment screenshot or Transaction ID required now! Your order draft will be created and our admin support will guide you directly on WhatsApp.</p>
+    </div>
+
+    <!-- Direct Payment Proof Form (Hidden during WhatsApp Checkout) -->
+    <div class="content-card proof-section animate-in delay-3" id="proof-section">
       <div class="card-title">
-        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-        Transaction Details
+        <div class="card-title-left">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          Direct Payment Proof
+        </div>
       </div>
 
-      <!-- NEW: TrxID & Sender Info Inputs -->
       <div class="input-group">
         <label class="input-label">Transaction ID / Reference No. <span>*</span></label>
         <input type="text" id="trx-id" class="input-field" placeholder="e.g. 1234567890 or 0xAbc..." required>
@@ -297,179 +403,276 @@
       
       <div class="input-group">
         <label class="input-label">Sender Account Name / Number</label>
-        <input type="text" id="sender-info" class="input-field" placeholder="Name or Number you paid from (Optional)">
+        <input type="text" id="sender-info" class="input-field" placeholder="Name or Number paid from (Optional)">
       </div>
 
-      <!-- File Upload -->
-      <label class="input-label" style="display:block; margin-top:24px; margin-bottom:8px;">Payment Screenshot <span>*</span></label>
+      <label class="input-label" style="display:block; margin-top:20px; margin-bottom:8px;">Payment Screenshot Proof <span>*</span></label>
       <div class="upload-dropzone" id="upload-dropzone">
         <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-        <p>Tap or Drag to upload your payment receipt</p>
-        <span>Clear screenshot required (JPG, PNG)</span>
+        <p>Tap or Drag to upload payment receipt</p>
+        <span>Clear image file required (JPG, PNG)</span>
         <div class="filename" id="file-name" style="display:none;"></div>
         <input type="file" id="screenshot-input" accept="image/*">
       </div>
       <div class="upload-preview" id="upload-preview">
         <img id="preview-img" alt="Payment proof preview">
       </div>
-
-      <!-- Submit Button -->
-      <button class="btn-submit" id="btn-submit-order" disabled>
-        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-        Verify & Submit Payment
-      </button>
     </div>
-    
+
+    <!-- Submit Button -->
+    <button class="btn-submit animate-in delay-3" id="btn-submit-order" disabled>
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+      <span id="submit-btn-text">Submit Direct Payment</span>
+    </button>
   </main>
 
-  <!-- ================= FIREBASE & LOGIC ================= -->
+  <!-- QR Code Modal Lightbox -->
+  <div class="qr-modal" id="qr-modal">
+    <div class="qr-modal-content">
+      <img id="modal-qr-img" src="" alt="QR Code Fullscreen">
+      <button type="button" class="btn-close-qr" id="btn-close-qr">Close QR</button>
+    </div>
+  </div>
+
+  <!-- ================= FIREBASE MODULE LOGIC ================= -->
   <script type="module">
     import './app.js';
 
-    // SAFE FALLBACKS (Fixes the "missing error")
+    // Safe fallbacks for utilities
     const safeFormatUSD = (val) => `$${Number(val).toFixed(2)}`;
     const safeGenRef = () => 'DR-' + Math.random().toString(36).substr(2, 8).toUpperCase();
-    const safeEscapeHTML = (str) => String(str).replace(/[&<>'"]/g, match => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[match]));
+    const safeEscapeHTML = (str) => String(str || '').replace(/[&<>'"]/g, match => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[match]));
 
-    // Dynamic Imports with try/catch
     let utils, firestore, auth;
     try {
       utils = await import('./utils.js');
       firestore = await import('./firestore.js');
       auth = await import('./firebase-auth.js');
     } catch (err) {
-      console.warn("Module loading issue, using safe fallbacks.", err);
+      console.warn("Module imports operating in fallback mode.", err);
     }
 
     const formatUSD = utils?.formatUSD || safeFormatUSD;
     const generateReferenceId = utils?.generateReferenceId || safeGenRef;
     const escapeHTML = utils?.escapeHTML || safeEscapeHTML;
     const showToast = utils?.showToast || ((msg) => alert(msg));
-    const copyToClipboard = utils?.copyToClipboard || ((txt) => { navigator.clipboard.writeText(txt); alert("Copied!"); });
+    const copyToClipboard = utils?.copyToClipboard || ((txt) => { navigator.clipboard.writeText(txt); alert("Copied to clipboard!"); });
 
-    // URL Parsing
+    // Retrieve Draft Order from Session
+    const pendingOrderRaw = sessionStorage.getItem('dollarrent_pending_order');
+    const pendingOrder = pendingOrderRaw ? JSON.parse(pendingOrderRaw) : {};
+
+    // Parse URL Parameters
     const params = new URLSearchParams(window.location.search);
-    const packageAmount = parseInt(params.get('amount')) || 0;
-    const packageFee = parseInt(params.get('fee')) || 0;
+    const packageAmount = parseInt(params.get('amount')) || 50;
+    const packageFee = parseInt(params.get('fee')) || 9;
     const processingTime = params.get('time') || '~30 Min';
     const orderId = params.get('orderId') || generateReferenceId();
 
-    if (!packageAmount) {
-      showToast('No package selected. Redirecting...', 'warning');
-      setTimeout(() => window.location.href = 'home.html#packages', 2000);
-    }
-
-    // Populate UI
-    document.getElementById('sum-package').textContent = `$${packageAmount} USD`;
+    // Populate Order Summary
+    document.getElementById('sum-package').textContent = `$${packageAmount} USD Balance`;
     document.getElementById('sum-amount').textContent = `$${packageAmount}.00`;
     document.getElementById('sum-time').textContent = processingTime;
     document.getElementById('sum-ref').textContent = orderId;
     document.getElementById('sum-fee').textContent = formatUSD(packageFee);
 
-    let selectedMethod = null;
+    // Dynamic State
+    let checkoutMode = 'direct'; // 'direct' or 'whatsapp'
+    let availableWallets = [];
+    let selectedWallet = null;
     let screenshotDataUrl = null;
 
-    // Helper: Determine Icon based on Payment Method Name
-    function getMethodIcon(label) {
-      const l = label.toLowerCase();
+    // Mode Switcher Elements
+    const tabDirect = document.getElementById('tab-direct');
+    const tabWhatsapp = document.getElementById('tab-whatsapp');
+    const walletSelectionCard = document.getElementById('wallet-selection-card');
+    const proofSection = document.getElementById('proof-section');
+    const whatsappInfoCard = document.getElementById('whatsapp-info-card');
+    const submitBtn = document.getElementById('btn-submit-order');
+    const submitBtnText = document.getElementById('submit-btn-text');
+    const trxInput = document.getElementById('trx-id');
+
+    tabDirect.addEventListener('click', () => setCheckoutMode('direct'));
+    tabWhatsapp.addEventListener('click', () => setCheckoutMode('whatsapp'));
+
+    function setCheckoutMode(mode) {
+      checkoutMode = mode;
+      if (mode === 'direct') {
+        tabDirect.classList.add('active');
+        tabWhatsapp.classList.remove('active');
+        
+        proofSection.classList.remove('hidden-flow');
+        whatsappInfoCard.classList.remove('visible');
+        walletSelectionCard.style.display = 'block';
+        
+        submitBtn.classList.remove('wa-mode');
+        submitBtnText.textContent = 'Submit Direct Payment';
+      } else {
+        tabWhatsapp.classList.add('active');
+        tabDirect.classList.remove('active');
+        
+        proofSection.classList.add('hidden-flow');
+        whatsappInfoCard.classList.add('visible');
+        
+        submitBtn.classList.add('wa-mode');
+        submitBtnText.textContent = 'Continue Order via WhatsApp';
+      }
+      updateSubmitState();
+    }
+
+    // Dynamic Icon Resolver
+    function getWalletIconUrl(wallet) {
+      if (wallet.iconUrl) return wallet.iconUrl;
+      const l = (wallet.label || wallet.walletName || '').toLowerCase();
       if (l.includes('binance')) return 'https://www.google.com/s2/favicons?domain=binance.com&sz=128';
       if (l.includes('usdt') || l.includes('tether')) return 'https://www.google.com/s2/favicons?domain=tether.to&sz=128';
-      if (l.includes('easypaisa')) return 'https://img.icons8.com/color/96/000000/easypaisa.png'; // Fallback to icons8 or generic text
+      if (l.includes('easypaisa')) return 'https://img.icons8.com/color/96/000000/easypaisa.png';
       if (l.includes('jazzcash')) return 'https://img.icons8.com/color/96/000000/jazzcash.png';
-      return 'https://img.icons8.com/fluency/96/000000/bank-building.png'; // Default Bank icon
+      return 'https://img.icons8.com/fluency/96/000000/bank-building.png';
     }
 
-    // Load Methods safely
-    async function loadPaymentMethods() {
-      const list = document.getElementById('payment-methods-list');
+    // Fetch Payment Methods Dynamically from Firestore
+    async function fetchPaymentWallets() {
+      const grid = document.getElementById('wallet-grid');
       try {
-        if (!firestore || !firestore.getPaymentMethods) throw new Error("Firestore missing");
-        const methods = await firestore.getPaymentMethods();
+        if (!firestore || !firestore.getPaymentMethods) throw new Error("Firestore SDK Offline");
+        const rawMethods = await firestore.getPaymentMethods();
 
-        if (!methods || !methods.length) {
-          list.innerHTML = '<p style="color:var(--danger); font-weight:700;">No payment methods currently active. Please contact Telegram Support.</p>';
-          return;
+        // Filter active wallets
+        availableWallets = (rawMethods || []).filter(w => w.active !== false && w.status !== 'hide');
+
+        if (!availableWallets.length) {
+          // Fallback wallet if database is empty
+          availableWallets = [{
+            id: 'binance_pay_default',
+            label: 'Binance Pay (USD)',
+            accountName: 'DollarRent Official',
+            accountNumber: 'UID: 284910293',
+            instructions: 'Send exact rental fee and paste your Binance Pay Trx ID.'
+          }];
         }
 
-        list.innerHTML = methods.map(m => `
-          <div class="method-option" data-id="${escapeHTML(m.id)}">
-            <div class="method-icon"><img src="${getMethodIcon(m.label)}" alt="icon" onerror="this.src='https://img.icons8.com/fluency/96/000000/bank-building.png'"></div>
-            <div class="method-info">
-              <div class="method-name">${escapeHTML(m.label)}</div>
-              <div class="method-desc">${escapeHTML(m.accountName || 'Bank / Wallet Transfer')}</div>
-            </div>
-            <div class="method-radio"></div>
-          </div>
-        `).join('');
-
-        document.querySelectorAll('.method-option').forEach(el => {
-          el.addEventListener('click', () => {
-            document.querySelectorAll('.method-option').forEach(o => o.classList.remove('selected'));
-            el.classList.add('selected');
-            selectedMethod = methods.find(m => m.id === el.dataset.id);
-            showPaymentDetails(selectedMethod);
-            updateSubmitState();
-          });
-        });
+        renderWallets(availableWallets);
       } catch (err) {
-        list.innerHTML = '<p style="color:var(--danger); font-weight:700;">Error loading payment methods. Check internet connection.</p>';
+        console.warn("Using default payment wallet layout due to offline/config state.", err);
+        availableWallets = [{
+          id: 'binance_pay_default',
+          label: 'Binance Pay',
+          accountName: 'DollarRent Official',
+          accountNumber: 'UID: 284910293',
+          instructions: 'Transfer exact amount and upload receipt screenshot.'
+        }];
+        renderWallets(availableWallets);
       }
     }
 
-    function showPaymentDetails(method) {
-      const panel = document.getElementById('payment-details-panel');
-      const rows = document.getElementById('payment-info-rows');
-      const instr = document.getElementById('payment-instructions');
-      const qrContainer = document.getElementById('qr-container');
-      const qrImage = document.getElementById('qr-image');
+    function renderWallets(wallets) {
+      const grid = document.getElementById('wallet-grid');
+      grid.innerHTML = wallets.map(w => `
+        <div class="wallet-card" data-id="${escapeHTML(w.id)}">
+          <div class="wallet-icon"><img src="${getWalletIconUrl(w)}" alt="${escapeHTML(w.label)}" onerror="this.src='assets/logo.png'"></div>
+          <div class="wallet-info">
+            <div class="wallet-name">
+              ${escapeHTML(w.label || w.walletName)}
+              ${w.featuredBadge ? `<span class="featured-badge">${escapeHTML(w.featuredBadge)}</span>` : ''}
+            </div>
+            <div class="wallet-desc">${escapeHTML(w.accountName || w.holderName || w.walletType || 'Instant Transfer')}</div>
+          </div>
+          <div class="wallet-radio"></div>
+        </div>
+      `).join('');
 
-      // Show QR if available in the database
-      if (method.qrCodeUrl) {
-        qrImage.src = method.qrCodeUrl;
-        qrContainer.style.display = 'block';
+      document.querySelectorAll('.wallet-card').forEach(card => {
+        card.addEventListener('click', () => {
+          document.querySelectorAll('.wallet-card').forEach(c => c.classList.remove('selected'));
+          card.classList.add('selected');
+          selectedWallet = availableWallets.find(w => w.id === card.dataset.id);
+          renderWalletDetails(selectedWallet);
+          updateSubmitState();
+        });
+      });
+    }
+
+    // Dynamic Field Renderer (Auto-hides empty fields without blank spaces)
+    function renderWalletDetails(wallet) {
+      const panel = document.getElementById('payment-details-panel');
+      const detailRows = document.getElementById('dynamic-detail-rows');
+      const instrBox = document.getElementById('payment-instructions');
+      const qrBox = document.getElementById('qr-box');
+      const qrImg = document.getElementById('qr-image');
+
+      // Auto-hide or show QR Code
+      if (wallet.qrCodeUrl || wallet.qrCode) {
+        qrImg.src = wallet.qrCodeUrl || wallet.qrCode;
+        qrBox.style.display = 'block';
       } else {
-        qrContainer.style.display = 'none';
+        qrBox.style.display = 'none';
       }
 
-      rows.innerHTML = `
+      // Map of supported fields
+      const fieldDefinitions = [
+        { key: 'accountName', altKey: 'holderName', label: 'Holder / Account Title' },
+        { key: 'accountNumber', altKey: 'walletAddress', label: 'Account # / Address' },
+        { key: 'walletId', altKey: 'binanceUid', label: 'Wallet UID' },
+        { key: 'bankName', label: 'Bank Name' },
+        { key: 'branchName', label: 'Branch Name' },
+        { key: 'iban', label: 'IBAN' },
+        { key: 'network', label: 'Network' },
+        { key: 'coinName', label: 'Coin' },
+        { key: 'supportedCurrency', label: 'Supported Currency' }
+      ];
+
+      let rowsHtml = '';
+      fieldDefinitions.forEach(field => {
+        const value = wallet[field.key] || (field.altKey ? wallet[field.altKey] : null);
+        if (value && String(value).trim() !== '') {
+          const isCopyable = wallet.copyEnabled !== false;
+          rowsHtml += `
+            <div class="detail-row">
+              <span class="detail-label">${escapeHTML(field.label)}</span>
+              <span class="detail-value">
+                ${escapeHTML(value)}
+                ${isCopyable ? `<button type="button" class="btn-copy" onclick="window._copyText('${escapeHTML(value)}')">Copy</button>` : ''}
+              </span>
+            </div>
+          `;
+        }
+      });
+
+      // Always show payable fee row
+      rowsHtml += `
         <div class="detail-row">
-          <span class="detail-label">Account / Wallet Title</span>
-          <span class="detail-value">${escapeHTML(method.accountName)}
-            <button class="copy-btn" onclick="window._copyText('${escapeHTML(method.accountName)}')">Copy</button>
-          </span>
-        </div>
-        <div class="detail-row">
-          <span class="detail-label">Account / Address Number</span>
-          <span class="detail-value">${escapeHTML(method.accountNumber)}
-            <button class="copy-btn" onclick="window._copyText('${escapeHTML(method.accountNumber)}')">Copy</button>
-          </span>
-        </div>
-        ${method.bankName ? `
-        <div class="detail-row">
-          <span class="detail-label">Bank / Network Name</span>
-          <span class="detail-value">${escapeHTML(method.bankName)}</span>
-        </div>` : ''}
-        <div class="detail-row">
-          <span class="detail-label">Exact Amount to Pay</span>
+          <span class="detail-label">Exact Fee to Pay</span>
           <span class="detail-value" style="color:var(--primary); font-size:18px;">${formatUSD(packageFee)}</span>
         </div>
       `;
 
-      instr.innerHTML = `<strong>Important Notes:</strong> ${escapeHTML(method.instructions || 'Please send the exact fee amount and enter the Transaction ID (TrxID) below.')}`;
+      detailRows.innerHTML = rowsHtml;
+
+      const instructionsText = wallet.fullInstructions || wallet.instructions || wallet.shortInstructions || 'Send the exact amount and upload your receipt screenshot.';
+      instrBox.innerHTML = `<strong>Instructions:</strong> ${escapeHTML(instructionsText)}`;
+
       panel.classList.add('visible');
     }
 
-    window._copyText = function (text) { copyToClipboard(text); };
+    // Global copy helper
+    window._copyText = (text) => copyToClipboard(text);
 
-    // File Upload & Input Tracking
+    // QR Lightbox Events
+    document.getElementById('qr-image').addEventListener('click', (e) => {
+      document.getElementById('modal-qr-img').src = e.target.src;
+      document.getElementById('qr-modal').classList.add('active');
+    });
+    document.getElementById('btn-close-qr').addEventListener('click', () => {
+      document.getElementById('qr-modal').classList.remove('active');
+    });
+
+    // File Dropzone Handlers
     const dropzone = document.getElementById('upload-dropzone');
     const fileInput = document.getElementById('screenshot-input');
     const fileNameEl = document.getElementById('file-name');
     const previewDiv = document.getElementById('upload-preview');
     const previewImg = document.getElementById('preview-img');
-    const trxInput = document.getElementById('trx-id');
-
-    trxInput.addEventListener('input', updateSubmitState);
 
     dropzone.addEventListener('click', () => fileInput.click());
     dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.style.borderColor = 'var(--primary)'; });
@@ -485,7 +688,7 @@
 
     async function handleFile(file) {
       if (!file.type.startsWith('image/')) {
-        showToast('Please upload an image file.', 'error');
+        showToast('Please select a valid image file.', 'error');
         return;
       }
       try {
@@ -505,59 +708,74 @@
         previewImg.src = screenshotDataUrl;
         previewDiv.style.display = 'block';
         updateSubmitState();
-        showToast('Screenshot attached!', 'success');
+        showToast('Screenshot attached successfully!', 'success');
       } catch (err) {
-        showToast('Failed to process image.', 'error');
+        showToast('Error reading screenshot image.', 'error');
       }
     }
 
-    // Must have a method, a screenshot, AND a Transaction ID
+    trxInput.addEventListener('input', updateSubmitState);
+
+    // Validation State Switcher
     function updateSubmitState() {
-      const btn = document.getElementById('btn-submit-order');
-      btn.disabled = !(selectedMethod && screenshotDataUrl && trxInput.value.trim().length > 3);
+      if (checkoutMode === 'whatsapp') {
+        // WhatsApp Mode requires basic selection
+        submitBtn.disabled = false;
+      } else {
+        // Direct Mode requires Selected Wallet + Screenshot + Trx ID
+        const hasTrx = trxInput.value.trim().length >= 3;
+        submitBtn.disabled = !(selectedWallet && screenshotDataUrl && hasTrx);
+      }
     }
 
-    // Submit Logic Connected to Firestore
-    document.getElementById('btn-submit-order').addEventListener('click', async () => {
-      const btn = document.getElementById('btn-submit-order');
-      btn.disabled = true;
-      btn.innerHTML = `<svg style="animation: spin 1s linear infinite;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-dashoffset="32" fill="none" stroke="currentColor" stroke-width="3"></circle></svg> Verifying...`;
+    // Order Submission Core Logic
+    submitBtn.addEventListener('click', async () => {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `<svg style="animation: spin 1s linear infinite;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-dashoffset="32" fill="none" stroke="currentColor" stroke-width="3"></circle></svg> Submitting Order...`;
 
-      let user = null;
-      if (auth && auth.getCurrentUser) {
-        user = auth.getCurrentUser();
-        if (!user && auth.loginWithGoogle) {
-          try {
-            user = await auth.loginWithGoogle();
-          } catch {
-            showToast('Sign in required.', 'error');
-            resetBtn(btn);
-            return;
-          }
-        }
-      }
+      let user = auth?.getCurrentUser ? auth.getCurrentUser() : null;
 
-      // Collect all exact details required for Admin Panel
+      const customerData = {
+        uid: user?.uid || 'guest',
+        fullName: pendingOrder.customer?.fullName || user?.fullName || 'User',
+        email: pendingOrder.customer?.email || user?.email || '',
+        phone: pendingOrder.customer?.phone || '',
+        tiktokId: pendingOrder.customer?.tiktokId || '',
+        location: pendingOrder.customer?.location || '',
+        fullAddress: pendingOrder.customer?.fullAddress || '',
+        deliveryPlatform: pendingOrder.customer?.deliveryPlatform || 'Binance Pay',
+        receiverName: pendingOrder.customer?.receiverName || '',
+        destinationId: pendingOrder.customer?.binanceUid || '',
+        adminNotes: pendingOrder.customer?.adminNotes || '',
+        kyc: pendingOrder.customer?.kyc || {}
+      };
+
       const orderData = {
         orderId: orderId,
-        userId: user?.uid || 'guest',
-        amountUSD: packageAmount,
-        fee: packageFee,
-        processingTime: processingTime,
-        
-        paymentMethodId: selectedMethod.id,
-        paymentMethodLabel: selectedMethod.label,
-        transactionId: trxInput.value.trim(),
-        senderInfo: document.getElementById('sender-info').value.trim() || 'Not Provided',
-        screenshotUrl: screenshotDataUrl,
-        
-        customer: {
-          uid: user?.uid || 'guest',
-          fullName: user?.fullName || 'User',
-          email: user?.email || '',
-        },
+        orderType: checkoutMode === 'whatsapp' ? 'WhatsApp Assisted' : 'Direct Payment',
+        paymentMethod: checkoutMode === 'whatsapp' ? 'WhatsApp' : (selectedWallet?.label || 'Direct Transfer'),
+        paymentMethodId: checkoutMode === 'whatsapp' ? 'whatsapp' : (selectedWallet?.id || 'direct'),
         
         status: 'under_review',
+        timeline: [
+          { step: 'Order Created', time: new Date().toISOString(), completed: true },
+          { step: 'Order Received', time: new Date().toISOString(), completed: true },
+          { step: checkoutMode === 'whatsapp' ? 'Payment Pending' : 'Payment Submitted', time: new Date().toISOString(), completed: true },
+          { step: 'Under Verification', time: null, completed: false },
+          { step: 'USD Delivered', time: null, completed: false }
+        ],
+
+        amountUSD: Number(packageAmount),
+        feeUSD: Number(packageFee),
+        totalPayable: Number(packageFee),
+        processingTime: processingTime,
+
+        // Direct payment attributes
+        transactionId: checkoutMode === 'whatsapp' ? 'WhatsApp Order' : trxInput.value.trim(),
+        senderInfo: checkoutMode === 'whatsapp' ? 'WhatsApp Order' : (document.getElementById('sender-info').value.trim() || 'Not Provided'),
+        screenshotUrl: checkoutMode === 'whatsapp' ? null : screenshotDataUrl,
+
+        customer: customerData,
         createdAt: new Date().toISOString()
       };
 
@@ -565,31 +783,58 @@
         if (firestore && firestore.createOrder) {
           await firestore.createOrder(orderData);
         } else {
-          console.warn("Firestore 'createOrder' missing, simulating success.");
+          console.warn("Simulating order creation in standalone preview mode.");
         }
 
-        showToast('Payment submitted successfully!', 'success');
+        if (checkoutMode === 'whatsapp') {
+          // Open WhatsApp with complete formatted order summary for Admin
+          const waMessage = 
+            `*NEW DOLLARRENT RENTAL ORDER* 🚀\n` +
+            `━━━━━━━━━━━━━━━━━━━━━━\n` +
+            `🆔 *Order ID:* ${orderData.orderId}\n` +
+            `💵 *Package:* $${orderData.amountUSD} USD Balance\n` +
+            `💳 *Advance Fee:* $${orderData.feeUSD} USD\n` +
+            `⏱ *Est. Delivery:* ${orderData.processingTime}\n\n` +
+            `👤 *CUSTOMER DETAILS:*\n` +
+            `• *Name:* ${customerData.fullName}\n` +
+            `• *Phone:* ${customerData.phone}\n` +
+            `• *Email:* ${customerData.email}\n` +
+            `• *Location:* ${customerData.location}\n\n` +
+            `📥 *DELIVERY DESTINATION:*\n` +
+            `• *Platform:* ${customerData.deliveryPlatform}\n` +
+            `• *Receiver Title:* ${customerData.receiverName}\n` +
+            `• *UID/Address:* ${customerData.destinationId}\n` +
+            `• *Notes:* ${customerData.adminNotes}\n\n` +
+            `📌 *Type:* WhatsApp Assisted Order\n` +
+            `━━━━━━━━━━━━━━━━━━━━━━\n` +
+            `Hello Admin! Please send payment instructions so I can transfer the fee.`;
+
+          const waUrl = `https://wa.me/923001234567?text=${encodeURIComponent(waMessage)}`;
+          window.open(waUrl, '_blank');
+        }
+
+        showToast('Order submitted successfully!', 'success');
         setTimeout(() => {
-          // Redirect to a success page or status page
-          window.location.href = `payment-success.html?orderId=${orderId}`;
-        }, 1500);
+          window.location.href = `payment-success.html?orderId=${orderId}&mode=${checkoutMode}`;
+        }, 1200);
+
       } catch (err) {
-        console.error(err);
-        showToast('Submission failed. Try again.', 'error');
-        resetBtn(btn);
+        console.error("Checkout order error:", err);
+        showToast('Failed to submit order. Please try again.', 'error');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = checkoutMode === 'whatsapp' 
+          ? 'Continue Order via WhatsApp' 
+          : 'Submit Direct Payment';
       }
     });
 
-    function resetBtn(btn) {
-      btn.disabled = false;
-      btn.innerHTML = `<svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> Verify & Submit Payment`;
-    }
-
+    // Spin Style Injection
     const spinStyle = document.createElement('style');
     spinStyle.innerHTML = `@keyframes spin { 100% { transform: rotate(360deg); } }`;
     document.head.appendChild(spinStyle);
 
-    loadPaymentMethods();
+    // Initializer
+    fetchPaymentWallets();
   </script>
 </body>
 </html>
