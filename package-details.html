@@ -10,7 +10,7 @@
   <link rel="apple-touch-icon" href="assets/logo.png">
   <link rel="manifest" href="manifest.json">
 
-  <!-- ================= PREMIUM FINTECH CSS ================= -->
+  <!-- ================= PREMIUM FINTECH PRODUCT CSS ================= -->
   <style>
     :root {
       --bg-color: #F8FAFC;
@@ -20,8 +20,6 @@
       --primary-hover: #0043CE;
       --primary-glow: rgba(15, 98, 254, 0.12);
       --secondary: #00E676;
-      --secondary-glow: rgba(0, 230, 118, 0.15);
-      --warning: #F59E0B;
       --danger: #EF4444;
       --heading: #0B101E;
       --body: #475569;
@@ -29,8 +27,7 @@
       --radius-md: 18px;
       --radius-sm: 12px;
       --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.04);
-      --shadow-md: 0 12px 28px -4px rgba(15, 98, 254, 0.08);
-      --shadow-hover: 0 20px 40px -8px rgba(15, 98, 254, 0.18);
+      --shadow-md: 0 16px 36px -6px rgba(15, 98, 254, 0.12);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -38,10 +35,10 @@
     body {
       font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
       background-color: var(--bg-color);
-      /* Subtle FinTech Grid Background */
+      /* Premium FinTech Background */
       background-image: radial-gradient(circle at 50% 0%, #ffffff 0%, transparent 70%),
-        linear-gradient(rgba(15, 98, 254, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(15, 98, 254, 0.03) 1px, transparent 1px);
+                        linear-gradient(rgba(15, 98, 254, 0.03) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(15, 98, 254, 0.03) 1px, transparent 1px);
       background-size: 100% 100%, 30px 30px, 30px 30px;
       color: var(--heading);
       padding-bottom: 120px; /* Space for Mobile Dock from app.js */
@@ -50,21 +47,15 @@
 
     a { text-decoration: none; color: inherit; }
 
-    /* ================= MAIN WRAPPER ================= */
+    /* ================= MAIN CONTAINER ================= */
     .container {
-      max-width: 1100px;
+      max-width: 1040px;
       margin: 0 auto;
       padding: 100px 20px 40px; /* Clears app.js Header */
     }
 
-    /* ================= ANIMATIONS ================= */
-    .animate-in { opacity: 0; transform: translateY(20px); animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
-    .delay-1 { animation-delay: 0.1s; }
-    .delay-2 { animation-delay: 0.2s; }
-
     /* ================= BACK BUBBLE ================= */
-    .back-bubble-wrapper { margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; }
+    .back-bubble-wrapper { margin-bottom: 24px; display: flex; align-items: center; }
     .back-bubble {
       display: inline-flex; align-items: center; gap: 8px;
       background: var(--card-solid); border: 1px solid var(--border-color);
@@ -75,134 +66,136 @@
     .back-bubble:hover { border-color: var(--primary); color: var(--primary); transform: translateX(-4px); box-shadow: var(--shadow-md); }
     .back-bubble svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
 
-    /* ================= PRODUCT LAYOUT GRID (DESKTOP HORIZONTAL SPLIT) ================= */
-    .product-grid {
+    /* ================= ANIMATIONS ================= */
+    .animate-in { opacity: 0; transform: translateY(20px); animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) forwards; }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+
+    /* ================= PRODUCT LAYOUT (2-COLUMN DESKTOP / 1-COLUMN MOBILE) ================= */
+    .product-layout {
       display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
+      grid-template-columns: 1fr 1.15fr;
       gap: 32px;
       align-items: start;
     }
 
-    /* ================= LEFT COLUMN: PRODUCT HERO & SPECS ================= */
-    .product-hero-card {
+    /* LEFT COLUMN: PRODUCT VISUAL SHOWCASE */
+    .product-visual-card {
       background: var(--card-solid);
       border: 1px solid var(--border-color);
       border-radius: var(--radius-lg);
-      padding: 40px 32px;
+      padding: 40px 28px;
+      text-align: center;
       box-shadow: var(--shadow-md);
       position: relative;
       overflow: hidden;
-      margin-bottom: 24px;
     }
-    .product-hero-card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px;
+    .product-visual-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 120px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary)); opacity: 0.08;
+    }
+
+    .badge-verified {
+      display: inline-block; background: var(--primary-glow); color: var(--primary);
+      padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 24px;
+    }
+
+    /* Floating Coin Visual */
+    .visual-hero-box {
+      position: relative; width: 120px; height: 120px; margin: 0 auto 20px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .visual-hero-box::before {
+      content: ''; position: absolute; inset: -10px; border-radius: 50%;
+      background: var(--primary-glow); filter: blur(12px); animation: pulseGlow 3s infinite ease-in-out;
+    }
+    @keyframes pulseGlow { 0%, 100% { opacity: 0.5; transform: scale(0.95); } 50% { opacity: 1; transform: scale(1.1); } }
+    
+    .hero-coin-img {
+      width: 100%; height: 100%; object-fit: contain; position: relative; z-index: 2;
+      filter: drop-shadow(0 12px 24px rgba(15, 98, 254, 0.25));
+      animation: float 4s ease-in-out infinite;
+    }
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+    .visual-amount { font-size: 52px; font-weight: 900; color: var(--heading); letter-spacing: -2px; line-height: 1; margin-bottom: 4px; }
+    .visual-subtitle { font-size: 13px; font-weight: 800; color: var(--body); text-transform: uppercase; letter-spacing: 1px; }
+
+    /* Supported Networks Showcase */
+    .networks-box {
+      background: var(--bg-color); border: 1px solid var(--border-color);
+      border-radius: var(--radius-md); padding: 20px; margin-top: 28px; text-align: center;
+    }
+    .networks-box label { display: block; font-size: 12px; font-weight: 800; color: var(--body); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+    .network-icons-row { display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; }
+    .network-icons-row img {
+      width: 32px; height: 32px; border-radius: 50%; object-fit: contain;
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.08)); transition: transform 0.3s;
+    }
+    .network-icons-row img:hover { transform: translateY(-3px) scale(1.15); }
+
+    /* RIGHT COLUMN: PRODUCT INFO & ACTION CONTROLS */
+    .product-info-card {
+      background: var(--card-solid); border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg); padding: 40px 32px;
+      box-shadow: var(--shadow-md); position: relative; overflow: hidden;
+    }
+    .product-info-card::before {
+      content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
       background: linear-gradient(90deg, var(--primary), var(--secondary));
     }
 
-    .badge-status {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: var(--secondary-glow); color: #00A650;
-      padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 800;
-      text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 20px;
-    }
-    .badge-status span { width: 8px; height: 8px; border-radius: 50%; background: #00A650; display: inline-block; animation: blink 1.5s infinite; }
-    @keyframes blink { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
-
-    .amount-display {
-      font-size: 56px; font-weight: 900; color: var(--heading);
-      letter-spacing: -2px; line-height: 1; margin-bottom: 8px;
-      display: flex; align-items: baseline; gap: 10px;
-    }
-    .amount-display span { font-size: 24px; color: var(--primary); font-weight: 800; letter-spacing: 0; }
-
-    .product-subtitle { font-size: 16px; color: var(--body); font-weight: 500; margin-bottom: 32px; }
+    .category-tag { font-size: 12px; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px; }
+    .product-title { font-size: 32px; font-weight: 900; color: var(--heading); letter-spacing: -1px; margin-bottom: 8px; line-height: 1.1; }
+    .fee-highlight { font-size: 18px; font-weight: 800; color: var(--primary); margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color); }
 
     /* Specs Grid */
-    .specs-grid {
-      display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 32px;
-    }
-    .spec-box {
+    .specs-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 28px; }
+    .spec-item {
       background: var(--bg-color); border: 1px solid var(--border-color);
-      border-radius: var(--radius-md); padding: 18px; display: flex; flex-direction: column; gap: 4px;
+      border-radius: var(--radius-sm); padding: 16px; display: flex; flex-direction: column; gap: 4px;
     }
-    .spec-box label { font-size: 11px; font-weight: 700; color: var(--body); text-transform: uppercase; letter-spacing: 0.5px; }
-    .spec-box span { font-size: 16px; font-weight: 800; color: var(--heading); }
+    .spec-label { font-size: 11px; font-weight: 700; color: var(--body); text-transform: uppercase; letter-spacing: 0.5px; }
+    .spec-val { font-size: 15px; font-weight: 800; color: var(--heading); }
 
-    /* Supported Platforms Bar */
-    .platforms-title { font-size: 14px; font-weight: 800; color: var(--heading); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .platforms-row { display: flex; flex-wrap: wrap; gap: 12px; }
-    .platform-pill {
-      display: flex; align-items: center; gap: 8px; background: var(--bg-color);
-      border: 1px solid var(--border-color); padding: 8px 14px; border-radius: 20px;
-      font-size: 13px; font-weight: 700; color: var(--heading); box-shadow: var(--shadow-sm);
-    }
-    .platform-pill img { width: 20px; height: 20px; border-radius: 50%; object-fit: contain; }
-
-    /* ================= RIGHT COLUMN: STICKY CHECKOUT & PERKS ================= */
-    .sticky-checkout-card {
-      position: sticky; top: 110px;
-      background: var(--card-solid);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-lg);
-      padding: 36px 28px;
-      box-shadow: var(--shadow-md);
-    }
-
-    .pricing-summary-box {
-      background: rgba(15, 98, 254, 0.03);
-      border: 1px solid rgba(15, 98, 254, 0.15);
-      border-radius: var(--radius-md);
-      padding: 20px; margin-bottom: 28px;
-    }
-    .price-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px dashed rgba(226,232,240,0.8); font-size: 14px; }
-    .price-row:last-child { border-bottom: none; padding-bottom: 0; }
-    .price-row .lbl { color: var(--body); font-weight: 600; }
-    .price-row .val { font-weight: 800; color: var(--heading); }
-    .price-row.total-row .val { font-size: 22px; color: var(--primary); font-weight: 900; }
-
-    /* Benefits List */
-    .checklist { margin-bottom: 32px; display: flex; flex-direction: column; gap: 14px; }
-    .check-item { display: flex; align-items: flex-start; gap: 12px; font-size: 14px; font-weight: 500; color: var(--body); line-height: 1.5; }
-    .check-item b { color: var(--heading); font-weight: 800; }
+    /* Benefits Checklist */
+    .benefits-section h4 { font-size: 16px; font-weight: 800; color: var(--heading); margin-bottom: 14px; }
+    .benefits-list { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 36px; }
+    .benefits-list li { display: flex; align-items: flex-start; gap: 12px; font-size: 14px; font-weight: 500; color: var(--body); line-height: 1.5; }
+    .benefits-list li b { color: var(--heading); font-weight: 700; }
     .check-icon {
-      width: 22px; height: 22px; border-radius: 50%; background: var(--secondary-glow);
-      color: #00A650; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px;
+      width: 22px; height: 22px; border-radius: 50%; background: rgba(0, 230, 118, 0.15);
+      color: var(--secondary); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;
     }
-    .check-icon svg { width: 14px; height: 14px; stroke: currentColor; stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    .check-icon svg { width: 13px; height: 13px; stroke: currentColor; stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round; }
 
-    /* CTA Button */
+    /* Proceed Action Button */
     .btn-proceed {
       width: 100%; padding: 18px; border-radius: 30px;
       background: linear-gradient(135deg, var(--primary), var(--primary-hover));
       color: white; font-size: 16px; font-weight: 800; border: none; cursor: pointer;
       box-shadow: 0 10px 24px rgba(15, 98, 254, 0.3); display: flex; align-items: center; justify-content: center; gap: 10px;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.3s ease;
     }
     .btn-proceed:hover { transform: translateY(-3px); box-shadow: 0 14px 32px rgba(15, 98, 254, 0.4); }
     .btn-proceed svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
 
-    /* Trust Footer */
-    .trust-footer {
-      display: flex; justify-content: center; gap: 16px; margin-top: 20px;
-      font-size: 12px; color: var(--body); font-weight: 600; text-align: center;
-    }
-    .trust-item { display: flex; align-items: center; gap: 6px; }
-    .trust-item svg { width: 14px; height: 14px; stroke: var(--primary); fill: none; stroke-width: 2.2; }
-
-    /* ================= MOBILE OPTIMIZATION ================= */
-    @media (max-width: 991px) {
+    /* ================= RESPONSIVE LAYOUT (90% Mobile Users) ================= */
+    @media (max-width: 900px) {
       .container { padding-top: 80px; padding-left: 16px; padding-right: 16px; }
-      .product-grid { grid-template-columns: 1fr; gap: 20px; }
-      .sticky-checkout-card { position: relative; top: 0; }
-      .amount-display { font-size: 44px; }
-      .product-hero-card { padding: 28px 20px; }
-      .sticky-checkout-card { padding: 28px 20px; }
+      .product-layout { grid-template-columns: 1fr; gap: 20px; }
+      .product-visual-card, .product-info-card { padding: 28px 20px; }
+      .visual-amount { font-size: 44px; }
+      .product-title { font-size: 26px; }
+      .specs-grid { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
-
 <body>
 
+  <!-- Main Container -->
   <main class="container">
 
     <!-- Back Navigation Bubble -->
@@ -213,202 +206,126 @@
       </a>
     </div>
 
-    <!-- E-COMMERCE / FINTECH PRODUCT LAYOUT GRID -->
-    <div class="product-grid">
+    <!-- 2-Column Responsive Product Detail Layout -->
+    <div class="product-layout">
 
-      <!-- LEFT COLUMN: PRODUCT HERO & DETAILED SPECS -->
-      <div class="left-panel animate-in delay-1">
+      <!-- LEFT COLUMN: VISUAL PRODUCT CARD -->
+      <div class="product-visual-card animate-in delay-1">
+        <div class="badge-verified">Verified Balance Package</div>
         
-        <div class="product-hero-card">
-          <div class="badge-status">
-            <span></span> Live Package in Stock
-          </div>
-
-          <div class="amount-display" id="pkg-amount">$0.00 <span>USD</span></div>
-          <p class="product-subtitle">Digital USD Balance Allocation with 100% Margin Retention & Direct Wallet Deposit.</p>
-
-          <!-- Specifications Grid -->
-          <div class="specs-grid">
-            <div class="spec-box">
-              <label>Rental Duration</label>
-              <span id="pkg-duration">4 Hours</span>
-            </div>
-            <div class="spec-box">
-              <label>Est. Delivery Time</label>
-              <span id="pkg-time">15 - 30 Minutes</span>
-            </div>
-            <div class="spec-box">
-              <label>Profit Share</label>
-              <span style="color:var(--secondary);">100% Yours to Keep</span>
-            </div>
-            <div class="spec-box">
-              <label>Verification Required</label>
-              <span>KYC (CNIC + Selfie)</span>
-            </div>
-          </div>
-
-          <!-- Supported Platforms Bar (Google Icons) -->
-          <div class="platforms-title">Supported Delivery Destinations</div>
-          <div class="platforms-row">
-            <div class="platform-pill">
-              <img src="https://www.google.com/s2/favicons?domain=binance.com&sz=128" alt="Binance">
-              Binance Pay
-            </div>
-            <div class="platform-pill">
-              <img src="https://www.google.com/s2/favicons?domain=tether.to&sz=128" alt="USDT">
-              USDT (TRC20/BEP20)
-            </div>
-            <div class="platform-pill">
-              <img src="https://www.google.com/s2/favicons?domain=quotex.com&sz=128" alt="Quotex">
-              Quotex
-            </div>
-            <div class="platform-pill">
-              <img src="https://www.google.com/s2/favicons?domain=metatrader5.com&sz=128" alt="MT5">
-              MetaTrader 5
-            </div>
-            <div class="platform-pill">
-              <img src="https://www.google.com/s2/favicons?domain=exness.com&sz=128" alt="Exness">
-              Exness
-            </div>
-            <div class="platform-pill">
-              <img src="https://www.google.com/s2/favicons?domain=okx.com&sz=128" alt="OKX">
-              OKX
-            </div>
-          </div>
-
+        <!-- Animated Coin Visual -->
+        <div class="visual-hero-box">
+          <img src="assets/logo.png" alt="DollarRent Logo" class="hero-coin-img">
         </div>
 
+        <div class="visual-amount" id="pkg-amount-hero">$0.00</div>
+        <div class="visual-subtitle">Digital USD Balance</div>
+
+        <!-- Supported Destinations (Fetched via Google Favicons) -->
+        <div class="networks-box">
+          <label>Supported Direct Destinations</label>
+          <div class="network-icons-row">
+            <img src="https://www.google.com/s2/favicons?domain=binance.com&sz=128" alt="Binance" title="Binance Pay">
+            <img src="https://www.google.com/s2/favicons?domain=tether.to&sz=128" alt="USDT" title="USDT TRC20/BEP20">
+            <img src="https://www.google.com/s2/favicons?domain=quotex.com&sz=128" alt="Quotex" title="Quotex">
+            <img src="https://www.google.com/s2/favicons?domain=metatrader5.com&sz=128" alt="MT5" title="MetaTrader 5">
+            <img src="https://www.google.com/s2/favicons?domain=exness.com&sz=128" alt="Exness" title="Exness">
+          </div>
+        </div>
       </div>
 
-      <!-- RIGHT COLUMN: STICKY CHECKOUT & PERKS -->
-      <div class="right-panel animate-in delay-2">
-        <div class="sticky-checkout-card">
-          
-          <h3 style="font-size:20px; font-weight:900; margin-bottom:16px; color:var(--heading);">Order Summary</h3>
+      <!-- RIGHT COLUMN: SPECS & ORDER CONTROLS -->
+      <div class="product-info-card animate-in delay-2">
+        <span class="category-tag">Digital USD Rental</span>
+        <h1 class="product-title" id="pkg-title">$0 USD Rental Package</h1>
+        <div class="fee-highlight" id="pkg-fee-display">Advance Rental Fee: $0.00</div>
 
-          <!-- Fee Calculation Breakdown -->
-          <div class="pricing-summary-box">
-            <div class="price-row">
-              <span class="lbl">Rental Balance Amount</span>
-              <span class="val" id="summary-balance">$0.00 USD</span>
-            </div>
-            <div class="price-row">
-              <span class="lbl">Advance Rental Fee</span>
-              <span class="val" id="summary-fee" style="color:var(--primary);">$0.00</span>
-            </div>
-            <div class="price-row total-row">
-              <span class="lbl" style="font-weight:800;">Total Payable Now</span>
-              <span class="val" id="summary-total">$0.00</span>
-            </div>
+        <!-- Quick Specs -->
+        <div class="specs-grid">
+          <div class="spec-item">
+            <span class="spec-label">Est. Delivery</span>
+            <span class="spec-val" id="pkg-time">15 - 30 Minutes</span>
           </div>
-
-          <!-- Benefits Checklist -->
-          <div class="checklist">
-            <div class="check-item">
-              <div class="check-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
-              <span><b>Direct Transfer:</b> Instant deposit into your Binance UID, USDT wallet, Quotex, or MT5 account.</span>
-            </div>
-            <div class="check-item">
-              <div class="check-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
-              <span><b>Profit Policy:</b> Return only the rented base balance ($<span id="base-return-val">0</span>) after duration expires. All profit is 100% yours.</span>
-            </div>
-            <div class="check-item">
-              <div class="check-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
-              <span><b>Loss Provision:</b> In case of trading loss, extra 38% fee (<span id="loss-val" style="color:var(--danger); font-weight:800;">$0</span>) applies after duration.</span>
-            </div>
-            <div class="check-item">
-              <div class="check-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
-              <span><b>Admin Escrow Guarantee:</b> 24/7 Live status tracking via Telegram operator (<strong>@rental_dollor</strong>).</span>
-            </div>
+          <div class="spec-item">
+            <span class="spec-label">Profit Retention</span>
+            <span class="spec-val" style="color:var(--secondary);">100% Yours</span>
           </div>
-
-          <!-- Primary Action Button -->
-          <button id="btn-order-flow" class="btn-proceed">
-            Proceed to KYC & Order Form
-            <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
-          </button>
-
-          <!-- Security Badges -->
-          <div class="trust-footer">
-            <div class="trust-item"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> SSL 256-bit</div>
-            <div class="trust-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> 15-30m Delivery</div>
-            <div class="trust-item"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> Google Verified</div>
+          <div class="spec-item">
+            <span class="spec-label">Verification</span>
+            <span class="spec-val">Strict KYC</span>
           </div>
-
+          <div class="spec-item">
+            <span class="spec-label">Support</span>
+            <span class="spec-val">24/7 Telegram</span>
+          </div>
         </div>
+
+        <!-- Key Benefits List -->
+        <div class="benefits-section">
+          <h4>Package Guarantees & Rules:</h4>
+          <ul class="benefits-list">
+            <li>
+              <div class="check-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+              <span><b>Direct Deposit:</b> Transferred instantly to Binance UID, USDT wallet address, Quotex, or MT5 after KYC approval.</span>
+            </li>
+            <li>
+              <div class="check-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+              <span><b>Keep All Profit:</b> Trade freely during your rental duration; keep 100% of profits made. Return only base USD.</span>
+            </li>
+            <li>
+              <div class="check-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+              <span><b>Full Escrow Protection:</b> Live order status tracking with full admin guarantee via Telegram Support (<b>@rental_dollor</b>).</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Main Action CTA Button -->
+        <button type="button" id="btn-order-flow" class="btn-proceed">
+          Proceed to KYC & Order Form
+          <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+
       </div>
 
     </div>
 
   </main>
 
-  <!-- ================= FIREBASE & APP LOGIC ================= -->
-  <!-- app.js handles Floating Island Header and Mobile Dock -->
+  <!-- ================= FIREBASE LOGIC & APP.JS INJECTION ================= -->
+  <!-- app.js automatically injects the Floating Island Header and Mobile Dock -->
   <script type="module">
     import './app.js';
+    import { getCurrentUser, loginWithGoogle } from './firebase-auth.js';
+    import { formatUSD, showToast } from './utils.js';
 
-    // Safe fallbacks for utilities
-    let auth, utils;
-    try {
-      auth = await import('./firebase-auth.js');
-      utils = await import('./utils.js');
-    } catch (e) {
-      console.warn("Module fallback mode.");
-    }
-
-    const getCurrentUser = auth?.getCurrentUser || (() => null);
-    const loginWithGoogle = auth?.loginWithGoogle || (async () => null);
-    const formatUSD = utils?.formatUSD || ((val) => `$${Number(val || 0).toFixed(2)}`);
-    const showToast = utils?.showToast || ((msg) => alert(msg));
-
-    // 1. Extract URL Parameters safely
+    // 1. Safely parse URL Parameters
     const params = new URLSearchParams(window.location.search);
-    const amountVal = parseInt(params.get('amount')) || 50;
-    const feeVal = parseInt(params.get('fee')) || 9;
+    const amount = params.get('amount') || '50';
+    const fee = params.get('fee') || '9';
     const id = params.get('id') || 'p50';
 
-    // 2. Dynamic Duration Rules Table Calculation
-    function calculateDuration(amt) {
-      if (amt <= 150) return '4 Hours';
-      if (amt <= 250) return '6 Hours';
-      if (amt <= 500) return '12 Hours';
-      if (amt <= 1000) return '24 Hours';
-      if (amt <= 2500) return '2 Days';
-      if (amt <= 5000) return '3 Days';
-      if (amt <= 10000) return '5 Days';
-      if (amt <= 25000) return '7 Days';
-      return '10 Days';
-    }
+    // 2. Populate UI dynamically
+    document.getElementById('pkg-amount-hero').textContent = `$${amount}.00`;
+    document.getElementById('pkg-title').textContent = `$${amount} USD Rental Package`;
+    document.getElementById('pkg-fee-display').textContent = `Advance Rental Fee: ${formatUSD(fee)}`;
 
-    const durationText = calculateDuration(amountVal);
-    const lossExtraPay = Math.round(amountVal * 0.38);
-
-    // 3. Populate Product Details UI
-    document.getElementById('pkg-amount').innerHTML = `$${amountVal}.00 <span>USD</span>`;
-    document.getElementById('pkg-duration').textContent = durationText;
-    document.getElementById('summary-balance').textContent = `$${amountVal}.00 USD`;
-    document.getElementById('summary-fee').textContent = formatUSD(feeVal);
-    document.getElementById('summary-total').textContent = formatUSD(feeVal); // User pays rental fee in advance
-    document.getElementById('base-return-val').textContent = `${amountVal}`;
-    document.getElementById('loss-val').textContent = `$${lossExtraPay} (38%)`;
-
-    // 4. Handle Order Flow Button
+    // 3. Handle Order Flow Button Trigger
     document.getElementById('btn-order-flow').addEventListener('click', async () => {
       let user = getCurrentUser();
 
-      // Ensure Google Sign-In before proceeding to KYC form
+      // Enforce Google Sign-In if unauthenticated
       if (!user) {
-        showToast('Please sign in with Google to continue to Order Form.', 'info');
+        showToast('Please sign in with Google to continue to the KYC form.', 'info');
         try {
           user = await loginWithGoogle();
-          if (!user) return;
         } catch (error) {
+          console.warn("Sign-in cancelled or failed.", error);
           return;
         }
       }
 
-      // Navigate to order details page with parameters
-      window.location.href = `order.html?packageId=${id}&amount=${amountVal}&fee=${feeVal}&time=${encodeURIComponent(durationText)}`;
+      // Navigate to order page with exact parameters
+      window.location.href = `order.html?packageId=${id}&amount=${amount}&fee=${fee}`;
     });
   </script>
 </body>
